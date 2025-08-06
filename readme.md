@@ -1,0 +1,1 @@
+# **A Fabric mod that allows users to easily copy the name and lore of items from any GUI. This tool is intended for convenience and learning purposes only. I do not condone or support the use of this mod to steal or replicate other players' GUI formats without permission.**
