@@ -1,0 +1,48 @@
+{
+	"schemaVersion": 1,
+	"id": "yoinkgui",
+	"version": "${version}",
+	"name": "YoinkGUI",
+	"description": "This is an example description! Tell everyone what your mod is about!",
+	"authors": [
+		"Me!"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/yoinkgui/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			{
+				"value": "me.thatonedevil.YoinkGUI",
+				"adapter": "kotlin"
+			}
+		],
+		"client": [
+			{
+				"value": "me.thatonedevil.YoinkGUIClient",
+				"adapter": "kotlin"
+			}
+		]
+	},
+	"mixins": [
+		"yoinkgui.mixins.json",
+		{
+			"config": "yoinkgui.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.16.14",
+		"minecraft": "~1.21.8",
+		"java": ">=21",
+		"fabric-api": "*",
+		"fabric-language-kotlin": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}

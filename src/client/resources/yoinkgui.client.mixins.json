@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "me.thatonedevil.mixin.client",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "ExampleClientMixin",
+    "ScreenMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+	}
+}
