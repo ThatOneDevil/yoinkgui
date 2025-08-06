@@ -4,7 +4,6 @@ import me.thatonedevil.YoinkGUIClient;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -18,9 +17,6 @@ public class ScreenMixin {
     private void render(DrawContext context, int mouseX, int mouseY, float deltaTicks, CallbackInfo ci) {
         MinecraftClient client = MinecraftClient.getInstance();
         if (client.player == null) {
-            return;
-        }
-        if (client.currentScreen != null && client.currentScreen.getClass().equals(InventoryScreen.class)) {
             return;
         }
 
