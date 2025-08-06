@@ -1,3 +1,6 @@
+[![build](https://github.com/ThatOneDevil/yoinkgui/actions/workflows/build.yml/badge.svg)](https://github.com/ThatOneDevil/yoinkgui/actions/workflows/build.yml)
+---
+
 **A Fabric mod that allows users to easily copy the name and lore of items from any GUI.**  
 This tool is intended strictly for convenience and educational purposes.
 
