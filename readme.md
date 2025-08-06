@@ -1,7 +1,7 @@
 [![build](https://github.com/ThatOneDevil/yoinkgui/actions/workflows/build.yml/badge.svg)](https://github.com/ThatOneDevil/yoinkgui/actions/workflows/build.yml)
 ---
 
-**A Fabric mod that allows users to easily copy the name and lore of items from any GUI.**  
+**A Fabric mod that allows users to easily copy the name and lore of items from any GUI**  
 This tool is intended strictly for convenience and educational purposes.
 
 > **Disclaimer:**  
@@ -22,8 +22,7 @@ This tool is intended strictly for convenience and educational purposes.
 
 ## How to use?
 
-- When u load the mod with the correct depecndies all you have to do is open a GUI, click the button on the top left **Yoink and Parse NBT into file** and then head over to your config folder and there should be a **.txt** file. You can also view the path in the console of the client where it is sent!
+- When u load the mod with the correct dependencies, all you have to do is open a GUI, click the button on the top left **Yoink and Parse NBT into file** and then head over to your config folder, and there should be a **.txt** file. You can also view the path in the console of the client where it is sent!
 
-- For instance this is where u can find it on prism as this is what i use.
+- For instance, this is where u can find it on Prism, as this is what I use.
 `C:\Users\user\AppData\Roaming\PrismLauncher\instances\1.21.8\minecraft\config`
-
