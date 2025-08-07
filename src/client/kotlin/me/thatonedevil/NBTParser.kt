@@ -3,10 +3,15 @@ package me.thatonedevil
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.JsonElement
+import jdk.jshell.execution.Util
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import me.thatonedevil.Utils.toClickable
+import me.thatonedevil.Utils.toComponent
+import net.minecraft.client.network.ClientPlayerEntity
 import java.io.File
 import java.io.FileWriter
+import java.time.Duration
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -143,10 +148,11 @@ object NBTParser {
         }
     }
 
-    suspend fun saveFormattedNBTToFile(nbtDataList: List<String>, configDir: File) = withContext(Dispatchers.IO) {
+    suspend fun saveFormattedNBTToFile(player: ClientPlayerEntity, nbtDataList: List<String>, configDir: File) = withContext(Dispatchers.IO) {
         try {
+            val time = LocalDateTime.now()
             val yoinkDir = File(configDir, "yoinkgui").apply { mkdirs() }
-            val timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"))
+            val timestamp = time.format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"))
             val file = File(yoinkDir, "formatted_nbt_$timestamp.txt")
 
             FileWriter(file).use { writer ->
@@ -161,7 +167,7 @@ object NBTParser {
                 }
 
                 writer.write("=== Formatted NBT Data ===\n")
-                writer.write("Generated: ${LocalDateTime.now()}\n")
+                writer.write("Generated: ${time}\n")
                 writer.write("Total Items with content: ${itemsWithContent.size} (out of ${nbtDataList.size})\n\n")
 
                 itemsWithContent.forEachIndexed { displayIndex, (originalIndex, nbtData) ->
@@ -174,7 +180,11 @@ object NBTParser {
                 }
             }
 
-            println("Formatted NBT for ${nbtDataList.size} items saved to: ${file.absolutePath}")
+            val parseDuration = Duration.between(time, LocalDateTime.now()).toMillis()
+            Utils.sendChat(
+                "\n<color:#FFA6CA>Formatted NBT data saved to:".toComponent(),
+                " <color:#FFA6CA>Parse time: <color:#8968CD>${parseDuration}ms".toComponent(),
+                "  <color:#8968CD>${file.absolutePath} &7&o(Click to copy)\n".toClickable(file.absolutePath.toString()))
         } catch (e: Exception) {
             println("Error saving NBT file: ${e.message}")
         }

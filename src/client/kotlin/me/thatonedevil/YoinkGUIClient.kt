@@ -3,6 +3,8 @@ package me.thatonedevil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import me.thatonedevil.inventory.TopInventory
+import me.thatonedevil.inventory.YoinkInventory
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.minecraft.client.MinecraftClient
@@ -49,7 +51,7 @@ object YoinkGUIClient : ClientModInitializer {
                     println("Starting NBT parsing for ${yoinkedItems.size} items...")
                 }
 
-                NBTParser.saveFormattedNBTToFile(yoinkedItems, configDir)
+                NBTParser.saveFormattedNBTToFile(client.player!!, yoinkedItems, configDir)
 
                 client.execute {
                     println("NBT parsing completed successfully!")

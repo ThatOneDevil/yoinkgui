@@ -1,4 +1,4 @@
-package me.thatonedevil
+package me.thatonedevil.inventory
 
 import net.minecraft.client.MinecraftClient
 import net.minecraft.item.ItemStack
