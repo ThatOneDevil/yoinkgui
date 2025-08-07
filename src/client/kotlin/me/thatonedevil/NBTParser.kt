@@ -93,12 +93,14 @@ object NBTParser {
         val italic = getBooleanValue(component.get("italic"))
         val underlined = getBooleanValue(component.get("underlined"))
         val strikethrough = getBooleanValue(component.get("strikethrough"))
+        val obfuscated = getBooleanValue(component.get("obfuscated"))
 
         append(formatColor(color))
         if (bold) append("&l")
         if (italic) append("&o")
         if (underlined) append("&n")
         if (strikethrough) append("&m")
+        if (obfuscated) append("&k")
         append(text)
 
         component.get("extra")?.asJsonArray?.forEach { element ->
