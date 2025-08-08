@@ -1,5 +1,6 @@
 package me.thatonedevil.inventory
 
+import me.thatonedevil.YoinkGUI.logger
 import net.minecraft.client.network.ClientPlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtElement
@@ -12,7 +13,7 @@ class YoinkInventory(private val player: ClientPlayerEntity, private val invento
 
     fun yoinkItems() {
         if (topInventory == null || inventory.isTopInventoryEmpty()) {
-            println("No top inventory found or it is empty!")
+            logger.info("No top inventory found or it is empty!")
             return
         }
 

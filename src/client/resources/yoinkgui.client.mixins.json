@@ -3,7 +3,6 @@
   "package": "me.thatonedevil.mixin.client",
   "compatibilityLevel": "JAVA_21",
   "client": [
-    "ExampleClientMixin",
     "ScreenMixin"
   ],
   "injectors": {

@@ -24,8 +24,7 @@ object Utils {
     }
 
     fun String.toComponent(): Component {
-        val converted = convertLegacyToMini(this)
-        return miniMessage.deserialize(converted)
+        return miniMessage.deserialize(convertLegacyToMini(this))
     }
 
     fun String.toClickable(message: String): Component {
@@ -35,6 +34,7 @@ object Utils {
     fun sendChat(message: String) {
         client.sendMessage(message.toComponent())
     }
+
     fun sendChat(vararg messages: Component) {
         messages.forEach { message ->
             client.sendMessage(message)

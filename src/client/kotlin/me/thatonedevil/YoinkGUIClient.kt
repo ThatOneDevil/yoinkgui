@@ -1,8 +1,10 @@
 package me.thatonedevil
 
+import com.github.shynixn.mccoroutine.fabric.launch
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import me.thatonedevil.YoinkGUI.logger
 import me.thatonedevil.inventory.TopInventory
 import me.thatonedevil.inventory.YoinkInventory
 import net.fabricmc.api.ClientModInitializer
@@ -29,36 +31,35 @@ object YoinkGUIClient : ClientModInitializer {
 
             wasLeftClicking = isLeftClicking
         }
+
     }
 
     private fun handleYoinkButton(client: MinecraftClient) {
         val yoinkInventory = YoinkInventory(client.player!!, TopInventory(client))
         yoinkInventory.yoinkItems()
-        println("Yoinked Items: ${yoinkInventory.getYoinkedItems()}")
+        logger.info("Yoinked Items: ${yoinkInventory.getYoinkedItems()}")
     }
 
     private fun handleParseButton(client: MinecraftClient) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val player = client.player!!
-                val yoinkInventory = YoinkInventory(player, TopInventory(client))
-                yoinkInventory.yoinkItems()
-
-                val yoinkedItems = yoinkInventory.getYoinkedItems().map { it.toString() }
+                val player = client.player ?: return@launch
                 val configDir = client.runDirectory.resolve("config")
+                val yoinkedItems = YoinkInventory(player, TopInventory(client)).apply { yoinkItems() }.getYoinkedItems().map { it.toString() }
 
                 client.execute {
-                    println("Starting NBT parsing for ${yoinkedItems.size} items...")
+                    logger.info("Starting NBT parsing for ${yoinkedItems.size} items...")
                 }
 
-                NBTParser.saveFormattedNBTToFile(client.player!!, yoinkedItems, configDir)
+                NBTParser.saveFormattedNBTToFile(yoinkedItems, configDir)
 
                 client.execute {
-                    println("NBT parsing completed successfully!")
+                    logger.info("NBT parsing completed successfully!")
                 }
+
             } catch (e: Exception) {
                 client.execute {
-                    println("Error during NBT parsing: ${e.message}")
+                    logger.error("Error during NBT parsing: ${e.message}")
                 }
             }
         }

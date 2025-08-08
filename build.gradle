@@ -45,6 +45,10 @@ dependencies {
 	modImplementation("net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}")
 
 	modImplementation include("net.kyori:adventure-platform-fabric:6.5.1")
+
+	implementation("com.github.shynixn.mccoroutine:mccoroutine-fabric-api:2.22.0")
+	implementation("com.github.shynixn.mccoroutine:mccoroutine-fabric-core:2.22.0")
+	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
 }
 
 processResources {
