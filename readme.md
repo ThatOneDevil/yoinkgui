@@ -1,35 +1,56 @@
-[![build](https://github.com/ThatOneDevil/yoinkgui/actions/workflows/build.yml/badge.svg)](https://github.com/ThatOneDevil/yoinkgui/actions/workflows/build.yml)
----
+<div align="center">
+
+# YoinkGUI
+
+[![Build Status](https://github.com/ThatOneDevil/yoinkgui/actions/workflows/build.yml/badge.svg)](https://github.com/ThatOneDevil/yoinkgui/actions/workflows/build.yml)
 
 **A Fabric mod that allows users to easily copy the name and lore of items from any GUI**  
-This tool is intended strictly for convenience and educational purposes.
+Intended strictly for convenience and development purposes.
 
-> **Disclaimer:**  
-> Use of this mod to steal or replicate other players' GUI formatting without their consent is not supported or condoned.
+[Curseforge](https://www.curseforge.com/minecraft/mc-mods/yoinkgui)
+[Modrinth](https://modrinth.com/mod/yoinkgui)
 
----
-
-## Download
-### [Download on Modrinth](https://modrinth.com/mod/yoinkgui)
+</div>
 
 ---
 
-## Features
+## 📜 Disclaimer
+> The use of this mod to steal or replicate other players' GUI formatting without their consent is **not** supported or condoned.
 
-- Supports all Minecraft formatting codes:
+---
+
+## 🐛 Issues
+Report bugs and request features here:  
+[https://github.com/ThatOneDevil/yoinkgui/issues](https://github.com/ThatOneDevil/yoinkgui/issues)
+
+---
+
+## 📦 Dependencies
+- Fabric Loader
+- Fabric API
+- Fabric Language Kotlin
+
+---
+
+## ✨ Features
+
+- **Full Minecraft formatting code support**:
   - **Color codes**
-  - **Bold**, *Italic*, __Underline__, ~~Strikethrough~~, obfuscated
-- Formats hex codes into the minimessage format:
+  - **Bold**, *Italic*, __Underline__, ~~Strikethrough~~, and obfuscated text
+- **Hex and gradient support** (MiniMessage format):
   - Hex colors: `<color:#FF00AA>`
   - Gradients: `<gradient:#8968CD:#FFA6CA>`
 
 ---
 
-## How to use?
+## 📖 How to Use
 
-- When u load the mod with the correct dependencies, all you have to do is open a GUI, click the button on the top left **Yoink and Parse NBT into file** and then head over to your config folder, and there should be a **.txt** file. You can also view the path in the console of the client where it is sent!
+1. Install the mod with the correct dependencies.  
+2. Open any GUI in-game.  
+3. Click the **"Yoink and Parse NBT into file"** button in the top-left corner.  
+4. The output `.txt` file will appear in your `config` folder.  
+5. The file path is also displayed in chat, as shown below 
 
-- For instance, this is where u can find it on Prism, as this is what I use.
-  `C:\Users\user\AppData\Roaming\PrismLauncher\instances\1.21.8\minecraft\config`
+**Example of the path message:**
 
 ![Example of the path message](https://cdn.modrinth.com/data/cached_images/681a4eb24635ac98ae987f4a72a741c27c4c3c87.png)
