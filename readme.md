@@ -3,14 +3,15 @@
 # YoinkGUI
 
 ![Build Status](https://github.com/ThatOneDevil/yoinkgui/actions/workflows/build.yml/badge.svg)
-![Modrinth Version](https://img.shields.io/modrinth/v/5j4oEPp2)
-![Modrinth Downloads](https://img.shields.io/modrinth/dt/5j4oEPp2)
-
-
+[![Modrinth Version](https://img.shields.io/modrinth/v/5j4oEPp2)](https://modrinth.com/mod/yoinkgui)
+[![Modrinth Downloads](https://img.shields.io/modrinth/dt/5j4oEPp2?color=%231CCC65)](https://modrinth.com/mod/yoinkgui)
+[![CurseForge Downloads](https://img.shields.io/curseforge/dt/1323988?color=%23fe7941)](https://www.curseforge.com/minecraft/mc-mods/yoinkgui)
 
 **A Fabric mod that allows users to easily copy the name and lore of items from any GUI**  
 Intended strictly for convenience and development purposes.
 
+[![Download on Modrinth](https://raw.githubusercontent.com/intergrav/devins-badges/c7fd18efdadd1c3f12ae56b49afd834640d2d797/assets/cozy/available/modrinth_vector.svg)](https://modrinth.com/mod/yoinkgui)  
+[![Download on CurseForge](https://raw.githubusercontent.com/intergrav/devins-badges/c7fd18efdadd1c3f12ae56b49afd834640d2d797/assets/cozy/available/curseforge_vector.svg)](https://www.curseforge.com/minecraft/mc-mods/yoinkgui)
 </div>
 
 ---
@@ -55,3 +56,5 @@ Report bugs and request features here:
 **Example of the path message:**
 
 ![Example of the path message](https://cdn.modrinth.com/data/cached_images/681a4eb24635ac98ae987f4a72a741c27c4c3c87.png)
+
+---
