@@ -1,6 +1,5 @@
 package me.thatonedevil
 
-import com.github.shynixn.mccoroutine.fabric.launch
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -31,7 +30,17 @@ object YoinkGUIClient : ClientModInitializer {
 
             wasLeftClicking = isLeftClicking
         }
+        versionChecker()
 
+    }
+
+    private fun versionChecker() {
+        val version = BuildConfig.VERSION
+        if (version != "1.0.3") {
+            logger.warn("You are using an outdated version of YoinkGUI! Please update to the latest version.")
+        } else {
+            logger.info("YoinkGUI is up to date!")
+        }
     }
 
     private fun handleYoinkButton(client: MinecraftClient) {
