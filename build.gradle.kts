@@ -6,6 +6,7 @@ plugins {
 
 version = property("mod_version") as String
 group = property("maven_group") as String
+val generatedDir = layout.buildDirectory.dir("generated/sources/buildConfig").get().asFile
 
 base {
 	archivesName.set(property("archives_base_name") as String)
@@ -69,7 +70,6 @@ tasks.jar {
 	}
 }
 
-val generatedDir = layout.buildDirectory.dir("generated/sources/buildConfig").get().asFile
 
 tasks.register<Copy>("generateBuildConfig") {
 	from("src/templates/kotlin")

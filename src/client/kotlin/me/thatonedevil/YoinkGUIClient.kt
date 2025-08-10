@@ -6,6 +6,7 @@ import kotlinx.coroutines.launch
 import me.thatonedevil.YoinkGUI.logger
 import me.thatonedevil.inventory.TopInventory
 import me.thatonedevil.inventory.YoinkInventory
+import me.thatonedevil.utils.api.UpdateChecker
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.minecraft.client.MinecraftClient
@@ -30,17 +31,8 @@ object YoinkGUIClient : ClientModInitializer {
 
             wasLeftClicking = isLeftClicking
         }
-        versionChecker()
 
-    }
-
-    private fun versionChecker() {
-        val version = BuildConfig.VERSION
-        if (version != "1.0.3") {
-            logger.warn("You are using an outdated version of YoinkGUI! Please update to the latest version.")
-        } else {
-            logger.info("YoinkGUI is up to date!")
-        }
+        UpdateChecker.setupJoinListener()
     }
 
     private fun handleYoinkButton(client: MinecraftClient) {

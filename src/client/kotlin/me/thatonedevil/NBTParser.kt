@@ -5,9 +5,10 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import me.thatonedevil.Utils.toClickable
-import me.thatonedevil.Utils.toComponent
+import me.thatonedevil.utils.Utils.toClickable
+import me.thatonedevil.utils.Utils.toComponent
 import me.thatonedevil.YoinkGUI.logger
+import me.thatonedevil.utils.Utils
 import java.io.File
 import java.io.FileWriter
 import java.time.Duration

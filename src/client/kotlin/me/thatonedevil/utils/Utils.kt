@@ -1,4 +1,4 @@
-package me.thatonedevil
+package me.thatonedevil.utils
 
 import net.kyori.adventure.platform.modcommon.MinecraftClientAudiences
 import net.kyori.adventure.text.Component
@@ -29,6 +29,9 @@ object Utils {
 
     fun String.toClickable(message: String): Component {
         return this.toComponent().clickEvent(ClickEvent.copyToClipboard(message))
+    }
+    fun String.toClickURL(message: String): Component {
+        return this.toComponent().clickEvent(ClickEvent.openUrl(message))
     }
 
     fun sendChat(message: String) {
