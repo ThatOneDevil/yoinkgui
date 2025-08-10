@@ -2,13 +2,14 @@
 
 # YoinkGUI
 
-[![Build Status](https://github.com/ThatOneDevil/yoinkgui/actions/workflows/build.yml/badge.svg)](https://github.com/ThatOneDevil/yoinkgui/actions/workflows/build.yml)
+![Build Status](https://github.com/ThatOneDevil/yoinkgui/actions/workflows/build.yml/badge.svg)
+![Modrinth Version](https://img.shields.io/modrinth/v/5j4oEPp2)
+![Modrinth Downloads](https://img.shields.io/modrinth/dt/5j4oEPp2)
+
+
 
 **A Fabric mod that allows users to easily copy the name and lore of items from any GUI**  
 Intended strictly for convenience and development purposes.
-
-[Curseforge](https://www.curseforge.com/minecraft/mc-mods/yoinkgui)
-[Modrinth](https://modrinth.com/mod/yoinkgui)
 
 </div>
 
@@ -49,7 +50,7 @@ Report bugs and request features here:
 2. Open any GUI in-game.  
 3. Click the **"Yoink and Parse NBT into file"** button in the top-left corner.  
 4. The output `.txt` file will appear in your `config` folder.  
-5. The file path is also displayed in chat, as shown below 
+5. The file path is also displayed in chat, as shown below
 
 **Example of the path message:**
 
