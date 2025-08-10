@@ -2,7 +2,10 @@ plugins {
 	id("fabric-loom") version "1.11-SNAPSHOT"
 	id("maven-publish")
 	id("org.jetbrains.kotlin.jvm") version "2.2.0"
+	id("me.modmuss50.mod-publish-plugin") version "0.8.4"
 }
+
+
 
 version = property("mod_version") as String
 group = property("maven_group") as String
@@ -19,6 +22,7 @@ repositories {
 		mavenContent { snapshotsOnly() }
 	}
 }
+
 
 loom {
 	splitEnvironmentSourceSets()
@@ -88,14 +92,34 @@ tasks.named("sourcesJar") {
 }
 
 
-publishing {
-	publications {
-		create<MavenPublication>("mavenJava") {
-			artifactId = property("archives_base_name") as String
-			from(components["java"])
-		}
-	}
-	repositories {
-		// Add publishing repositories here
-	}
+publishMods {
+	file.set(tasks.remapJar.get().archiveFile)
+	changelog.set(
+		rootProject.file("changelogs/${version}.md")
+			.takeIf { it.exists() }
+			?.readText()
+			?: "No changelog provided."
+	)
+	type = STABLE
+	modLoaders.add("fabric")
+
+
+modrinth {
+	projectId.set(property("modrinthId") as String)
+	accessToken.set(providers.environmentVariable("MODRINTH_API_KEY"))
+	minecraftVersions.addAll("1.21.8")
+
+	requires { slug.set("fabric-api") }
+	requires { slug.set("fabric-language-kotlin") }
+}
+
+curseforge {
+	projectId.set(property("curseforgeId") as String)
+	accessToken.set(providers.environmentVariable("CURSEFORGE_API_KEY"))
+	minecraftVersions.addAll("1.21.8")
+
+	requires { slug.set("fabric-api") }
+	requires { slug.set("fabric-language-kotlin") }
+}
+
 }
