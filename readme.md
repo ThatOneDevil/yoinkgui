@@ -7,6 +7,9 @@
 **A Fabric mod that allows users to easily copy the name and lore of items from any GUI**  
 Intended strictly for convenience and development purposes.
 
+[Curseforge](https://www.curseforge.com/minecraft/mc-mods/yoinkgui)
+[Modrinth](https://modrinth.com/mod/yoinkgui)
+
 </div>
 
 ---
