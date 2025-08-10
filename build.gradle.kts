@@ -6,7 +6,6 @@ plugins {
 
 version = property("mod_version") as String
 group = property("maven_group") as String
-val generatedDir = layout.buildDirectory.dir("generated/sources/buildConfig").get().asFile
 
 base {
 	archivesName.set(property("archives_base_name") as String)
@@ -70,15 +69,24 @@ tasks.jar {
 	}
 }
 
+val generatedDir = layout.buildDirectory.dir("generated/sources/buildConfig").get().asFile
 
-tasks.register<Copy>("generateBuildConfig") {
+sourceSets["main"].java.srcDir(generatedDir)
+
+val generateBuildConfig by tasks.registering(Copy::class) {
 	from("src/templates/kotlin")
 	into(generatedDir)
 	filteringCharset = "UTF-8"
-	expand("version" to property("mod_version") as String)
+	expand("version" to version)
 }
 
-sourceSets["main"].java.srcDir(generatedDir)
+tasks.named("compileKotlin") {
+	dependsOn(generateBuildConfig)
+}
+tasks.named("sourcesJar") {
+	dependsOn(generateBuildConfig)
+}
+
 
 publishing {
 	publications {
