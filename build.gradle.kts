@@ -1,10 +1,8 @@
 plugins {
-	id("fabric-loom") version "1.11-SNAPSHOT"
 	id("org.jetbrains.kotlin.jvm") version "2.2.0"
-	id("maven-publish")
+	id("fabric-loom") version "1.11-SNAPSHOT"
 	id("me.modmuss50.mod-publish-plugin") version "0.8.4"
 }
-
 
 version = property("mod.mod_version") as String
 group = property("maven_group") as String
@@ -101,7 +99,9 @@ val generateBuildConfig by tasks.registering(Copy::class) {
 	filteringCharset = "UTF-8"
 	expand("version" to cleanVersion)
 	inputs.property("version", cleanVersion)
-	outputs.upToDateWhen { false }
+
+	outputs.dir(generatedDir)
+	outputs.cacheIf { true }
 }
 
 tasks.named("compileKotlin") {
@@ -147,3 +147,5 @@ publishMods {
 	}
 
 }
+
+
