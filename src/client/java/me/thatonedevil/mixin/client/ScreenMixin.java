@@ -20,10 +20,23 @@ public class ScreenMixin {
             return;
         }
 
-        int parseButtonX = 40;
-        int parseButtonY = 35; // Position below the first button
-        int parseButtonWidth = 160;
-        int parseButtonHeight = 20;
+        int guiScale = client.options.getGuiScale().getValue();
+
+        int baseButtonWidth = 160;
+        int baseButtonHeight = 20;
+        int baseButtonX = 40;
+        int baseButtonY = 35;
+
+        float scaleFactor = switch (guiScale) {
+            case 1 -> 1.5f;
+            case 4 -> 0.65f;
+            default -> 1.0f;
+        };
+
+        int parseButtonX = (int) (baseButtonX * scaleFactor);
+        int parseButtonY = (int) (baseButtonY * scaleFactor);
+        int parseButtonWidth = (int) (baseButtonWidth * scaleFactor);
+        int parseButtonHeight = (int) (baseButtonHeight * scaleFactor);
         String parseButtonText = "Yoink and Parse NBT into file";
 
         // Register HUD rendering event
