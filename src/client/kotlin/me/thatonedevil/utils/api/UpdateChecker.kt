@@ -7,10 +7,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import me.thatonedevil.BuildConfig
-import me.thatonedevil.utils.Utils
 import me.thatonedevil.utils.Utils.sendChat
 import me.thatonedevil.utils.Utils.toClickURL
-import me.thatonedevil.utils.Utils.toClickable
 import me.thatonedevil.utils.Utils.toComponent
 import net.fabricmc.fabric.api.client.networking.v1.ClientLoginConnectionEvents
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger.logger
@@ -23,7 +21,7 @@ object UpdateChecker {
 
     private var currentUpdateVersion: ModrinthVersion? = null
 
-    suspend fun getUpdateVersion(): ModrinthVersion? {
+    private suspend fun getUpdateVersion(): ModrinthVersion? {
         if (currentUpdateVersion != null) {
             return currentUpdateVersion
         }

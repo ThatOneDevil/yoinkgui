@@ -81,7 +81,9 @@ val generateBuildConfig by tasks.registering(Copy::class) {
 	from("src/templates/kotlin")
 	into(generatedDir)
 	filteringCharset = "UTF-8"
-	expand("version" to version)
+	expand("version" to project.version)
+	inputs.property("version", project.version)
+	outputs.upToDateWhen { false }
 }
 
 tasks.named("compileKotlin") {
@@ -104,22 +106,22 @@ publishMods {
 	modLoaders.add("fabric")
 
 
-modrinth {
-	projectId.set(property("modrinthId") as String)
-	accessToken.set(providers.environmentVariable("MODRINTH_API_KEY"))
-	minecraftVersions.addAll("1.21.8")
+	modrinth {
+		projectId.set(property("modrinthId") as String)
+		accessToken.set(providers.environmentVariable("MODRINTH_API_KEY"))
+		minecraftVersions.addAll("1.21.8")
 
-	requires { slug.set("fabric-api") }
-	requires { slug.set("fabric-language-kotlin") }
-}
+		requires { slug.set("fabric-api") }
+		requires { slug.set("fabric-language-kotlin") }
+	}
 
-curseforge {
-	projectId.set(property("curseforgeId") as String)
-	accessToken.set(providers.environmentVariable("CURSEFORGE_API_KEY"))
-	minecraftVersions.addAll("1.21.8")
+	curseforge {
+		projectId.set(property("curseforgeId") as String)
+		accessToken.set(providers.environmentVariable("CURSEFORGE_API_KEY"))
+		minecraftVersions.addAll("1.21.8")
 
-	requires { slug.set("fabric-api") }
-	requires { slug.set("fabric-language-kotlin") }
-}
+		requires { slug.set("fabric-api") }
+		requires { slug.set("fabric-language-kotlin") }
+	}
 
 }
