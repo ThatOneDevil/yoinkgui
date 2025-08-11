@@ -3,13 +3,13 @@
 	"id": "yoinkgui",
 	"version": "${version}",
 	"name": "YoinkGUI",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "A Fabric mod that allows users to easily copy the name and lore of items from any GUI!",
 	"authors": [
-		"Me!"
+		"ThatOneDevil"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://github.com/ThatOneDevil/yoinkgui",
+		"sources": "https://github.com/ThatOneDevil/yoinkgui"
 	},
 	"license": "CC0-1.0",
 	"icon": "assets/yoinkgui/icon.png",
@@ -36,8 +36,8 @@
 		}
 	],
 	"depends": {
-		"fabricloader": ">=0.16.14",
-		"minecraft": "~1.21.8",
+		"fabricloader": ">=0.16.0",
+		"minecraft": "${mc}",
 		"java": ">=21",
 		"fabric-api": "*",
 		"fabric-language-kotlin": "*"

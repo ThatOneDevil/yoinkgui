@@ -1,7 +1,7 @@
 plugins {
 	id("fabric-loom") version "1.11-SNAPSHOT"
-	id("maven-publish")
 	id("org.jetbrains.kotlin.jvm") version "2.2.0"
+	id("maven-publish")
 	id("me.modmuss50.mod-publish-plugin") version "0.8.4"
 }
 
@@ -10,6 +10,7 @@ version = property("mod.mod_version") as String
 group = property("maven_group") as String
 var cleanVersion = version.toString().split("+").first()
 val mcVersion = property("deps.minecraft_version")!!.toString()
+val mcDep = property("mcDep").toString()
 
 base {
 	archivesName.set(property("mod.archives_base_name") as String)
@@ -49,15 +50,26 @@ dependencies {
 	modImplementation("net.fabricmc.fabric-api:fabric-api:${property("deps.fabric_api")}")
 	modImplementation("net.fabricmc:fabric-language-kotlin:${property("fabric_kotlin_version")}")
 
-	modImplementation(include("net.kyori:adventure-platform-fabric:6.5.1")!!)
+	modImplementation(include("net.kyori:adventure-platform-fabric:${property("deps.adventure_api")}")!!)
+
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
 }
 
 tasks.processResources {
-	inputs.property("version", project.version)
+	val version: String by project
+	val mcDep: String by project
+
+	val props = mapOf(
+		"version" to project.version,
+		"mc" to mcDep
+	)
+
+	props.forEach(inputs::property)
+
 	filesMatching("fabric.mod.json") {
-		expand("version" to inputs.properties["version"])
+		expand(props)
 	}
+
 }
 
 tasks.withType<JavaCompile>().configureEach {
