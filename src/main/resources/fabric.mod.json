@@ -11,7 +11,7 @@
 		"homepage": "https://github.com/ThatOneDevil/yoinkgui",
 		"sources": "https://github.com/ThatOneDevil/yoinkgui"
 	},
-	"license": "CC0-1.0",
+	"license": "GPL-3.0 license",
 	"icon": "assets/yoinkgui/icon.png",
 	"environment": "*",
 	"entrypoints": {
