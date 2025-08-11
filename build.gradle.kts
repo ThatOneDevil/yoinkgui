@@ -70,6 +70,15 @@ tasks.processResources {
 
 }
 
+stonecutter {
+	replacements.string {
+		phase = "FIRST"
+		direction = eval(current.version, "=1.21.1")
+		replace("net.kyori.adventure.platform.modcommon.MinecraftClientAudiences", "net.kyori.adventure.platform.fabric.FabricClientAudiences")
+	}
+	println(current.version)
+}
+
 tasks.withType<JavaCompile>().configureEach {
 	options.release.set(21)
 }

@@ -1,5 +1,7 @@
 package me.thatonedevil.utils
 
+// adventure_imports
+
 import net.kyori.adventure.platform.modcommon.MinecraftClientAudiences
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.ClickEvent
@@ -7,7 +9,12 @@ import net.kyori.adventure.text.minimessage.MiniMessage
 
 object Utils {
     private val miniMessage = MiniMessage.miniMessage()
-    private val client = MinecraftClientAudiences.of().audience();
+
+    //? if >1.21.1 {
+    private val client = MinecraftClientAudiences.of().audience()
+    //?} else
+    /*private val client = FabricClientAudiences.of().audience();*/
+
     private val colorReplacements = mapOf(
         "&0" to "<black>", "&1" to "<dark_blue>", "&2" to "<dark_green>", "&3" to "<dark_aqua>",
         "&4" to "<dark_red>", "&5" to "<dark_purple>", "&6" to "<gold>", "&7" to "<gray>",

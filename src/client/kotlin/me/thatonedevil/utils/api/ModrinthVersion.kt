@@ -8,7 +8,7 @@ class ModrinthVersion(jsonElement: JsonElement) {
 
     init {
         val json: JsonObject = jsonElement.asJsonObject
-        this.updateVersion = json.get("version_number").asString
+        this.updateVersion = json.get("version_number").asString.split("+").first() //gets the version number without the version
     }
 
     fun getUpdateLink(): String {
