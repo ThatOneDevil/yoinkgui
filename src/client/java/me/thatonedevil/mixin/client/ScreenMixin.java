@@ -20,14 +20,6 @@ public class ScreenMixin {
             return;
         }
 
-        // First button (Yoink)
-        int buttonX = 40;
-        int buttonY = 10;
-        int buttonWidth = 120;
-        int buttonHeight = 20;
-        String buttonText = "Yoink nbt of all items";
-
-        // Second button (Parse NBT)
         int parseButtonX = 40;
         int parseButtonY = 35; // Position below the first button
         int parseButtonWidth = 160;
@@ -41,23 +33,8 @@ public class ScreenMixin {
         int mouseXUi = (int) (client.mouse.getX() * scaledWidth / client.getWindow().getWidth());
         int mouseYUi = (int) (client.mouse.getY() * scaledHeight / client.getWindow().getHeight());
 
-        // Update button hover states in shared YoinkGUIClient
-        YoinkGUIClient.INSTANCE.setButtonHovered(mouseXUi >= buttonX && mouseXUi <= buttonX + buttonWidth &&
-                mouseYUi >= buttonY && mouseYUi <= buttonY + buttonHeight);
-
         YoinkGUIClient.INSTANCE.setParseButtonHovered(mouseXUi >= parseButtonX && mouseXUi <= parseButtonX + parseButtonWidth &&
                 mouseYUi >= parseButtonY && mouseYUi <= parseButtonY + parseButtonHeight);
-
-        // Draw first button (Yoink) with appropriate color
-        int bgColor = YoinkGUIClient.INSTANCE.getButtonHovered() ? 0xAA444444 : 0xAA000000;
-        context.fill(buttonX, buttonY, buttonX + buttonWidth, buttonY + buttonHeight, bgColor);
-        context.drawCenteredTextWithShadow(
-                client.textRenderer,
-                literal(buttonText),
-                buttonX + buttonWidth / 2,
-                buttonY + (buttonHeight - 8) / 2,
-                0xFFFFFFFF
-        );
 
         // Draw second button (Parse NBT) with appropriate color
         int parseBgColor = YoinkGUIClient.INSTANCE.getParseButtonHovered() ? 0xAA444444 : 0xAA000000;

@@ -6,12 +6,13 @@ plugins {
 }
 
 
-
-version = property("mod_version") as String
+version = property("mod.mod_version") as String
 group = property("maven_group") as String
+var cleanVersion = version.toString().split("+").first()
+val mcVersion = property("deps.minecraft_version")!!.toString()
 
 base {
-	archivesName.set(property("archives_base_name") as String)
+	archivesName.set(property("mod.archives_base_name") as String)
 }
 
 repositories {
@@ -23,7 +24,6 @@ repositories {
 	}
 }
 
-
 loom {
 	splitEnvironmentSourceSets()
 
@@ -33,19 +33,23 @@ loom {
 			sourceSet(sourceSets["client"])
 		}
 	}
+
+	runConfigs.all {
+		ideConfigGenerated(true)
+		runDir("../../run")
+	}
+
 }
 
 dependencies {
-	minecraft("com.mojang:minecraft:${property("minecraft_version")}")
-	mappings("net.fabricmc:yarn:${property("yarn_mappings")}:v2")
+	minecraft("com.mojang:minecraft:${property("deps.minecraft_version")}")
+	mappings("net.fabricmc:yarn:${property("deps.yarn_mappings")}:v2")
 	modImplementation("net.fabricmc:fabric-loader:${property("loader_version")}")
 
-	modImplementation("net.fabricmc.fabric-api:fabric-api:${property("fabric_version")}")
+	modImplementation("net.fabricmc.fabric-api:fabric-api:${property("deps.fabric_api")}")
 	modImplementation("net.fabricmc:fabric-language-kotlin:${property("fabric_kotlin_version")}")
 
 	modImplementation(include("net.kyori:adventure-platform-fabric:6.5.1")!!)
-	implementation("com.github.shynixn.mccoroutine:mccoroutine-fabric-api:2.22.0")
-	implementation("com.github.shynixn.mccoroutine:mccoroutine-fabric-core:2.22.0")
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
 }
 
@@ -62,8 +66,10 @@ tasks.withType<JavaCompile>().configureEach {
 
 java {
 	withSourcesJar()
-	sourceCompatibility = JavaVersion.VERSION_21
-	targetCompatibility = JavaVersion.VERSION_21
+	val java = if (stonecutter.eval(stonecutter.current.version, ">=1.20.5"))
+		JavaVersion.VERSION_21 else JavaVersion.VERSION_17
+	targetCompatibility = java
+	sourceCompatibility = java
 }
 
 tasks.jar {
@@ -78,11 +84,11 @@ val generatedDir = layout.buildDirectory.dir("generated/sources/buildConfig").ge
 sourceSets["main"].java.srcDir(generatedDir)
 
 val generateBuildConfig by tasks.registering(Copy::class) {
-	from("src/templates/kotlin")
+	from("../../src/templates/kotlin")
 	into(generatedDir)
 	filteringCharset = "UTF-8"
-	expand("version" to project.version)
-	inputs.property("version", project.version)
+	expand("version" to cleanVersion)
+	inputs.property("version", cleanVersion)
 	outputs.upToDateWhen { false }
 }
 
@@ -93,11 +99,11 @@ tasks.named("sourcesJar") {
 	dependsOn(generateBuildConfig)
 }
 
-
 publishMods {
+	displayName.set("YoinkGUI $cleanVersion for MC $mcVersion")
 	file.set(tasks.remapJar.get().archiveFile)
 	changelog.set(
-		rootProject.file("changelogs/${version}.md")
+		rootProject.file("changelogs/${cleanVersion}.md")
 			.takeIf { it.exists() }
 			?.readText()
 			?: "No changelog provided."
@@ -105,11 +111,15 @@ publishMods {
 	type = STABLE
 	modLoaders.add("fabric")
 
+	fun versionList(prop: String) = findProperty(prop)?.toString()
+		?.split(',')
+		?.map { it.trim() }
+		?: emptyList()
 
 	modrinth {
 		projectId.set(property("modrinthId") as String)
 		accessToken.set(providers.environmentVariable("MODRINTH_API_KEY"))
-		minecraftVersions.addAll("1.21.8")
+		minecraftVersions.addAll(versionList("pub.modrinthMC"))
 
 		requires { slug.set("fabric-api") }
 		requires { slug.set("fabric-language-kotlin") }
@@ -118,7 +128,7 @@ publishMods {
 	curseforge {
 		projectId.set(property("curseforgeId") as String)
 		accessToken.set(providers.environmentVariable("CURSEFORGE_API_KEY"))
-		minecraftVersions.addAll("1.21.8")
+		minecraftVersions.addAll(versionList("pub.curseMC"))
 
 		requires { slug.set("fabric-api") }
 		requires { slug.set("fabric-language-kotlin") }
