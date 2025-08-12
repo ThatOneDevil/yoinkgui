@@ -30,7 +30,7 @@ object UpdateChecker {
             val latest = getLatestVersionFromModrinth()
             if (latest == null) {
                 null
-            } else if (latest.updateVersion?.equals(BuildConfig.VERSION) == true) {
+            } else if (latest.updateVersion == BuildConfig.VERSION) {
                 null
             } else {
                 currentUpdateVersion = latest
@@ -44,11 +44,11 @@ object UpdateChecker {
             runBlocking {
                 getUpdateVersion()?.let { version ->
                     sendChat(
-                        "\n<color:#FFA6CA>A new update is available: &m&c${version.updateVersion}&r &a${BuildConfig.VERSION}".toComponent(),
+                        "\n<color:#FFA6CA>A new update is available: &m&c${version.cleanVersion}&r &a${BuildConfig.VERSION}".toComponent(),
                         "<color:#8968CD>${version.getUpdateLink()} &7&o(Click to open)\n".toClickURL(version.getUpdateLink())
                     )
                 } ?: run {
-                    sendChat("&aYou are using the latest version of YoinkGUI!".toComponent())
+                    sendChat("<color#77DD77>You have the latest version of YoinkGUI!".toComponent())
                 }
             }
         }

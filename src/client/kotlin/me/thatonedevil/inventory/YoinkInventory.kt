@@ -1,6 +1,8 @@
 package me.thatonedevil.inventory
 
 import me.thatonedevil.YoinkGUI.logger
+import me.thatonedevil.utils.Utils.sendChat
+import me.thatonedevil.utils.Utils.toComponent
 import net.minecraft.client.network.ClientPlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtElement
@@ -13,7 +15,7 @@ class YoinkInventory(private val player: ClientPlayerEntity, private val invento
 
     fun yoinkItems() {
         if (topInventory == null || inventory.isTopInventoryEmpty()) {
-            logger.info("No top inventory found or it is empty!")
+            sendChat("<color:#FF6961>No inventory found or it is empty!".toComponent())
             return
         }
 

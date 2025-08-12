@@ -6,6 +6,9 @@ import kotlinx.coroutines.launch
 import me.thatonedevil.YoinkGUI.logger
 import me.thatonedevil.inventory.TopInventory
 import me.thatonedevil.inventory.YoinkInventory
+import me.thatonedevil.utils.Utils.sendChat
+import me.thatonedevil.utils.Utils.toClickable
+import me.thatonedevil.utils.Utils.toComponent
 import me.thatonedevil.utils.api.UpdateChecker
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
@@ -48,19 +51,19 @@ object YoinkGUIClient : ClientModInitializer {
                 val configDir = client.runDirectory.resolve("config")
                 val yoinkedItems = YoinkInventory(player, TopInventory(client)).apply { yoinkItems() }.getYoinkedItems().map { it.toString() }
 
-                client.execute {
-                    logger.info("Starting NBT parsing for ${yoinkedItems.size} items...")
+                if (yoinkedItems.isEmpty()) {
+                    client.execute {
+                        sendChat("<color:#FF6961>Inventory is empty!".toComponent())
+                    }
+                    return@launch
                 }
 
                 NBTParser.saveFormattedNBTToFile(yoinkedItems, configDir)
 
-                client.execute {
-                    logger.info("NBT parsing completed successfully!")
-                }
-
             } catch (e: Exception) {
                 client.execute {
-                    logger.error("Error during NBT parsing: ${e.message}")
+                    sendChat("<color:#FF6961>Error during NBT parsing: ${e.message} ()".toClickable(e.message.toString()))
+                    logger.error("Error during NBT parsing: ${e.stackTraceToString()}")
                 }
             }
         }

@@ -1,18 +1,19 @@
 package me.thatonedevil.utils.api
 
 import com.google.gson.JsonElement
-import com.google.gson.JsonObject
 
 class ModrinthVersion(jsonElement: JsonElement) {
-    var updateVersion: String? = null
+
+    val updateVersion: String
+    val cleanVersion: String
 
     init {
-        val json: JsonObject = jsonElement.asJsonObject
-        this.updateVersion = json.get("version_number").asString.split("+").first() //gets the version number without the version
+        val json = jsonElement.asJsonObject
+        val versionNumber = json.get("version_number").asString
+        cleanVersion = versionNumber.substringBefore("+")
+        updateVersion = versionNumber
     }
 
-    fun getUpdateLink(): String {
-        return "https://modrinth.com/mod/yoinkgui/version/" + this.updateVersion
-    }
+    fun getUpdateLink(): String = "https://modrinth.com/mod/yoinkgui/version/$updateVersion"
 
 }
