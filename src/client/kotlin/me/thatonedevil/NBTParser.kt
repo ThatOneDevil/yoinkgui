@@ -89,6 +89,15 @@ object NBTParser {
         }
     }
 
+    private fun parseJsonStringAsTextComponent(jsonString: String): String {
+        return try {
+            val parsed = gson.fromJson(jsonString, JsonObject::class.java)
+            parseTextComponent(parsed)
+        } catch (e: Exception) {
+            jsonString // Fallback to raw string if parsing fails
+        }
+    }
+
     private fun parseNewNBTFormat(raw: String): String = buildString {
         val json = gson.fromJson(raw, JsonObject::class.java)
         val components = json.getAsJsonObject("components") ?: return@buildString
@@ -97,8 +106,14 @@ object NBTParser {
         val hasLore = components.has("minecraft:lore")
         if (!hasName && !hasLore) return@buildString
 
-        components.getAsJsonObject("minecraft:custom_name")?.let {
-            append("Name: ").append(parseTextComponent(it)).append("\n\n")
+        components.get("minecraft:custom_name")?.let { customNameElement ->
+            append("Name: ")
+            when {
+                customNameElement.isJsonObject -> append(parseTextComponent(customNameElement.asJsonObject))
+                customNameElement.isJsonPrimitive -> append(parseJsonStringAsTextComponent(customNameElement.asString))
+                else -> append("Unknown format")
+            }
+            append("\n\n")
         }
 
         components.getAsJsonArray("minecraft:lore")?.let { lore ->
@@ -107,7 +122,7 @@ object NBTParser {
                 val parsed = when {
                     line.isJsonPrimitive && line.asString.isBlank() -> ""
                     line.isJsonObject -> parseTextComponent(line.asJsonObject)
-                    line.isJsonPrimitive -> line.asString
+                    line.isJsonPrimitive -> parseJsonStringAsTextComponent(line.asString)
                     else -> ""
                 }
                 append("Line $index: ").append(parsed).append("\n")
@@ -136,6 +151,7 @@ object NBTParser {
 
                 contentItems.forEachIndexed { idx, (itemIndex, formatted) ->
                     writer.write("=== ITEM $itemIndex ===\n")
+                    writer.write("Raw NBT: ${nbtList[idx]}\n")
                     writer.write("Item: ")
                     writer.write("Formatted:\n$formatted\n")
                     if (idx < contentItems.lastIndex) writer.write("\n${"=".repeat(50)}\n\n")

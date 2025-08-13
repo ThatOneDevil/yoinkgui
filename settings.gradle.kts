@@ -18,7 +18,7 @@ stonecutter {
 	kotlinController = true
 	centralScript = "build.gradle.kts"
 	shared {
-		versions("1.21.1", "1.21.3", "1.21.8")
+		versions("1.21.1", "1.21.5", "1.21.8")
 	}
 	create(rootProject)
 

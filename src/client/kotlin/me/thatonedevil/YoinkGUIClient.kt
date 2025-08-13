@@ -17,7 +17,7 @@ import org.lwjgl.glfw.GLFW
 
 object YoinkGUIClient : ClientModInitializer {
 
-    var buttonHovered = false
+    private var buttonHovered = false
     var parseButtonHovered = false
     private var wasLeftClicking = false
 

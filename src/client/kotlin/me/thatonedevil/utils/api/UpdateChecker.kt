@@ -7,11 +7,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import me.thatonedevil.BuildConfig
+import me.thatonedevil.YoinkGUI.logger
 import me.thatonedevil.utils.Utils.sendChat
 import me.thatonedevil.utils.Utils.toClickURL
 import me.thatonedevil.utils.Utils.toComponent
 import net.fabricmc.fabric.api.client.networking.v1.ClientLoginConnectionEvents
-import net.kyori.adventure.text.logger.slf4j.ComponentLogger.logger
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
@@ -62,7 +62,7 @@ object UpdateChecker {
             val latestVersion: JsonElement = elements.get(0)
             return ModrinthVersion(latestVersion)
         } catch (e: IOException) {
-            logger("&cChecking for update failed!")
+            logger.error("Checking for update failed!")
         }
         return null
     }
