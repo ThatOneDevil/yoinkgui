@@ -2,7 +2,6 @@ package me.thatonedevil.utils.api
 
 import com.google.gson.Gson
 import com.google.gson.JsonArray
-import com.google.gson.JsonElement
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
@@ -59,8 +58,17 @@ object UpdateChecker {
             val url = URI("https://api.modrinth.com/v2/project/5j4oEPp2/version").toURL()
             val reader = BufferedReader(InputStreamReader(url.openStream()))
             val elements: JsonArray = Gson().fromJson(reader, JsonArray::class.java)
-            val latestVersion: JsonElement = elements.get(0)
-            return ModrinthVersion(latestVersion)
+
+            for (element in elements) {
+                val version = ModrinthVersion(element)
+                if (version.supportsGameVersion(BuildConfig.MC_VERSION)) {
+                    println("Found compatible version: ${version.cleanVersion} for MC ${BuildConfig.MC_VERSION}")
+                    return version
+                }
+            }
+
+            println("No compatible version found for MC ${BuildConfig.MC_VERSION}")
+            return null
         } catch (e: IOException) {
             logger.error("Checking for update failed!")
         }
