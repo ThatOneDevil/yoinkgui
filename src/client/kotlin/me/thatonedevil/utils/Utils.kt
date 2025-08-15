@@ -46,8 +46,6 @@ object Utils {
     }
 
     fun sendChat(vararg messages: Component) {
-        messages.forEach { message ->
-            client.sendMessage(message)
-        }
+        messages.forEach(client::sendMessage)
     }
 }

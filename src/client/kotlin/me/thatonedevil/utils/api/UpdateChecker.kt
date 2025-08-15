@@ -2,11 +2,11 @@ package me.thatonedevil.utils.api
 
 import com.google.gson.Gson
 import com.google.gson.JsonArray
-import com.google.gson.JsonElement
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import me.thatonedevil.BuildConfig
+import me.thatonedevil.YoinkGUI
 import me.thatonedevil.YoinkGUI.logger
 import me.thatonedevil.utils.Utils.sendChat
 import me.thatonedevil.utils.Utils.toClickURL
@@ -48,7 +48,7 @@ object UpdateChecker {
                         "<color:#8968CD>${version.getUpdateLink()} &7&o(Click to open)\n".toClickURL(version.getUpdateLink())
                     )
                 } ?: run {
-                    sendChat("<color:#77DD77>You have the latest version of YoinkGUI!".toComponent())
+                    sendChat("<color:#77DD77>You have the latest version of YoinkGUI!")
                 }
             }
         }
@@ -59,8 +59,17 @@ object UpdateChecker {
             val url = URI("https://api.modrinth.com/v2/project/5j4oEPp2/version").toURL()
             val reader = BufferedReader(InputStreamReader(url.openStream()))
             val elements: JsonArray = Gson().fromJson(reader, JsonArray::class.java)
-            val latestVersion: JsonElement = elements.get(0)
-            return ModrinthVersion(latestVersion)
+
+            for (element in elements) {
+                val version = ModrinthVersion(element)
+                if (version.supportsGameVersion(BuildConfig.MC_VERSION)) {
+                    logger.info("Found compatible version: ${version.cleanVersion} for MC ${BuildConfig.MC_VERSION}")
+                    return version
+                }
+            }
+
+            logger.error("No compatible version found for MC ${BuildConfig.MC_VERSION}")
+            return null
         } catch (e: IOException) {
             logger.error("Checking for update failed!")
         }
