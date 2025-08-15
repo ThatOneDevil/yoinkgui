@@ -70,18 +70,24 @@ object NBTParser {
         }
     }
 
-    private fun parseTextComponent(obj: JsonObject): String = buildString {
-        detectGradient(obj)?.let {
-            append(it).append(extractText(obj))
-            return@buildString
-        }
-
-        append(formatColor(obj.get("color")?.asString))
+    private fun appendColorCodes(obj: JsonObject): String = buildString {
         if (getBooleanValue(obj.get("bold"))) append("&l")
         if (getBooleanValue(obj.get("italic"))) append("&o")
         if (getBooleanValue(obj.get("underlined"))) append("&n")
         if (getBooleanValue(obj.get("strikethrough"))) append("&m")
         if (getBooleanValue(obj.get("obfuscated"))) append("&k")
+    }
+
+    private fun parseTextComponent(obj: JsonObject): String = buildString {
+        detectGradient(obj)?.let { gradientCode ->
+            // Apply formatting codes before the gradient
+            append(appendColorCodes(obj))
+            append(gradientCode).append(extractText(obj))
+            return@buildString
+        }
+
+        append(formatColor(obj.get("color")?.asString))
+        append(appendColorCodes(obj))
         append(obj.get("text")?.asString ?: "")
 
         obj.get("extra")?.asJsonArray?.forEach {
@@ -135,8 +141,9 @@ object NBTParser {
     suspend fun saveFormattedNBTToFile(nbtList: List<String>, configDir: File) = withContext(Dispatchers.IO) {
         try {
             val start = LocalDateTime.now()
+            val formattedTime = start.format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"))
             val yoinkDir = File(configDir, "yoinkgui").apply { mkdirs() }
-            val fileName = "formatted_nbt_${start.format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"))}.txt"
+            val fileName = "formatted_nbt_${formattedTime}.txt"
             val file = File(yoinkDir, fileName)
 
             FileWriter(file).use { writer ->
@@ -146,14 +153,16 @@ object NBTParser {
                 }
 
                 writer.write("=== Formatted NBT Data ===\n")
-                writer.write("Generated: $start\n")
+                writer.write("Generated: $formattedTime\n")
                 writer.write("Items with content: ${contentItems.size} / ${nbtList.size}\n\n")
+                writer.write("=== Details ===\n")
+                writer.write("Mod Version: ${BuildConfig.VERSION}\n")
+                writer.write("Minecraft Version: ${BuildConfig.MC_VERSION}\n\n")
 
                 contentItems.forEachIndexed { idx, (itemIndex, formatted) ->
                     writer.write("=== ITEM $itemIndex ===\n")
                     writer.write("Raw NBT: ${nbtList[idx]}\n")
-                    writer.write("Item: ")
-                    writer.write("Formatted:\n$formatted\n")
+                    writer.write("\n$formatted\n")
                     if (idx < contentItems.lastIndex) writer.write("\n${"=".repeat(50)}\n\n")
                 }
             }

@@ -97,27 +97,18 @@ tasks.jar {
 	}
 }
 
-val generatedDir = layout.buildDirectory.dir("generated/sources/buildConfig").get().asFile
+val templateSource = file("../../src/templates/kotlin")
+val templateDest = layout.buildDirectory.dir("generated/sources/templates")
+val generateTemplates = tasks.register<Copy>("generateTemplates") {
+	val props = mapOf("version" to cleanVersion, "mcVersion" to mcVersion)
+	inputs.properties(props)
 
-sourceSets["main"].java.srcDir(generatedDir)
-
-val generateBuildConfig by tasks.registering(Copy::class) {
-	from("../../src/templates/kotlin")
-	into(generatedDir)
-	filteringCharset = "UTF-8"
-	expand("version" to cleanVersion)
-	inputs.property("version", cleanVersion)
-
-	outputs.dir(generatedDir)
-	outputs.cacheIf { true }
+	from(templateSource)
+	into(templateDest)
+	expand(props)
 }
 
-tasks.named("compileKotlin") {
-	dependsOn(generateBuildConfig)
-}
-tasks.named("sourcesJar") {
-	dependsOn(generateBuildConfig)
-}
+sourceSets.main.configure { java.srcDir(generateTemplates.map { it.outputs }) }
 
 publishMods {
 	displayName.set("YoinkGUI $cleanVersion for MC $mcVersion")

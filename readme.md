@@ -8,6 +8,7 @@
 ![Build Status](https://github.com/ThatOneDevil/yoinkgui/actions/workflows/build.yml/badge.svg)
 [![Modrinth Donwloads](https://img.shields.io/modrinth/dt/yoinkgui?color=00AF5C&label=downloads&logo=modrinth)](https://modrinth.com/mod/yoinkgui)
 [![CurseForge Downloads](https://cf.way2muchnoise.eu/full_yoinkgui_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/yoinkgui)
+[![Discord](https://img.shields.io/discord/1405856687851704420?color=blue&logo=discord&label=Discord)](https://discord.gg/kcegGvZvpC)
 
 **A Fabric mod that allows users to easily copy the name and lore of items from any GUI**  
 Intended strictly for convenience and development purposes.
@@ -24,13 +25,12 @@ Intended strictly for convenience and development purposes.
 ---
 
 ## 🐛 Issues
-Report bugs and request features here:  
+Report bugs here:  
 [https://github.com/ThatOneDevil/yoinkgui/issues](https://github.com/ThatOneDevil/yoinkgui/issues)
 
 ---
 
 ## 📦 Dependencies
-- Fabric Loader
 - Fabric API
 - Fabric Language Kotlin
 
@@ -49,10 +49,10 @@ Report bugs and request features here:
 
 ## 📖 How to Use
 
-1. Install the mod with the correct dependencies.  
-2. Open any GUI in-game.  
-3. Click the **"Yoink and Parse NBT into file"** button in the top-left corner.  
-4. The output `.txt` file will appear in your `config` folder.  
+1. Install the mod with the correct dependencies.
+2. Open any GUI in-game.
+3. Click the **"Yoink and Parse NBT into file"** button in the top-left corner.
+4. The output `.txt` file will appear in your `config` folder.
 5. The file path is also displayed in chat, as shown below
 
 **Example of the path message:**
