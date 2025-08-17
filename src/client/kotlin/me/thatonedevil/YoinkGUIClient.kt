@@ -8,7 +8,6 @@ import me.thatonedevil.inventory.TopInventory
 import me.thatonedevil.inventory.YoinkInventory
 import me.thatonedevil.utils.Utils.sendChat
 import me.thatonedevil.utils.Utils.toClickable
-import me.thatonedevil.utils.Utils.toComponent
 import me.thatonedevil.utils.api.UpdateChecker
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents

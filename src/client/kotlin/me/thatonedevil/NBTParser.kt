@@ -136,8 +136,6 @@ object NBTParser {
         }
     }
 
-    private fun parseNBTToString(raw: String): String = parseNewNBTFormat(raw)
-
     suspend fun saveFormattedNBTToFile(nbtList: List<String>, configDir: File) = withContext(Dispatchers.IO) {
         try {
             val start = LocalDateTime.now()
@@ -148,7 +146,7 @@ object NBTParser {
 
             FileWriter(file).use { writer ->
                 val contentItems = nbtList.mapIndexedNotNull { i, raw ->
-                    val formatted = parseNBTToString(raw)
+                    val formatted = parseNewNBTFormat(raw)
                     if (formatted.isNotBlank()) i + 1 to formatted else null
                 }
 
