@@ -19,11 +19,6 @@ Intended strictly for convenience and development purposes.
 
 ---
 
-## 📜 Disclaimer
-> The use of this mod to steal or replicate other players' GUI formatting without their consent is **not** supported or condoned.
-
----
-
 ## 🐛 Issues
 Report bugs here:  
 [https://github.com/ThatOneDevil/yoinkgui/issues](https://github.com/ThatOneDevil/yoinkgui/issues)
@@ -49,14 +44,16 @@ Report bugs here:
 
 ## 📖 How to Use
 
-1. Install the mod with the correct dependencies.
-2. Open any GUI in-game.
-3. Click the **"Yoink and Parse NBT into file"** button in the top-left corner.
-4. The output `.txt` file will appear in your `config` folder.
+1. Install the mod with the correct dependencies.  
+2. Open any GUI in-game.  
+3. Click the **"Yoink and Parse NBT into file"** button in the top-left corner.  
+4. The output `.txt` file will appear in your `config` folder.  
 5. The file path is also displayed in chat, as shown below
 
 **Example of the path message:**
 
 ![Example of the path message](https://cdn.modrinth.com/data/cached_images/681a4eb24635ac98ae987f4a72a741c27c4c3c87.png)
 
----
+![Example item with lore](https://cdn.modrinth.com/data/cached_images/acb2558b12d52504936e9d1e1afd8f54a93d04ef.png)
+
+![Parsed Lore](https://cdn.modrinth.com/data/cached_images/c468d843708f68328354a1c17ea48f4d8b4dd297.png)
