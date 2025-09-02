@@ -40,7 +40,7 @@ object YoinkGUIClient : ClientModInitializer {
     private fun handleYoinkButton(client: MinecraftClient) {
         val yoinkInventory = YoinkInventory(client.player!!, TopInventory(client))
         yoinkInventory.yoinkItems()
-        logger.info("Yoinked Items: ${yoinkInventory.getYoinkedItems()}")
+        logger?.info("Yoinked Items: ${yoinkInventory.getYoinkedItems()}")
     }
 
     private fun handleParseButton(client: MinecraftClient) {
@@ -62,7 +62,7 @@ object YoinkGUIClient : ClientModInitializer {
             } catch (e: Exception) {
                 client.execute {
                     sendChat("<color:#FF6961>Error during NBT parsing: ${e.message} &7&o(Report on github, Click to copy)".toClickable(e.message.toString()))
-                    logger.error("Error during NBT parsing: ${e.stackTraceToString()}")
+                    logger?.error("Error during NBT parsing: ${e.stackTraceToString()}")
                 }
             }
         }

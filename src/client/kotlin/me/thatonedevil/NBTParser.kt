@@ -100,7 +100,7 @@ object NBTParser {
             val parsed = gson.fromJson(jsonString, JsonObject::class.java)
             parseTextComponent(parsed)
         } catch (e: Exception) {
-            jsonString // Fallback to raw string if parsing fails
+            jsonString
         }
     }
 
@@ -172,7 +172,7 @@ object NBTParser {
                 "  <color:#8968CD>${file.absolutePath} &7&o(Click to copy)\n".toClickable(file.absolutePath)
             )
         } catch (e: Exception) {
-            logger.error("Error saving NBT file: ${e.message}")
+            logger?.error("Error saving NBT file: ${e.message}")
         }
     }
 }

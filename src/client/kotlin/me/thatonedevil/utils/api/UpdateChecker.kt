@@ -2,11 +2,12 @@ package me.thatonedevil.utils.api
 
 import com.google.gson.Gson
 import com.google.gson.JsonArray
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import me.thatonedevil.BuildConfig
-import me.thatonedevil.YoinkGUI
 import me.thatonedevil.YoinkGUI.logger
 import me.thatonedevil.utils.Utils.sendChat
 import me.thatonedevil.utils.Utils.toClickURL
@@ -41,7 +42,7 @@ object UpdateChecker {
 
     fun setupJoinListener() {
         ClientLoginConnectionEvents.INIT.register { _, _ ->
-            runBlocking {
+            CoroutineScope(Dispatchers.IO).launch {
                 getUpdateVersion()?.let { version ->
                     sendChat(
                         "\n<color:#FFA6CA>A new update is available: &m&c${version.cleanVersion}&r &a${BuildConfig.VERSION}".toComponent(),
@@ -63,15 +64,15 @@ object UpdateChecker {
             for (element in elements) {
                 val version = ModrinthVersion(element)
                 if (version.supportsGameVersion(BuildConfig.MC_VERSION)) {
-                    logger.info("Found compatible version: ${version.cleanVersion} for MC ${BuildConfig.MC_VERSION}")
+                    logger?.info("Found compatible version: ${version.cleanVersion} for MC ${BuildConfig.MC_VERSION}")
                     return version
                 }
             }
 
-            logger.error("No compatible version found for MC ${BuildConfig.MC_VERSION}")
+            logger?.error("No compatible version found for MC ${BuildConfig.MC_VERSION}")
             return null
-        } catch (e: IOException) {
-            logger.error("Checking for update failed!")
+        } catch (_: IOException) {
+            logger?.error("Checking for update failed!")
         }
         return null
     }

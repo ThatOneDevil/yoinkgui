@@ -29,5 +29,6 @@ class YoinkInventory(private val player: ClientPlayerEntity, private val invento
 
     }
 
+
     fun getYoinkedItems(): List<NbtElement> = encodedItems
 }
