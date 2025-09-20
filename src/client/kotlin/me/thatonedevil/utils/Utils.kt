@@ -6,16 +6,18 @@ import net.kyori.adventure.text.minimessage.MiniMessage
 
 //? if >1.21.1 {
 import net.kyori.adventure.platform.modcommon.MinecraftClientAudiences
-//?} else
+//?} else {
 /*import net.kyori.adventure.platform.fabric.FabricClientAudiences*/
+//?}
 
 object Utils {
     private val miniMessage = MiniMessage.miniMessage()
 
     //? if >1.21.1 {
     private val client = MinecraftClientAudiences.of().audience()
-    //?} else
+    //?} else {
     /*private val client = FabricClientAudiences.of().audience();*/
+    //?}
 
     private val colorReplacements = mapOf(
         "&0" to "<black>", "&1" to "<dark_blue>", "&2" to "<dark_green>", "&3" to "<dark_aqua>",
