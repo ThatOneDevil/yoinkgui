@@ -54,7 +54,6 @@ dependencies {
 }
 
 tasks.processResources {
-	val version: String by project
 	val mcDep: String by project
 
 	val props = mapOf(
@@ -68,15 +67,6 @@ tasks.processResources {
 		expand(props)
 	}
 
-}
-
-stonecutter {
-	replacements.string {
-		phase = "FIRST"
-		direction = eval(current.version, "=1.21.1")
-		replace("net.kyori.adventure.platform.modcommon.MinecraftClientAudiences", "net.kyori.adventure.platform.fabric.FabricClientAudiences")
-	}
-	println(current.version)
 }
 
 tasks.withType<JavaCompile>().configureEach {

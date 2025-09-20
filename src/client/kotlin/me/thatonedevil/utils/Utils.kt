@@ -1,11 +1,13 @@
 package me.thatonedevil.utils
 
-// adventure_imports
-
-import net.kyori.adventure.platform.modcommon.MinecraftClientAudiences
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.minimessage.MiniMessage
+
+//? if >1.21.1 {
+import net.kyori.adventure.platform.modcommon.MinecraftClientAudiences
+//?} else
+/*import net.kyori.adventure.platform.fabric.FabricClientAudiences*/
 
 object Utils {
     private val miniMessage = MiniMessage.miniMessage()

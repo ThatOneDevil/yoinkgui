@@ -5,7 +5,6 @@ import com.google.gson.JsonArray
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import me.thatonedevil.BuildConfig
 import me.thatonedevil.YoinkGUI.logger
