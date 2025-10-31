@@ -3,20 +3,21 @@ package me.thatonedevil.utils
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.minimessage.MiniMessage
-
+import net.minecraft.client.MinecraftClient
 //? if >1.21.1 {
 import net.kyori.adventure.platform.modcommon.MinecraftClientAudiences
 //?} else {
 /*import net.kyori.adventure.platform.fabric.FabricClientAudiences*/
 //?}
 
+
 object Utils {
     private val miniMessage = MiniMessage.miniMessage()
 
     //? if >1.21.1 {
-    private val client = MinecraftClientAudiences.of().audience()
+    private val audience = MinecraftClientAudiences.of().audience()
     //?} else {
-    /*private val client = FabricClientAudiences.of().audience();*/
+    /*private val audience = FabricClientAudiences.of().audience();*/
     //?}
 
     private val colorReplacements = mapOf(
@@ -45,11 +46,20 @@ object Utils {
         return this.toComponent().clickEvent(ClickEvent.openUrl(message))
     }
 
+    // Ensure message sending runs on the client/render thread
     fun sendChat(message: String) {
-        client.sendMessage(message.toComponent())
+        val mc = MinecraftClient.getInstance()
+        val action = Runnable { audience.sendMessage(message.toComponent()) }
+        mc?.execute(action) ?: action.run()
     }
 
     fun sendChat(vararg messages: Component) {
-        messages.forEach(client::sendMessage)
+        val mc = MinecraftClient.getInstance()
+        val action = Runnable {
+            for (component in messages) {
+                audience.sendMessage(component)
+            }
+        }
+        mc?.execute(action) ?: action.run()
     }
 }

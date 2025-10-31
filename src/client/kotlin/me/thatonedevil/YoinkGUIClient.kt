@@ -51,19 +51,16 @@ object YoinkGUIClient : ClientModInitializer {
                 val yoinkedItems = YoinkInventory(player, TopInventory(client)).apply { yoinkItems() }.getYoinkedItems().map { it.toString() }
 
                 if (yoinkedItems.isEmpty()) {
-                    client.execute {
-                        sendChat("<color:#FF6961>Inventory is empty!")
-                    }
+                    sendChat("<color:#FF6961>Inventory is empty!")
                     return@launch
                 }
 
                 NBTParser.saveFormattedNBTToFile(yoinkedItems, configDir)
 
             } catch (e: Exception) {
-                client.execute {
-                    sendChat("<color:#FF6961>Error during NBT parsing: ${e.message} &7&o(Report on github, Click to copy)".toClickable(e.message.toString()))
-                    logger?.error("Error during NBT parsing: ${e.stackTraceToString()}")
-                }
+                sendChat("<color:#FF6961>Error during NBT parsing: ${e.message} &7&o(Report on github, Click to copy)".toClickable(e.message.toString()))
+                logger?.error("Error during NBT parsing: ${e.stackTraceToString()}")
+
             }
         }
     }
