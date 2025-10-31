@@ -136,6 +136,7 @@ object NBTParser {
         }
     }
 
+
     suspend fun saveFormattedNBTToFile(nbtList: List<String>, configDir: File) = withContext(Dispatchers.IO) {
         try {
             val start = LocalDateTime.now()
@@ -145,9 +146,10 @@ object NBTParser {
             val file = File(yoinkDir, fileName)
 
             FileWriter(file).use { writer ->
+                // keep the original index so we can reference the raw NBT correctly later
                 val contentItems = nbtList.mapIndexedNotNull { i, raw ->
                     val formatted = parseNewNBTFormat(raw)
-                    if (formatted.isNotBlank()) i + 1 to formatted else null
+                    if (formatted.isNotBlank()) Pair(i, formatted) else null
                 }
 
                 writer.write("=== Formatted NBT Data ===\n")
@@ -157,22 +159,27 @@ object NBTParser {
                 writer.write("Mod Version: ${BuildConfig.VERSION}\n")
                 writer.write("Minecraft Version: ${BuildConfig.MC_VERSION}\n\n")
 
-                contentItems.forEachIndexed { idx, (itemIndex, formatted) ->
-                    writer.write("=== ITEM $itemIndex ===\n")
-                    writer.write("Raw NBT: ${nbtList[idx]}\n")
+                contentItems.forEachIndexed { outIdx, (originalIndex, formatted) ->
+                    writer.write("=== ITEM ${originalIndex + 1} ===\n")
+                    writer.write("Raw NBT: ${nbtList[originalIndex]}\n")
                     writer.write("\n$formatted\n")
-                    if (idx < contentItems.lastIndex) writer.write("\n${"=".repeat(50)}\n\n")
+                    if (outIdx < contentItems.lastIndex) writer.write("\n${"=".repeat(50)}\n\n")
                 }
             }
 
             val duration = Duration.between(start, LocalDateTime.now()).toMillis()
-            Utils.sendChat(
-                "\n<color:#FFA6CA>Formatted NBT data saved to:".toComponent(),
-                " <color:#FFA6CA>Parse time: <color:#8968CD>${duration}ms".toComponent(),
-                "  <color:#8968CD>${file.absolutePath} &7&o(Click to copy)\n".toClickable(file.absolutePath)
-            )
+
+            try {
+                Utils.sendChat(
+                    "\n<color:#FFA6CA>Formatted NBT data saved to:".toComponent(),
+                    " <color:#FFA6CA>Parse time: <color:#8968CD>${duration}ms".toComponent(),
+                    "  <color:#8968CD>${file.absolutePath} &7&o(Click to copy)\n".toClickable(file.absolutePath)
+                )
+            } catch (inner: Exception) {
+                logger?.error("Error while sending save notification to chat: ${inner.message}", inner)
+            }
         } catch (e: Exception) {
-            logger?.error("Error saving NBT file: ${e.message}")
+            logger?.error("Error saving NBT file: ${e.message}", e)
         }
     }
 }
