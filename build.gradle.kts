@@ -47,7 +47,6 @@ dependencies {
 
 	modImplementation("net.fabricmc.fabric-api:fabric-api:${property("deps.fabric_api")}")
 	modImplementation("net.fabricmc:fabric-language-kotlin:${property("fabric_kotlin_version")}")
-
 	modImplementation(include("net.kyori:adventure-platform-fabric:${property("deps.adventure_api")}")!!)
 
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
