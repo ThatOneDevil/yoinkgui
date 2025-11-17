@@ -2,6 +2,15 @@ name: build
 
 on:
   push:
+  schedule:
+    - cron: '0 0 * * *'  # Runs daily at midnight UTC
+  workflow_dispatch:
+    inputs:
+      force_nightly:
+        description: 'Force nightly build (upload artifacts and send Discord notification)'
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   build:
@@ -36,3 +45,25 @@ jobs:
 
       - name: Build with Gradle
         run: ./gradlew build --no-daemon
+
+      - name: Upload build artifacts
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.force_nightly == 'true')
+        uses: actions/upload-artifact@v4
+        with:
+          name: yoinkgui-nightly-${{ github.run_number }}
+          path: build/libs/*.jar
+          retention-days: 30
+
+      - name: Send Discord notification
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.force_nightly == 'true')
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        run: |
+          ARTIFACT_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          COMMIT_MSG=$(git log -1 --pretty=%B | head -n 1)
+          COMMIT_SHA=$(git rev-parse --short HEAD)
+          
+          curl -H "Content-Type: application/json" \
+            -d "{\"embeds\": [{\"title\": \"🌙 Nightly Build Complete\", \"description\": \"YoinkGUI nightly build has finished successfully!\", \"color\": 5814783, \"fields\": [{\"name\": \"Commit\", \"value\": \"[\`$COMMIT_SHA\`](https://github.com/${{ github.repository }}/commit/${{ github.sha }}) - $COMMIT_MSG\", \"inline\": false}, {\"name\": \"Download\", \"value\": \"[Click here to download artifacts]($ARTIFACT_URL)\", \"inline\": false}], \"timestamp\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"}]}" \
+            $DISCORD_WEBHOOK
+
