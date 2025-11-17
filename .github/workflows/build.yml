@@ -51,7 +51,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: yoinkgui-nightly-${{ github.run_number }}
-          path: build/libs/*.jar
+          path: versions/*/build/libs/*.jar
           retention-days: 30
 
       - name: Send Discord notification
