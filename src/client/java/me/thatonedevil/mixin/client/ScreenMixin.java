@@ -21,11 +21,13 @@ public class ScreenMixin {
             return;
         }
 
-        if (!ModConfig.getEnableYoinkButton()){
+        ModConfig config = YoinkGUIClient.getModConfig();
+
+        if (!config.enableYoinkButton){
             return;
         }
 
-        float scaleFactor = ModConfig.getButtonScaleFactor();
+        float scaleFactor = config.buttonScaleFactor;
 
         int baseButtonWidth = 160;
         int baseButtonHeight = 20;
