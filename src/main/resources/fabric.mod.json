@@ -15,6 +15,9 @@
 	"icon": "assets/yoinkgui/icon.png",
 	"environment": "*",
 	"entrypoints": {
+       "modmenu": [
+          "me.thatonedevil.config.ModMenuIntegration"
+        ],
 		"main": [
 			{
 				"value": "me.thatonedevil.YoinkGUI",
@@ -40,7 +43,8 @@
 		"minecraft": "${mc}",
 		"java": ">=21",
 		"fabric-api": "*",
-		"fabric-language-kotlin": "*"
+		"fabric-language-kotlin": "*",
+        "yet_another_config_lib_v3": ">=${yaclVersion}"
 	},
 	"suggests": {
 		"another-mod": "*"

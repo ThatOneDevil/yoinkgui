@@ -4,11 +4,14 @@ plugins {
 	id("me.modmuss50.mod-publish-plugin") version "0.8.4"
 }
 
-version = property("mod.mod_version") as String
+val modVersion = "1.5.0"
+
+version = "${modVersion}+${property("mod.mod_version") as String}"
 group = property("maven_group") as String
 var cleanVersion = version.toString().split("+").first()
 val mcVersion = property("deps.minecraft_version")!!.toString()
 val mcDep = property("mcDep").toString()
+val yacl = property("deps.yacl").toString()
 
 base {
 	archivesName.set(property("mod.archives_base_name") as String)
@@ -21,6 +24,12 @@ repositories {
 		url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
 		mavenContent { snapshotsOnly() }
 	}
+    maven("https://maven.terraformersmc.com/") {
+        name = "Terraformers"
+    }
+    maven("https://maven.isxander.dev/releases") {
+        name = "Xander Maven"
+    }
 }
 
 loom {
@@ -41,15 +50,26 @@ loom {
 }
 
 dependencies {
-	minecraft("com.mojang:minecraft:${property("deps.minecraft_version")}")
+	// mappings
+    minecraft("com.mojang:minecraft:${property("deps.minecraft_version")}")
 	mappings("net.fabricmc:yarn:${property("deps.yarn_mappings")}:v2")
-	modImplementation("net.fabricmc:fabric-loader:${property("loader_version")}")
 
+    // fabric
+	modImplementation("net.fabricmc:fabric-loader:${property("loader_version")}")
 	modImplementation("net.fabricmc.fabric-api:fabric-api:${property("deps.fabric_api")}")
 	modImplementation("net.fabricmc:fabric-language-kotlin:${property("fabric_kotlin_version")}")
+
+    // adventure
 	modImplementation(include("net.kyori:adventure-platform-fabric:${property("deps.adventure_api")}")!!)
 
-	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
+
+    // config libs
+    modImplementation("com.terraformersmc:modmenu:${property("deps.modmenu")}")
+    modImplementation("dev.isxander:yet-another-config-lib:${property("deps.yacl")}")
+
+
+    // kotlin
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
 }
 
 tasks.processResources {
@@ -57,7 +77,8 @@ tasks.processResources {
 
 	val props = mapOf(
 		"version" to project.version,
-		"mc" to mcDep
+		"mc" to mcDep,
+        "yaclVersion" to yacl
 	)
 
 	props.forEach(inputs::property)
@@ -123,6 +144,7 @@ publishMods {
 
 		requires { slug.set("fabric-api") }
 		requires { slug.set("fabric-language-kotlin") }
+        optional { slug.set("modmenu") }
 	}
 
 	curseforge {
@@ -132,6 +154,7 @@ publishMods {
 
 		requires { slug.set("fabric-api") }
 		requires { slug.set("fabric-language-kotlin") }
+        optional { slug.set("modmenu") }
 	}
 
 }
