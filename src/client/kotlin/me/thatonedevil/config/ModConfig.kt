@@ -28,51 +28,7 @@ class ModConfig() {
                     .build()
             }
             .build()
-
-        // fallback instance used if handler is unavailable or reflection fails
-        private val FALLBACK = ModConfig()
-
-        /**
-         * Retrieve the live config instance from the HANDLER using reflection (tries several common method names).
-         * If that fails, returns a fallback singleton so bindings still work.
-         */
-        @JvmStatic
-        fun live(): ModConfig {
-            val handler = HANDLER ?: return FALLBACK
-            val cls = handler::class.java
-            val candidates = arrayOf("get", "getConfig", "getOrCreate", "getOrLoad", "getValue", "getInstance")
-            for (name in candidates) {
-                try {
-                    val m = cls.getMethod(name)
-                    val res = m.invoke(handler)
-                    if (res is ModConfig) return res
-                } catch (_: NoSuchMethodException) {
-                    // try next
-                } catch (_: Throwable) {
-                    // ignore other invocation errors and try next candidate
-                }
-            }
-            return FALLBACK
-        }
-
-        @JvmStatic
-        fun save() {
-            try {
-                HANDLER?.let { handler ->
-                    // try to call save() reflectively if necessary (most implementations expose save())
-                    val cls = handler::class.java
-                    try {
-                        val m = cls.getMethod("save")
-                        m.invoke(handler)
-                        return
-                    } catch (_: NoSuchMethodException) {
-                        // fallthrough
-                    }
-                }
-            } catch (_: Throwable) {
-                // ignore
-            }
-        }
     }
 
 }
+

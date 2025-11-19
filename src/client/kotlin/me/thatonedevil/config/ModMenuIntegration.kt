@@ -8,10 +8,10 @@ import dev.isxander.yacl3.api.OptionGroup
 import dev.isxander.yacl3.api.YetAnotherConfigLib
 import dev.isxander.yacl3.api.controller.FloatSliderControllerBuilder
 import dev.isxander.yacl3.api.controller.TickBoxControllerBuilder
+import me.thatonedevil.YoinkGUIClient.modConfig
 import net.minecraft.text.Text
 
 class ModMenuIntegration : ModMenuApi {
-
     override fun getModConfigScreenFactory(): ConfigScreenFactory<*> = ConfigScreenFactory { parentScreen ->
         YetAnotherConfigLib.createBuilder()
             .title(Text.of("YoinkGUI Settings"))
@@ -23,21 +23,13 @@ class ModMenuIntegration : ModMenuApi {
 
                     .option(Option.createBuilder<Boolean>()
                         .name(Text.of("Enable Yoink Button"))
-                        .binding(
-                            ModConfig.live().enableYoinkButton,
-                            { ModConfig.live().enableYoinkButton },
-                            { ModConfig.live().enableYoinkButton = it }
-                        )
+                        .binding(true, { modConfig.enableYoinkButton }, { modConfig.enableYoinkButton = it })
                         .controller(TickBoxControllerBuilder::create)
                         .build())
 
                     .option(Option.createBuilder<Float>()
                         .name(Text.of("Button Scale Factor"))
-                        .binding(
-                            ModConfig.live().buttonScaleFactor,
-                            { ModConfig.live().buttonScaleFactor },
-                            { ModConfig.live().buttonScaleFactor = it }
-                        )
+                        .binding(1.0f, { modConfig.buttonScaleFactor }, { modConfig.buttonScaleFactor = it })
                         .controller{ option ->
                             FloatSliderControllerBuilder.create(option)
                                 .range(0f, 2f)
@@ -49,7 +41,7 @@ class ModMenuIntegration : ModMenuApi {
                         .build())
                     .build())
                 .build())
-            .save { ModConfig.save() }
+            .save { ModConfig.HANDLER?.save() }
             .build()
             .generateScreen(parentScreen)
     }
