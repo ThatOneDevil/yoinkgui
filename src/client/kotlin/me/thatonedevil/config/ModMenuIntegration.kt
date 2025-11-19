@@ -7,10 +7,8 @@ import dev.isxander.yacl3.api.OptionGroup
 import dev.isxander.yacl3.api.YetAnotherConfigLib
 import dev.isxander.yacl3.api.Option
 import dev.isxander.yacl3.api.controller.FloatSliderControllerBuilder
-import dev.isxander.yacl3.api.controller.SliderControllerBuilder
 import dev.isxander.yacl3.api.controller.TickBoxControllerBuilder
 import dev.isxander.yacl3.dsl.controller
-import dev.isxander.yacl3.gui.controllers.slider.FloatSliderController
 import net.minecraft.text.Text
 
 class ModMenuIntegration : ModMenuApi {
