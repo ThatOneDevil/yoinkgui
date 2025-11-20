@@ -8,10 +8,12 @@ val modVersion = "1.5.0"
 
 version = "${modVersion}+${property("mod.mod_version") as String}"
 group = property("maven_group") as String
+
 var cleanVersion = version.toString().split("+").first()
 val mcVersion = property("deps.minecraft_version")!!.toString()
 val mcDep = property("mcDep").toString()
 val yacl = property("deps.yacl").toString()
+val modMenu = property("deps.modmenu").toString()
 
 base {
 	archivesName.set(property("mod.archives_base_name") as String)
@@ -64,8 +66,8 @@ dependencies {
 
 
     // config libs
-    modImplementation("com.terraformersmc:modmenu:${property("deps.modmenu")}")
-    modImplementation("dev.isxander:yet-another-config-lib:${property("deps.yacl")}")
+    modImplementation("com.terraformersmc:modmenu:${modMenu}")
+    modImplementation("dev.isxander:yet-another-config-lib:${yacl}")
 
 
     // kotlin
@@ -78,7 +80,8 @@ tasks.processResources {
 	val props = mapOf(
 		"version" to project.version,
 		"mc" to mcDep,
-        "yaclVersion" to yacl
+        "yaclVersion" to yacl,
+        "modmenuVersion" to modMenu
 	)
 
 	props.forEach(inputs::property)
@@ -145,7 +148,7 @@ publishMods {
 		requires { slug.set("fabric-api") }
 		requires { slug.set("fabric-language-kotlin") }
         requires { slug.set("yacl") }
-        optional { slug.set("modmenu") }
+        requires { slug.set("modmenu") }
 	}
 
 	curseforge {
@@ -156,7 +159,7 @@ publishMods {
 		requires { slug.set("fabric-api") }
 		requires { slug.set("fabric-language-kotlin") }
         requires { slug.set("yacl") }
-        optional { slug.set("modmenu") }
+        requires { slug.set("modmenu") }
 	}
 
 }

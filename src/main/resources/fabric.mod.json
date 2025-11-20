@@ -44,7 +44,8 @@
 		"java": ">=21",
 		"fabric-api": "*",
 		"fabric-language-kotlin": "*",
-        "yet_another_config_lib_v3": ">=${yaclVersion}"
+        "yet_another_config_lib_v3": ">=${yaclVersion}",
+        "modmenu": ">=${modmenuVersion}"
 	},
 	"suggests": {
 		"another-mod": "*"
