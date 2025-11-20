@@ -144,6 +144,7 @@ publishMods {
 
 		requires { slug.set("fabric-api") }
 		requires { slug.set("fabric-language-kotlin") }
+        requires { slug.set("yacl") }
         optional { slug.set("modmenu") }
 	}
 
@@ -154,6 +155,7 @@ publishMods {
 
 		requires { slug.set("fabric-api") }
 		requires { slug.set("fabric-language-kotlin") }
+        requires { slug.set("yacl") }
         optional { slug.set("modmenu") }
 	}
 
