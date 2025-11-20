@@ -4,6 +4,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.thatonedevil.YoinkGUI.logger
+import me.thatonedevil.config.YoinkGuiSettings
 import me.thatonedevil.inventory.TopInventory
 import me.thatonedevil.inventory.YoinkInventory
 import me.thatonedevil.utils.Utils.sendChat
@@ -20,6 +21,9 @@ object YoinkGUIClient : ClientModInitializer {
     var parseButtonHovered = false
     private var wasLeftClicking = false
 
+    @JvmStatic
+    val yoinkGuiSettings = YoinkGuiSettings
+
     override fun onInitializeClient() {
         ClientTickEvents.END_CLIENT_TICK.register { client ->
             val isLeftClicking = GLFW.glfwGetMouseButton(client.window.handle, GLFW.GLFW_MOUSE_BUTTON_LEFT) == GLFW.GLFW_PRESS
@@ -35,6 +39,7 @@ object YoinkGUIClient : ClientModInitializer {
         }
 
         UpdateChecker.setupJoinListener()
+        yoinkGuiSettings // Load settings on client init
     }
 
     private fun handleYoinkButton(client: MinecraftClient) {

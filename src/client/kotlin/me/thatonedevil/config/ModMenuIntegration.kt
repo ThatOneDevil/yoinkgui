@@ -1,0 +1,50 @@
+package me.thatonedevil.config
+
+import com.terraformersmc.modmenu.api.ConfigScreenFactory
+import com.terraformersmc.modmenu.api.ModMenuApi
+import dev.isxander.yacl3.api.ConfigCategory
+import dev.isxander.yacl3.api.Option
+import dev.isxander.yacl3.api.OptionGroup
+import dev.isxander.yacl3.api.YetAnotherConfigLib
+import dev.isxander.yacl3.api.controller.FloatSliderControllerBuilder
+import dev.isxander.yacl3.api.controller.TickBoxControllerBuilder
+import dev.isxander.yacl3.config.v3.value
+import me.thatonedevil.YoinkGUIClient.yoinkGuiSettings
+import net.minecraft.text.Text
+
+class ModMenuIntegration : ModMenuApi {
+    override fun getModConfigScreenFactory(): ConfigScreenFactory<*> = ConfigScreenFactory { parentScreen ->
+        YetAnotherConfigLib.createBuilder()
+            .save(YoinkGuiSettings::saveToFile)
+            .title(Text.of("YoinkGUI Settings"))
+            .category(ConfigCategory.createBuilder()
+                .name(Text.of("Button settings"))
+                .tooltip(Text.of("Button settings"))
+                .group(OptionGroup.createBuilder()
+                    .name(Text.of("Button Options"))
+
+                    .option(Option.createBuilder<Boolean>()
+                        .name(Text.of("Enable Yoink Button"))
+                        .binding(true, { yoinkGuiSettings.enableYoinkButton.value }, { yoinkGuiSettings.enableYoinkButton.value = it })
+                        .controller(TickBoxControllerBuilder::create)
+                        .build())
+
+                    .option(Option.createBuilder<Float>()
+                        .name(Text.of("Button Scale Factor"))
+                        .binding(1.0f, { yoinkGuiSettings.buttonScaleFactor.value }, { yoinkGuiSettings.buttonScaleFactor.value = it })
+                        .controller{ option ->
+                            FloatSliderControllerBuilder.create(option)
+                                .range(0.1f, 2f)
+                                .step(0.1f)
+                                .formatValue { value ->
+                                    Text.of(" ${value}x scale")
+                                }
+                        }
+                        .build())
+                    .build())
+                .build())
+            .build()
+            .generateScreen(parentScreen)
+    }
+
+}

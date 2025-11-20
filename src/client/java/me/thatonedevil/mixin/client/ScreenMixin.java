@@ -1,6 +1,7 @@
 package me.thatonedevil.mixin.client;
 
 import me.thatonedevil.YoinkGUIClient;
+import me.thatonedevil.config.YoinkGuiSettings;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
@@ -20,18 +21,19 @@ public class ScreenMixin {
             return;
         }
 
-        int guiScale = client.options.getGuiScale().getValue();
+        YoinkGuiSettings config = YoinkGUIClient.getYoinkGuiSettings();
+
+        if (!config.getEnableYoinkButton().get()){
+            return;
+        }
+
+        float scaleFactor = config.getButtonScaleFactor().get();
 
         int baseButtonWidth = 160;
         int baseButtonHeight = 20;
         int baseButtonX = 40;
         int baseButtonY = 35;
 
-        float scaleFactor = switch (guiScale) {
-            case 1 -> 1.5f;
-            case 4 -> 0.65f;
-            default -> 1.0f;
-        };
 
         int parseButtonX = (int) (baseButtonX * scaleFactor);
         int parseButtonY = (int) (baseButtonY * scaleFactor);
