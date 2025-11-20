@@ -18,7 +18,7 @@ class ModConfig() {
 
     companion object {
         @JvmField
-        val HANDLER: ConfigClassHandler<ModConfig>? = ConfigClassHandler.createBuilder(ModConfig::class.java)
+        val HANDLER: ConfigClassHandler<ModConfig> = ConfigClassHandler.createBuilder(ModConfig::class.java)
             .id(Identifier.of("config"))
             .serializer { config ->
                 GsonConfigSerializerBuilder.create<ModConfig>(config)

@@ -22,7 +22,8 @@ object YoinkGUIClient : ClientModInitializer {
     private var wasLeftClicking = false
 
     @JvmStatic
-    var modConfig = ModConfig()
+    val modConfig: ModConfig
+        get() = ModConfig.HANDLER.instance()
 
     override fun onInitializeClient() {
         ClientTickEvents.END_CLIENT_TICK.register { client ->
@@ -39,7 +40,7 @@ object YoinkGUIClient : ClientModInitializer {
         }
 
         UpdateChecker.setupJoinListener()
-        ModConfig.HANDLER?.load()
+        ModConfig.HANDLER.load()
     }
 
     private fun handleYoinkButton(client: MinecraftClient) {

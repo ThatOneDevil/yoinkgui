@@ -41,7 +41,7 @@ class ModMenuIntegration : ModMenuApi {
                         .build())
                     .build())
                 .build())
-            .save { ModConfig.HANDLER?.save() }
+            .save { ModConfig.HANDLER.save() }
             .build()
             .generateScreen(parentScreen)
     }
