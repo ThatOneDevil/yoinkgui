@@ -8,12 +8,14 @@ import dev.isxander.yacl3.api.OptionGroup
 import dev.isxander.yacl3.api.YetAnotherConfigLib
 import dev.isxander.yacl3.api.controller.FloatSliderControllerBuilder
 import dev.isxander.yacl3.api.controller.TickBoxControllerBuilder
-import me.thatonedevil.YoinkGUIClient.modConfig
+import dev.isxander.yacl3.config.v3.value
+import me.thatonedevil.YoinkGUIClient.yoinkGuiSettings
 import net.minecraft.text.Text
 
 class ModMenuIntegration : ModMenuApi {
     override fun getModConfigScreenFactory(): ConfigScreenFactory<*> = ConfigScreenFactory { parentScreen ->
         YetAnotherConfigLib.createBuilder()
+            .save(YoinkGuiSettings::saveToFile)
             .title(Text.of("YoinkGUI Settings"))
             .category(ConfigCategory.createBuilder()
                 .name(Text.of("Button settings"))
@@ -23,16 +25,16 @@ class ModMenuIntegration : ModMenuApi {
 
                     .option(Option.createBuilder<Boolean>()
                         .name(Text.of("Enable Yoink Button"))
-                        .binding(true, { modConfig.enableYoinkButton }, { modConfig.enableYoinkButton = it })
+                        .binding(true, { yoinkGuiSettings.enableYoinkButton.value }, { yoinkGuiSettings.enableYoinkButton.value = it })
                         .controller(TickBoxControllerBuilder::create)
                         .build())
 
                     .option(Option.createBuilder<Float>()
                         .name(Text.of("Button Scale Factor"))
-                        .binding(1.0f, { modConfig.buttonScaleFactor }, { modConfig.buttonScaleFactor = it })
+                        .binding(1.0f, { yoinkGuiSettings.buttonScaleFactor.value }, { yoinkGuiSettings.buttonScaleFactor.value = it })
                         .controller{ option ->
                             FloatSliderControllerBuilder.create(option)
-                                .range(0f, 2f)
+                                .range(0.1f, 2f)
                                 .step(0.1f)
                                 .formatValue { value ->
                                     Text.of(" ${value}x scale")
@@ -41,7 +43,6 @@ class ModMenuIntegration : ModMenuApi {
                         .build())
                     .build())
                 .build())
-            .save { ModConfig.HANDLER?.save() }
             .build()
             .generateScreen(parentScreen)
     }

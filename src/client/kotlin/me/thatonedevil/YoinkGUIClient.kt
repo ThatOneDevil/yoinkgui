@@ -4,7 +4,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.thatonedevil.YoinkGUI.logger
-import me.thatonedevil.config.ModConfig
+import me.thatonedevil.config.YoinkGuiSettings
 import me.thatonedevil.inventory.TopInventory
 import me.thatonedevil.inventory.YoinkInventory
 import me.thatonedevil.utils.Utils.sendChat
@@ -22,7 +22,7 @@ object YoinkGUIClient : ClientModInitializer {
     private var wasLeftClicking = false
 
     @JvmStatic
-    var modConfig = ModConfig()
+    var yoinkGuiSettings = YoinkGuiSettings
 
     override fun onInitializeClient() {
         ClientTickEvents.END_CLIENT_TICK.register { client ->
@@ -39,7 +39,7 @@ object YoinkGUIClient : ClientModInitializer {
         }
 
         UpdateChecker.setupJoinListener()
-        ModConfig.HANDLER?.load()
+        yoinkGuiSettings // Load settings on client init
     }
 
     private fun handleYoinkButton(client: MinecraftClient) {

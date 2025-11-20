@@ -1,7 +1,7 @@
 package me.thatonedevil.mixin.client;
 
 import me.thatonedevil.YoinkGUIClient;
-import me.thatonedevil.config.ModConfig;
+import me.thatonedevil.config.YoinkGuiSettings;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
@@ -21,13 +21,13 @@ public class ScreenMixin {
             return;
         }
 
-        ModConfig config = YoinkGUIClient.getModConfig();
+        YoinkGuiSettings config = YoinkGUIClient.getYoinkGuiSettings();
 
-        if (!config.enableYoinkButton){
+        if (!config.getEnableYoinkButton().get()){
             return;
         }
 
-        float scaleFactor = config.buttonScaleFactor;
+        float scaleFactor = config.getButtonScaleFactor().get();
 
         int baseButtonWidth = 160;
         int baseButtonHeight = 20;
