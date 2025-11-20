@@ -22,7 +22,7 @@ object YoinkGUIClient : ClientModInitializer {
     private var wasLeftClicking = false
 
     @JvmStatic
-    var yoinkGuiSettings = YoinkGuiSettings
+    val yoinkGuiSettings = YoinkGuiSettings
 
     override fun onInitializeClient() {
         ClientTickEvents.END_CLIENT_TICK.register { client ->
