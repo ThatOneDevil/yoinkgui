@@ -29,6 +29,8 @@ Report bugs here:
 ## 📦 Dependencies
 - Fabric API
 - Fabric Language Kotlin
+- Yet Another Config Lib
+- ModMenu
 
 ---
 
