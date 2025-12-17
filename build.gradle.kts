@@ -1,10 +1,12 @@
+import net.fabricmc.loom.api.ModSettings
+
 plugins {
 	id("org.jetbrains.kotlin.jvm") version "2.2.0"
 	id("fabric-loom") version "1.13-SNAPSHOT"
 	id("me.modmuss50.mod-publish-plugin") version "0.8.4"
 }
 
-val modVersion = "1.5.0"
+val modVersion = "1.6.0"
 
 version = "${modVersion}+${property("mod.mod_version") as String}"
 group = property("maven_group") as String
@@ -37,11 +39,13 @@ repositories {
 loom {
 	splitEnvironmentSourceSets()
 
+
 	mods {
-		create("yoinkgui") {
-			sourceSet(sourceSets["main"])
-			sourceSet(sourceSets["client"])
-		}
+
+		create("yoinkgui").project.sourceSets {
+            sourceSets["main"]
+            sourceSets["client"]
+        }
 	}
 
 	runConfigs.all {
