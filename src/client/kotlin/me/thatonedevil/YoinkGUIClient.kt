@@ -4,6 +4,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.thatonedevil.YoinkGUI.logger
+import me.thatonedevil.commands.YoinkGuiCommandRegistry
 import me.thatonedevil.config.YoinkGuiSettings
 import me.thatonedevil.inventory.TopInventory
 import me.thatonedevil.inventory.YoinkInventory
@@ -39,6 +40,7 @@ object YoinkGUIClient : ClientModInitializer {
         }
 
         UpdateChecker.setupJoinListener()
+        YoinkGuiCommandRegistry.register()
         yoinkGuiSettings // Load settings on client init
     }
 

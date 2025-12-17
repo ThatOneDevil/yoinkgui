@@ -8,8 +8,9 @@
 		"ThatOneDevil"
 	],
 	"contact": {
-		"homepage": "https://github.com/ThatOneDevil/yoinkgui",
-		"sources": "https://github.com/ThatOneDevil/yoinkgui"
+		"homepage": "https://modrinth.com/project/5j4oEPp2",
+		"sources": "https://github.com/ThatOneDevil/yoinkgui",
+        "issues": "https://github.com/ThatOneDevil/yoinkgui/issues"
 	},
 	"license": "GPL-3.0 license",
 	"icon": "assets/yoinkgui/icon.png",

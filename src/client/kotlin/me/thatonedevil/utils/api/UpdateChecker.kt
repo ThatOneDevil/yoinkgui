@@ -19,9 +19,9 @@ import java.net.URI
 
 object UpdateChecker {
 
-    private var currentUpdateVersion: ModrinthVersion? = null
+    var currentUpdateVersion: ModrinthVersion? = null
 
-    private suspend fun getUpdateVersion(): ModrinthVersion? {
+    suspend fun getUpdateVersion(): ModrinthVersion? {
         if (currentUpdateVersion != null) {
             return currentUpdateVersion
         }
@@ -41,15 +41,19 @@ object UpdateChecker {
 
     fun setupJoinListener() {
         ClientLoginConnectionEvents.INIT.register { _, _ ->
-            CoroutineScope(Dispatchers.IO).launch {
-                getUpdateVersion()?.let { version ->
-                    sendChat(
-                        "\n<color:#FFA6CA>A new update is available: &m&c${version.cleanVersion}&r &a${BuildConfig.VERSION}".toComponent(),
-                        "<color:#8968CD>${version.getUpdateLink()} &7&o(Click to open)\n".toClickURL(version.getUpdateLink())
-                    )
-                } ?: run {
-                    sendChat("<color:#77DD77>You have the latest version of YoinkGUI!")
-                }
+            checkVersion()
+        }
+    }
+
+    fun checkVersion(){
+        CoroutineScope(Dispatchers.IO).launch {
+            getUpdateVersion()?.let { version ->
+                sendChat(
+                    "\n<color:#FFA6CA>A new update is available: &m&c${version.cleanVersion}&r &a${BuildConfig.VERSION}".toComponent(),
+                    "<color:#8968CD>${version.getUpdateLink()} &7&o(Click to open)\n".toClickURL(version.getUpdateLink())
+                )
+            } ?: run {
+                sendChat("<color:#77DD77>You have the latest version of YoinkGUI!")
             }
         }
     }
