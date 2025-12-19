@@ -7,7 +7,7 @@
 [![fapi-badge](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/requires/fabric-api_vector.svg)](https://modrinth.com/mod/fabric-api)
 [![sinytra-connector](https://github.com/Sinytra/.github/blob/main/badges/connector/cozy.svg)](https://modrinth.com/mod/connector)
 
-![Build Status](https://github.com/ThatOneDevil/yoinkgui/actions/workflows/build.yml/badge.svg)
+[![Build Status](https://github.com/ThatOneDevil/yoinkgui/actions/workflows/build.yml/badge.svg)](https://github.com/ThatOneDevil/yoinkgui)
 [![Modrinth Donwloads](https://img.shields.io/modrinth/dt/yoinkgui?color=00AF5C&label=downloads&logo=modrinth)](https://modrinth.com/mod/yoinkgui)
 [![CurseForge Downloads](https://cf.way2muchnoise.eu/full_yoinkgui_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/yoinkgui)
 [![Discord](https://img.shields.io/discord/1405856687851704420?color=blue&logo=discord&label=Discord)](https://discord.gg/kcegGvZvpC)
