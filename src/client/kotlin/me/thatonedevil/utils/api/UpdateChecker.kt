@@ -49,7 +49,7 @@ object UpdateChecker {
         CoroutineScope(Dispatchers.IO).launch {
             getUpdateVersion()?.let { version ->
                 sendChat(
-                    "\n<color:#FFA6CA>A new update is available: &m&c${version.cleanVersion}&r &a${BuildConfig.VERSION}".toComponent(),
+                    "\n<color:#FFA6CA>A new update is available: &m&c${BuildConfig.VERSION}&r &a${version.cleanVersion}".toComponent(),
                     "<color:#8968CD>${version.getUpdateLink()} &7&o(Click to open)\n".toClickURL(version.getUpdateLink())
                 )
             } ?: run {

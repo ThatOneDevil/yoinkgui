@@ -1,7 +1,6 @@
 package me.thatonedevil
 
 import com.google.gson.Gson
-import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -9,6 +8,7 @@ import me.thatonedevil.utils.Utils.toClickable
 import me.thatonedevil.utils.Utils.toComponent
 import me.thatonedevil.YoinkGUI.logger
 import me.thatonedevil.utils.Utils
+import me.thatonedevil.nbt.ComponentValueRegistry
 import java.io.File
 import java.io.FileWriter
 import java.time.Duration
@@ -19,75 +19,13 @@ object NBTParser {
 
     private val gson = Gson()
 
-    private val colorCodes = mapOf(
-        "black" to "&0", "dark_blue" to "&1", "dark_green" to "&2", "dark_aqua" to "&3",
-        "dark_red" to "&4", "dark_purple" to "&5", "gold" to "&6", "gray" to "&7",
-        "dark_gray" to "&8", "blue" to "&9", "green" to "&a", "aqua" to "&b",
-        "red" to "&c", "light_purple" to "&d", "yellow" to "&e", "white" to "&f"
-    )
-
-    private fun formatColor(color: String?): String {
-        val lower = color?.lowercase() ?: return ""
-        return colorCodes[lower] ?: if (color.startsWith("#")) "<color:${color.uppercase()}>" else ""
-    }
-
-    private fun getBooleanValue(element: JsonElement?): Boolean {
-        return when {
-            element == null -> false
-            element.isJsonPrimitive -> {
-                val primitive = element.asJsonPrimitive
-                when {
-                    primitive.isBoolean -> primitive.asBoolean
-                    primitive.isNumber -> primitive.asNumber.toInt() == 1
-                    primitive.isString -> primitive.asString in listOf("true", "1", "1b")
-                    else -> false
-                }
-            }
-            else -> false
-        }
-    }
-
-    private fun detectGradient(component: JsonObject): String? {
-        if (!component.has("extra") || component.getAsJsonArray("extra").size() < 4) return null
-
-        val hexColors = mutableListOf<String>()
-
-        fun collectColors(obj: JsonObject) {
-            obj.get("color")?.asString?.takeIf { it.startsWith("#") }?.let { hexColors.add(it) }
-            obj.get("extra")?.asJsonArray?.forEach { el ->
-                if (el.isJsonObject) collectColors(el.asJsonObject)
-            }
-        }
-
-        collectColors(component)
-        return if (hexColors.size > 3) "<gradient:${hexColors.first().uppercase()}:${hexColors.last().uppercase()}>" else null
-    }
-
-    private fun extractText(obj: JsonObject): String = buildString {
-        obj.get("text")?.asString?.let { append(it) }
-        obj.get("extra")?.asJsonArray?.forEach {
-            if (it.isJsonObject) append(extractText(it.asJsonObject))
-        }
-    }
-
-    private fun appendColorCodes(obj: JsonObject): String = buildString {
-        if (getBooleanValue(obj.get("bold"))) append("&l")
-        if (getBooleanValue(obj.get("italic"))) append("&o")
-        if (getBooleanValue(obj.get("underlined"))) append("&n")
-        if (getBooleanValue(obj.get("strikethrough"))) append("&m")
-        if (getBooleanValue(obj.get("obfuscated"))) append("&k")
-    }
-
     private fun parseTextComponent(obj: JsonObject): String = buildString {
-        detectGradient(obj)?.let { gradientCode ->
-            // Apply formatting codes before the gradient
-            append(appendColorCodes(obj))
-            append(gradientCode).append(extractText(obj))
-            return@buildString
+        val result = ComponentValueRegistry.process(obj)
+        if (result.text.isNotEmpty()) {
+            append(result.text)
+            if (result.stopPropagation) return@buildString
         }
 
-        append(formatColor(obj.get("color")?.asString))
-        append(appendColorCodes(obj))
         append(obj.get("text")?.asString ?: "")
 
         obj.get("extra")?.asJsonArray?.forEach {
@@ -99,7 +37,7 @@ object NBTParser {
         return try {
             val parsed = gson.fromJson(jsonString, JsonObject::class.java)
             parseTextComponent(parsed)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             jsonString
         }
     }
