@@ -5,7 +5,7 @@
 [![Download on Modrinth](https://raw.githubusercontent.com/intergrav/devins-badges/c7fd18efdadd1c3f12ae56b49afd834640d2d797/assets/cozy/available/modrinth_vector.svg)](https://modrinth.com/mod/yoinkgui)
 [![Download on CurseForge](https://raw.githubusercontent.com/intergrav/devins-badges/c7fd18efdadd1c3f12ae56b49afd834640d2d797/assets/cozy/available/curseforge_vector.svg)](https://www.curseforge.com/minecraft/mc-mods/yoinkgui)
 [![fapi-badge](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/requires/fabric-api_vector.svg)](https://modrinth.com/mod/fabric-api)
-[![sinytra-connector](https://github.com/Sinytra/.github/blob/main/badges/connector/cozy.svg)](https://modrinth.com/mod/connector)
+[![sinytra-connector](https://raw.githubusercontent.com/Sinytra/.github/refs/heads/main/badges/connector/cozy.svg)](https://modrinth.com/mod/connector)
 
 [![Build Status](https://github.com/ThatOneDevil/yoinkgui/actions/workflows/build.yml/badge.svg)](https://github.com/ThatOneDevil/yoinkgui)
 [![Modrinth Donwloads](https://img.shields.io/modrinth/dt/yoinkgui?color=00AF5C&label=downloads&logo=modrinth)](https://modrinth.com/mod/yoinkgui)
