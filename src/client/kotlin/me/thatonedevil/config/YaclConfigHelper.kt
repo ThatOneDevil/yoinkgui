@@ -3,14 +3,12 @@ package me.thatonedevil.config
 import dev.isxander.yacl3.api.Option
 import dev.isxander.yacl3.api.OptionDescription
 import dev.isxander.yacl3.api.controller.FloatSliderControllerBuilder
-import dev.isxander.yacl3.api.controller.IntegerSliderControllerBuilder
 import dev.isxander.yacl3.api.controller.TickBoxControllerBuilder
 import dev.isxander.yacl3.config.v3.ConfigEntry
 import dev.isxander.yacl3.config.v3.value
 import net.minecraft.text.Text
 
 object YaclConfigHelper {
-
 
     fun booleanOption(
         name: String,
@@ -47,9 +45,5 @@ object YaclConfigHelper {
             }
             .build()
     }
-
-    /**
-     * Helper extension function for creating scale factor text
-     */
 }
 
