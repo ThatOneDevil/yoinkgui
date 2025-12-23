@@ -3,7 +3,6 @@ package me.thatonedevil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import me.thatonedevil.YoinkGUI.logger
 import me.thatonedevil.commands.YoinkGuiCommandRegistry
 import me.thatonedevil.config.YoinkGuiSettings
 import me.thatonedevil.inventory.TopInventory
@@ -15,12 +14,15 @@ import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.minecraft.client.MinecraftClient
 import org.lwjgl.glfw.GLFW
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 object YoinkGUIClient : ClientModInitializer {
 
     private var buttonHovered = false
     var parseButtonHovered = false
     private var wasLeftClicking = false
+    val logger: Logger = LoggerFactory.getLogger(BuildConfig.MOD_ID)
 
     @JvmStatic
     val yoinkGuiSettings = YoinkGuiSettings
@@ -29,7 +31,7 @@ object YoinkGUIClient : ClientModInitializer {
         ClientTickEvents.END_CLIENT_TICK.register { client ->
             val isLeftClicking = GLFW.glfwGetMouseButton(client.window.handle, GLFW.GLFW_MOUSE_BUTTON_LEFT) == GLFW.GLFW_PRESS
 
-            if (client.player != null && isLeftClicking && !wasLeftClicking) {
+            if (client.player != null && client.currentScreen != null && isLeftClicking && !wasLeftClicking) {
                 when {
                     buttonHovered -> handleYoinkButton(client)
                     parseButtonHovered -> handleParseButton(client)
@@ -47,7 +49,7 @@ object YoinkGUIClient : ClientModInitializer {
     private fun handleYoinkButton(client: MinecraftClient) {
         val yoinkInventory = YoinkInventory(client.player!!, TopInventory(client))
         yoinkInventory.yoinkItems()
-        logger?.info("Yoinked Items: ${yoinkInventory.getYoinkedItems()}")
+        logger.info("Yoinked Items: ${yoinkInventory.getYoinkedItems()}")
     }
 
     private fun handleParseButton(client: MinecraftClient) {
@@ -66,7 +68,7 @@ object YoinkGUIClient : ClientModInitializer {
 
             } catch (e: Exception) {
                 sendChat("<color:#FF6961>Error during NBT parsing: ${e.message} &7&o(Report on github, Click to copy)".toClickable(e.message.toString()))
-                logger?.error("Error during NBT parsing: ${e.stackTraceToString()}")
+                logger.error("Error during NBT parsing: ${e.stackTraceToString()}")
 
             }
         }
