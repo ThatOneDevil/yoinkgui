@@ -17,7 +17,7 @@ public class ScreenMixin {
     @Inject(at = @At("HEAD"), method = "render")
     private void render(DrawContext context, int mouseX, int mouseY, float deltaTicks, CallbackInfo ci) {
         MinecraftClient client = MinecraftClient.getInstance();
-        if (client.player == null) {
+        if (client.player == null || client.world == null) {
             return;
         }
 

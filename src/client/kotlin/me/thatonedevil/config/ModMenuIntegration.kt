@@ -54,13 +54,6 @@ class ModMenuIntegration : ModMenuApi {
                         defaultValue = false,
                         description = "Enables debug logging to help diagnose issues."
                     ))
-
-                    .option(booleanOption(
-                        name = "Serialize ItemStacks",
-                        field = yoinkGuiSettings.serializeItemstack,
-                        defaultValue = false,
-                        description = "Enables serialization of ItemStacks to copy item in singleplayer."
-                    ))
                     .build())
                 .build())
 

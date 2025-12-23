@@ -5,7 +5,7 @@ import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource
 
-object YoinkGuiCommandRegistry {
+object YoinkGuiClientCommandRegistry {
 
     private val versionCommand = VersionCommand()
 
@@ -17,7 +17,7 @@ object YoinkGuiCommandRegistry {
 
     private fun registerCommands(dispatcher: CommandDispatcher<FabricClientCommandSource>) {
         dispatcher.register(
-        ClientCommandManager.literal("yoinkgui")
+        ClientCommandManager.literal("yoinkguiclient")
             .then(
                 ClientCommandManager.literal("version")
                     .executes { _ ->

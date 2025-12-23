@@ -1,5 +1,6 @@
 package me.thatonedevil.inventory
 
+import me.thatonedevil.utils.Utils.debug
 import net.minecraft.client.MinecraftClient
 import net.minecraft.item.ItemStack
 
@@ -8,6 +9,7 @@ class TopInventory(client: MinecraftClient) {
     private val topInventory = client.player?.currentScreenHandler
 
     fun getTopInventory(): Any? {
+        debug("Top Inventory: $topInventory")
         return topInventory
     }
 
@@ -16,6 +18,8 @@ class TopInventory(client: MinecraftClient) {
     }
 
     fun inventoryItems(): MutableList<ItemStack>? {
-        return topInventory?.stacks?.stream()?.toList()
+        val items = topInventory?.stacks?.stream()?.toList()
+        debug("Items: $items")
+        return items
     }
 }

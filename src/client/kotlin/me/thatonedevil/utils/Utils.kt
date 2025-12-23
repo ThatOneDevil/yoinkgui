@@ -1,11 +1,14 @@
 package me.thatonedevil.utils
 
+//? if >1.21.1 {
+import me.thatonedevil.YoinkGUIClient.logger
+import me.thatonedevil.YoinkGUIClient.yoinkGuiSettings
+import net.kyori.adventure.platform.modcommon.MinecraftClientAudiences
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.minimessage.MiniMessage
 import net.minecraft.client.MinecraftClient
-//? if >1.21.1 {
-import net.kyori.adventure.platform.modcommon.MinecraftClientAudiences
+
 //?} else {
 /*import net.kyori.adventure.platform.fabric.FabricClientAudiences*/
 //?}
@@ -62,4 +65,11 @@ object Utils {
         }
         mc?.execute(action) ?: action.run()
     }
+
+    fun debug(message: String) {
+        if (yoinkGuiSettings.debugMode.get() == true) {
+            logger.info(message)
+        }
+    }
+
 }

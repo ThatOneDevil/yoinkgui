@@ -3,7 +3,7 @@ package me.thatonedevil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import me.thatonedevil.commands.YoinkGuiCommandRegistry
+import me.thatonedevil.commands.YoinkGuiClientCommandRegistry
 import me.thatonedevil.config.YoinkGuiSettings
 import me.thatonedevil.inventory.TopInventory
 import me.thatonedevil.inventory.YoinkInventory
@@ -42,7 +42,7 @@ object YoinkGUIClient : ClientModInitializer {
         }
 
         UpdateChecker.setupJoinListener()
-        YoinkGuiCommandRegistry.register()
+        YoinkGuiClientCommandRegistry.register()
         yoinkGuiSettings // Load settings on client init
     }
 
@@ -57,7 +57,8 @@ object YoinkGUIClient : ClientModInitializer {
             try {
                 val player = client.player ?: return@launch
                 val configDir = client.runDirectory.resolve("config")
-                val yoinkedItems = YoinkInventory(player, TopInventory(client)).apply { yoinkItems() }.getYoinkedItems().map { it.toString() }
+                val yoinkInventory = YoinkInventory(player, TopInventory(client))
+                val yoinkedItems = yoinkInventory.apply { yoinkItems() }.getYoinkedItems().map { it.toString() }
 
                 if (yoinkedItems.isEmpty()) {
                     sendChat("<color:#FF6961>Inventory is empty!")

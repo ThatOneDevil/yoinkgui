@@ -44,11 +44,12 @@ object UpdateChecker {
     fun setupJoinListener() {
         ClientPlayConnectionEvents.JOIN.register { _, _, client ->
             serverName = client.currentServerEntry?.address ?: "Unknown"
-            if (serverName.contains("local:")) {
-                serverName = "Singleplayer"
-            }
-
             debug("Server name: $serverName")
+//            if (serverName.contains("local:")) {
+//                serverName = "Singleplayer"
+//            }
+
+
 
             checkVersion()
         }
