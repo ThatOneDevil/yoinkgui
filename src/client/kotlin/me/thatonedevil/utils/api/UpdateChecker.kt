@@ -20,7 +20,7 @@ import java.net.URI
 
 object UpdateChecker {
 
-    var serverName = "Unknown"
+    var serverName: String? = "Unknown"
     var currentUpdateVersion: ModrinthVersion? = null
 
     suspend fun getUpdateVersion(): ModrinthVersion? {
@@ -43,13 +43,8 @@ object UpdateChecker {
 
     fun setupJoinListener() {
         ClientPlayConnectionEvents.JOIN.register { _, _, client ->
-            serverName = client.currentServerEntry?.address ?: "Unknown"
+            serverName = client.currentServerEntry?.address ?: "Singleplayer"
             debug("Server name: $serverName")
-//            if (serverName.contains("local:")) {
-//                serverName = "Singleplayer"
-//            }
-
-
 
             checkVersion()
         }
