@@ -42,6 +42,28 @@ class ModMenuIntegration : ModMenuApi {
                     ))
                     .build())
                 .build())
+
+            .category(ConfigCategory.createBuilder()
+                .name(Text.of("Dev settings"))
+                .tooltip(Text.of("Developer settings"))
+                .group(OptionGroup.createBuilder()
+                    .name(Text.of("Dev Options"))
+                    .option(booleanOption(
+                        name = "Debug Mode",
+                        field = yoinkGuiSettings.debugMode,
+                        defaultValue = false,
+                        description = "Enables debug logging to help diagnose issues."
+                    ))
+
+                    .option(booleanOption(
+                        name = "Serialize ItemStacks",
+                        field = yoinkGuiSettings.serializeItemstack,
+                        defaultValue = false,
+                        description = "Enables serialization of ItemStacks to copy item in singleplayer."
+                    ))
+                    .build())
+                .build())
+
             .build()
             .generateScreen(parentScreen)
         return screen

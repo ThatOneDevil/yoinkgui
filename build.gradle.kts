@@ -21,9 +21,8 @@ base {
 
 repositories {
 	mavenCentral()
-	maven {
+	maven("https://s01.oss.sonatype.org/content/repositories/snapshots/"){
 		name = "sonatype-oss-snapshots1"
-		url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
 		mavenContent { snapshotsOnly() }
 	}
     maven("https://maven.terraformersmc.com/") {
@@ -32,6 +31,10 @@ repositories {
     maven("https://maven.isxander.dev/releases") {
         name = "Xander Maven"
     }
+
+    maven( "https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1") {
+        name = "DevAuth"
+    }
 }
 
 loom {
@@ -39,7 +42,6 @@ loom {
 
 
 	mods {
-
 		create("yoinkgui").project.sourceSets {
             sourceSets["main"]
             sourceSets["client"]
@@ -71,9 +73,12 @@ dependencies {
     modImplementation("com.terraformersmc:modmenu:${modMenu}")
     modImplementation("dev.isxander:yet-another-config-lib:${yacl}")
 
-
     // kotlin
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
+
+    //devauth
+    modRuntimeOnly("me.djtheredstoner:DevAuth-fabric:1.2.2")
+
 }
 
 tasks.processResources {
