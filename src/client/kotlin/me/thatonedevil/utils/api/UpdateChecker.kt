@@ -7,11 +7,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.thatonedevil.BuildConfig
-import me.thatonedevil.YoinkGUI.logger
+import me.thatonedevil.YoinkGUIClient.logger
+import me.thatonedevil.utils.Utils.debug
 import me.thatonedevil.utils.Utils.sendChat
 import me.thatonedevil.utils.Utils.toClickURL
 import me.thatonedevil.utils.Utils.toComponent
-import net.fabricmc.fabric.api.client.networking.v1.ClientLoginConnectionEvents
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
@@ -19,6 +20,7 @@ import java.net.URI
 
 object UpdateChecker {
 
+    var serverName = "Unknown"
     var currentUpdateVersion: ModrinthVersion? = null
 
     suspend fun getUpdateVersion(): ModrinthVersion? {
@@ -40,7 +42,14 @@ object UpdateChecker {
     }
 
     fun setupJoinListener() {
-        ClientLoginConnectionEvents.INIT.register { _, _ ->
+        ClientPlayConnectionEvents.JOIN.register { _, _, client ->
+            serverName = client.currentServerEntry?.address ?: "Unknown"
+            if (serverName.contains("local:")) {
+                serverName = "Singleplayer"
+            }
+
+            debug("Server name: $serverName")
+
             checkVersion()
         }
     }
@@ -67,15 +76,15 @@ object UpdateChecker {
             for (element in elements) {
                 val version = ModrinthVersion(element)
                 if (version.supportsGameVersion(BuildConfig.MC_VERSION)) {
-                    logger?.info("Found compatible version: ${version.cleanVersion} for MC ${BuildConfig.MC_VERSION}")
+                    logger.info("Found compatible version: ${version.cleanVersion} for MC ${BuildConfig.MC_VERSION}")
                     return version
                 }
             }
 
-            logger?.error("No compatible version found for MC ${BuildConfig.MC_VERSION}")
+            logger.error("No compatible version found for MC ${BuildConfig.MC_VERSION}")
             return null
         } catch (_: IOException) {
-            logger?.error("Checking for update failed!")
+            logger.error("Checking for update failed!")
         }
         return null
     }

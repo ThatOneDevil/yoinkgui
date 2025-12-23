@@ -4,11 +4,12 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import me.thatonedevil.YoinkGUIClient.logger
 import me.thatonedevil.utils.Utils.toClickable
 import me.thatonedevil.utils.Utils.toComponent
-import me.thatonedevil.YoinkGUI.logger
 import me.thatonedevil.utils.Utils
 import me.thatonedevil.nbt.ComponentValueRegistry
+import me.thatonedevil.utils.api.UpdateChecker.serverName
 import java.io.File
 import java.io.FileWriter
 import java.time.Duration
@@ -76,11 +77,11 @@ object NBTParser {
 
 
     suspend fun saveFormattedNBTToFile(nbtList: List<String>, configDir: File) = withContext(Dispatchers.IO) {
+        val start = LocalDateTime.now()
+        val formattedTime = start.format(DateTimeFormatter.ofPattern("MM-dd HH-mm-ss"))
         try {
-            val start = LocalDateTime.now()
-            val formattedTime = start.format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"))
             val yoinkDir = File(configDir, "yoinkgui").apply { mkdirs() }
-            val fileName = "formatted_nbt_${formattedTime}.txt"
+            val fileName = "${serverName}-${formattedTime}.txt"
             val file = File(yoinkDir, fileName)
 
             FileWriter(file).use { writer ->
@@ -114,10 +115,10 @@ object NBTParser {
                     "  <color:#8968CD>${file.absolutePath} &7&o(Click to copy)\n".toClickable(file.absolutePath)
                 )
             } catch (inner: Exception) {
-                logger?.error("Error while sending save notification to chat: ${inner.message}", inner)
+                logger.error("Error while sending save notification to chat: ${inner.message}", inner)
             }
         } catch (e: Exception) {
-            logger?.error("Error saving NBT file: ${e.message}", e)
+            logger.error("Error saving NBT file: ${e.message}", e)
         }
     }
 }
