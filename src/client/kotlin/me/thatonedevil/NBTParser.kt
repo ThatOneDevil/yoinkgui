@@ -6,6 +6,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import me.thatonedevil.YoinkGUIClient.logger
 import me.thatonedevil.YoinkGUIClient.yoinkGuiSettings
+import me.thatonedevil.config.YoinkGuiSettings
 import me.thatonedevil.utils.Utils.toClickable
 import me.thatonedevil.utils.Utils.toComponent
 import me.thatonedevil.utils.Utils
@@ -100,7 +101,7 @@ object NBTParser {
 
                 contentItems.forEachIndexed { outIdx, (originalIndex, formatted) ->
                     writer.write("=== ITEM ${originalIndex + 1} ===\n")
-                    writer.write("Raw NBT: ${nbtList[originalIndex]}\n")
+                    if (YoinkGuiSettings.includeRawNbt.get()) { writer.write("Raw NBT: ${nbtList[originalIndex]}\n") }
 
                     writer.write("\n$formatted\n")
                     if (outIdx < contentItems.lastIndex) writer.write("\n${"=".repeat(50)}\n\n")

@@ -45,7 +45,7 @@ object UpdateChecker {
         ClientPlayConnectionEvents.JOIN.register { _, _, client ->
             serverName = when (client.currentServerEntry?.address){
                 "0", "localhost" -> "Singleplayer"
-                else -> client.currentServerEntry?.address
+                else -> client.currentServerEntry?.address ?: "Singleplayer"
             }
 
             debug("Server name: $serverName")

@@ -2,6 +2,8 @@ package me.thatonedevil.nbt
 
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
+import me.thatonedevil.config.YoinkGuiSettings
+import me.thatonedevil.utils.Utils.debug
 
 interface ComponentValueHandler {
     fun handle(obj: JsonObject): HandlerResult
@@ -13,17 +15,25 @@ object ComponentValueRegistry {
     private val handlers = mutableListOf<ComponentValueHandler>()
 
     init {
-        // Registration order matters for the final string composition. Keep as close to original behaviour as possible.
-        register(ColorHandler)
-        register(StyleHandler)
-        register(ShadowHandler)
-        register(GradientHandler)
-        register(TextHandler)
+        refreshHandlers()
     }
 
     fun register(handler: ComponentValueHandler) {
         handlers.add(handler)
     }
+
+    fun refreshHandlers() {
+        handlers.clear()
+        // Registration order matters for the final string composition. Keep as close to original behaviour as possible.
+        if (YoinkGuiSettings.toggleColorParser.get()) { register(ColorHandler) }
+        if (YoinkGuiSettings.toggleStyleParser.get()) { register(StyleHandler) }
+        if (YoinkGuiSettings.toggleShadowParser.get()) { register(ShadowHandler) }
+        if (YoinkGuiSettings.toggleGradientParser.get()) { register(GradientHandler) }
+        register(TextHandler)
+
+        debug("ComponentValueRegistry handlers refreshed. Current handlers: ${handlers.map { it.javaClass.simpleName }}")
+    }
+
 
     fun process(obj: JsonObject): HandlerResult {
         val builder = StringBuilder()

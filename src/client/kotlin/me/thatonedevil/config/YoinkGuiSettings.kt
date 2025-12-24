@@ -1,7 +1,5 @@
 package me.thatonedevil.config
 
-import dev.isxander.yacl3.config.v3.ConfigEntry
-import dev.isxander.yacl3.config.v3.EntryAddable
 import dev.isxander.yacl3.config.v3.JsonFileCodecConfig
 import dev.isxander.yacl3.config.v3.register
 import dev.isxander.yacl3.config.v3.value
@@ -20,6 +18,13 @@ open class YoinkGuiSettings() : JsonFileCodecConfig<YoinkGuiSettings>(
     val enableYoinkButton by register<Boolean>(default = true, BOOL)
     val buttonScaleFactor by register<Float>(default = 1.0f, FLOAT)
     val debugMode by register<Boolean>(default = false, BOOL)
+
+    // parser options
+    val includeRawNbt by register<Boolean>(default = false, BOOL)
+    val toggleColorParser by register<Boolean>(default = true, BOOL)
+    val toggleStyleParser by register<Boolean>(default = true, BOOL)
+    val toggleShadowParser by register<Boolean>(default = true, BOOL)
+    val toggleGradientParser by register<Boolean>(default = true, BOOL)
 
     var firstLaunch = false
     val _firstLaunch by register<Boolean>(default = true, BOOL)
