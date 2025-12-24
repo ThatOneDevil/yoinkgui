@@ -43,7 +43,11 @@ object UpdateChecker {
 
     fun setupJoinListener() {
         ClientPlayConnectionEvents.JOIN.register { _, _, client ->
-            serverName = client.currentServerEntry?.address ?: "Singleplayer"
+            serverName = when (client.currentServerEntry?.address){
+                "0", "localhost" -> "Singleplayer"
+                else -> client.currentServerEntry?.address
+            }
+
             debug("Server name: $serverName")
 
             checkVersion()

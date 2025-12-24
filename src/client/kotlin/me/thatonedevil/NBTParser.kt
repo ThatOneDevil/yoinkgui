@@ -24,12 +24,8 @@ object NBTParser {
 
     private fun parseTextComponent(obj: JsonObject): String = buildString {
         val result = ComponentValueRegistry.process(obj)
-        if (result.text.isNotEmpty()) {
-            append(result.text)
-            if (result.stopPropagation) return@buildString
-        }
-
-        append(obj.get("text")?.asString ?: "")
+        append(result.text)
+        if (result.stopPropagation) return@buildString
 
         obj.get("extra")?.asJsonArray?.forEach {
             if (it.isJsonObject) append(parseTextComponent(it.asJsonObject))
@@ -49,11 +45,13 @@ object NBTParser {
         val json = gson.fromJson(raw, JsonObject::class.java)
         val components = json.getAsJsonObject("components") ?: return@buildString
 
-        val hasName = components.has("minecraft:custom_name")
+        val hasName = components.has("minecraft:custom_name") || components.has("minecraft:item_name")
         val hasLore = components.has("minecraft:lore")
         if (!hasName && !hasLore) return@buildString
 
-        components.get("minecraft:custom_name")?.let { customNameElement ->
+        // Check for both custom_name and item_name
+        val nameElement = components.get("minecraft:custom_name") ?: components.get("minecraft:item_name")
+        nameElement?.let { customNameElement ->
             append("Name: ")
             when {
                 customNameElement.isJsonObject -> append(parseTextComponent(customNameElement.asJsonObject))
