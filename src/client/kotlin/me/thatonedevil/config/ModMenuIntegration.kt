@@ -71,25 +71,25 @@ class ModMenuIntegration : ModMenuApi {
                         name = "Color parser",
                         field = yoinkGuiSettings.toggleColorParser,
                         defaultValue = true,
-                        description = "Toggles color parsing in NBT text. (<red>, <blue>, <green>)"
+                        description = "Toggles color parsing in NBT text. <red>, <blue>, <green>"
                     ))
                     .option(booleanOption(
                         name = "Style parser",
                         field = yoinkGuiSettings.toggleStyleParser,
                         defaultValue = true,
-                        description = "Toggles style parsing in NBT text. (<bold>, <italic>, <underlined>)"
+                        description = "Toggles style parsing in NBT text. <bold>, <italic>, <underlined>"
                     ))
                     .option(booleanOption(
                         name = "Shadow parser",
                         field = yoinkGuiSettings.toggleShadowParser,
                         defaultValue = true,
-                        description = "Toggles shadow parsing in NBT text. (<shadow:#000000:0.5>)"
+                        description = "Toggles shadow parsing in NBT text. <shadow:#000000:0.5>"
                     ))
                     .option(booleanOption(
                         name = "Gradient parser",
                         field = yoinkGuiSettings.toggleGradientParser,
                         defaultValue = true,
-                        description = "Toggles gradient parsing in NBT text. (<gradient:#FF0000:#00FF00:#0000FF>)"
+                        description = "Toggles gradient parsing in NBT text. <gradient:#FF0000:#00FF00:#0000FF>"
                     ))
                     .build())
                 .build())
