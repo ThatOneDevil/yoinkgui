@@ -11,12 +11,16 @@ open class YoinkGuiSettings() : JsonFileCodecConfig<YoinkGuiSettings>(
     constructor(settings: YoinkGuiSettings) : this() {
         this.enableYoinkButton.value = settings.enableYoinkButton.value
         this.buttonScaleFactor.value = settings.buttonScaleFactor.value
+        this.buttonX.value = settings.buttonX.value
+        this.buttonY.value = settings.buttonY.value
         this.debugMode.value = settings.debugMode.value
         this._firstLaunch.value = settings._firstLaunch.value
     }
 
     val enableYoinkButton by register<Boolean>(default = true, BOOL)
     val buttonScaleFactor by register<Float>(default = 1.0f, FLOAT)
+    val buttonX by register<Int>(default = 40, INT)
+    val buttonY by register<Int>(default = 35, INT)
     val debugMode by register<Boolean>(default = false, BOOL)
 
     // parser options

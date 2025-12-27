@@ -8,11 +8,13 @@ import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource
 object YoinkGuiClientCommandRegistry {
 
     private val versionCommand = VersionCommand()
+    private val debugCommand = DebugCommand()
 
     fun register() {
         ClientCommandRegistrationCallback.EVENT.register { dispatcher, _ ->
             registerCommands(dispatcher)
         }
+
     }
 
     private fun registerCommands(dispatcher: CommandDispatcher<FabricClientCommandSource>) {
@@ -23,7 +25,12 @@ object YoinkGuiClientCommandRegistry {
                     .executes { _ ->
                         versionCommand.execute()
                     }
-            )
+            ).then(
+            ClientCommandManager.literal("debug")
+                .executes { _ ->
+                    debugCommand.execute()
+                }
+        )
         )
     }
 

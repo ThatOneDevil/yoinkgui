@@ -6,7 +6,6 @@ import dev.isxander.yacl3.api.ConfigCategory
 import dev.isxander.yacl3.api.OptionGroup
 import dev.isxander.yacl3.api.YetAnotherConfigLib
 import me.thatonedevil.YoinkGUIClient.yoinkGuiSettings
-import me.thatonedevil.config.YaclConfigHelper.floatSliderOption
 import me.thatonedevil.config.YaclConfigHelper.booleanOption
 import me.thatonedevil.nbt.ComponentValueRegistry.refreshHandlers
 import net.minecraft.client.gui.screen.Screen
@@ -34,15 +33,6 @@ class ModMenuIntegration : ModMenuApi {
                         name = "Enable Yoink Button",
                         field = yoinkGuiSettings.enableYoinkButton,
                         defaultValue = true
-                    ))
-
-                    .option(floatSliderOption(
-                        name = "Button Scale Factor",
-                        field = yoinkGuiSettings.buttonScaleFactor,
-                        defaultValue = 1.0f,
-                        range = 0.1f..2f,
-                        step = 0.1f,
-                        formatValue = { Text.of("${"%.2f".format(it)}x scale") }
                     ))
                     .build())
                 .build())

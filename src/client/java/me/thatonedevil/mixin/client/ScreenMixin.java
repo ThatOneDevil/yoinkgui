@@ -31,18 +31,13 @@ public class ScreenMixin {
 
         int baseButtonWidth = 160;
         int baseButtonHeight = 20;
-        int baseButtonX = 40;
-        int baseButtonY = 35;
 
-
-        int parseButtonX = (int) (baseButtonX * scaleFactor);
-        int parseButtonY = (int) (baseButtonY * scaleFactor);
+        int parseButtonX = config.getButtonX().get();
+        int parseButtonY = config.getButtonY().get();
         int parseButtonWidth = (int) (baseButtonWidth * scaleFactor);
         int parseButtonHeight = (int) (baseButtonHeight * scaleFactor);
         String parseButtonText = "Yoink and Parse NBT into file";
 
-        // Register HUD rendering event
-        // Calculate mouse position in UI space
         int scaledWidth = client.getWindow().getScaledWidth();
         int scaledHeight = client.getWindow().getScaledHeight();
         int mouseXUi = (int) (client.mouse.getX() * scaledWidth / client.getWindow().getWidth());
@@ -51,7 +46,6 @@ public class ScreenMixin {
         YoinkGUIClient.INSTANCE.setParseButtonHovered(mouseXUi >= parseButtonX && mouseXUi <= parseButtonX + parseButtonWidth &&
                 mouseYUi >= parseButtonY && mouseYUi <= parseButtonY + parseButtonHeight);
 
-        // Draw second button (Parse NBT) with appropriate color
         int parseBgColor = YoinkGUIClient.INSTANCE.getParseButtonHovered() ? 0xAA444444 : 0xAA000000;
         context.fill(parseButtonX, parseButtonY, parseButtonX + parseButtonWidth, parseButtonY + parseButtonHeight, parseBgColor);
         context.drawCenteredTextWithShadow(
