@@ -36,12 +36,19 @@ Report bugs here:
 
 ## ✨ Features
 
+- Press **M** to open the configuration menu and customize your parsing options
+
 - **Full Minecraft formatting code support**:
-  - **Color codes**
-  - **Bold**, *Italic*, __Underline__, ~~Strikethrough~~, and obfuscated text
+    - **Color codes, &c &e**
+    - **Bold**, *Italic*, __Underline__, ~~Strikethrough~~, and obfuscated text
+
 - **Hex and gradient support** (MiniMessage format):
-  - Hex colors: `<color:#FF00AA>`
-  - Gradients: `<gradient:#8968CD:#FFA6CA>`
+    - Hex colors: `<color:#FF00AA>`
+    - Gradients: `<gradient:#8968CD:#FFA6CA>`
+    - Shadow: `<shadow:hex:alpha>`
+
+![img.png](imageCache/configMenuDevOptions.png)
+![Parsed Lore](imageCache/dragScreen.png)
 
 ---
 
@@ -53,10 +60,6 @@ Report bugs here:
 4. The output `.txt` file will appear in your `config` folder.  
 5. The file path is also displayed in chat, as shown below
 
-**Example of the path message:**
+![Example item with lore](imageCache/exampleItem.png)
 
-![Example of the path message](https://cdn.modrinth.com/data/cached_images/681a4eb24635ac98ae987f4a72a741c27c4c3c87.png)
-
-![Example item with lore](https://cdn.modrinth.com/data/cached_images/acb2558b12d52504936e9d1e1afd8f54a93d04ef.png)
-
-![Parsed Lore](https://cdn.modrinth.com/data/cached_images/c468d843708f68328354a1c17ea48f4d8b4dd297.png)
+![Parsed Lore](imageCache/exampleOutput.png)
