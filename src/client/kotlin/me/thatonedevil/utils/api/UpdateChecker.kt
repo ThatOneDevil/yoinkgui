@@ -77,7 +77,7 @@ object UpdateChecker {
             for (element in elements) {
                 val version = ModrinthVersion(element)
                 if (version.supportsGameVersion(BuildConfig.MC_VERSION)) {
-                    logger.info("Found compatible version: ${version.cleanVersion} for MC ${BuildConfig.MC_VERSION}")
+                    debug("Found compatible version: ${version.cleanVersion} for MC ${BuildConfig.MC_VERSION}")
                     return version
                 }
             }

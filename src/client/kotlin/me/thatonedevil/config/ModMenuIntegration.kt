@@ -7,7 +7,9 @@ import dev.isxander.yacl3.api.OptionGroup
 import dev.isxander.yacl3.api.YetAnotherConfigLib
 import me.thatonedevil.YoinkGUIClient.yoinkGuiSettings
 import me.thatonedevil.config.YaclConfigHelper.booleanOption
+import me.thatonedevil.config.YaclConfigHelper.enumOptionString
 import me.thatonedevil.nbt.ComponentValueRegistry.refreshHandlers
+import me.thatonedevil.nbt.FormatOptions
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.text.Text
 
@@ -47,6 +49,13 @@ class ModMenuIntegration : ModMenuApi {
                         field = yoinkGuiSettings.debugMode,
                         defaultValue = false,
                         description = "Enables debug logging to help diagnose issues."
+                    ))
+                    .name(Text.of("Toggle formating option"))
+                    .option(enumOptionString(
+                        name = "Default NBT Format",
+                        field = yoinkGuiSettings.formatOption,
+                        enumClass = FormatOptions::class.java,
+                        defaultValue = FormatOptions.LEGACY
                     ))
                     .build())
                 .group(OptionGroup.createBuilder()
