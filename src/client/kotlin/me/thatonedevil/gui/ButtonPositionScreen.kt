@@ -9,10 +9,6 @@ import net.minecraft.client.gui.screen.Screen
 import net.minecraft.text.Text
 import org.lwjgl.glfw.GLFW
 
-//? if >=1.21.9 {
-import net.minecraft.client.gui.Click
-//? }
-
 @Environment(EnvType.CLIENT)
 class ButtonPositionScreen(private val parent: Screen?) : Screen(Text.literal("Position Yoink Button")) {
 
@@ -147,38 +143,6 @@ class ButtonPositionScreen(private val parent: Screen?) : Screen(Text.literal("P
         return mouseX >= buttonX && mouseX <= buttonX + scaledButtonWidth &&
                mouseY >= buttonY && mouseY <= buttonY + scaledButtonHeight
     }
-
-    //? if >=1.21.9 {
-    override fun mouseClicked(click: Click?, doubled: Boolean): Boolean {
-        return false
-    }
-    //? } else {
-    /*override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        return false
-    }*/
-    //?}
-
-
-    //? if =1.22.9 {
-    override fun applyBlur(context: DrawContext?) {
-        super.applyBlur(context)
-    }
-
-    //? } else if =1.21.8 {
-    /*override fun applyBlur(context: DrawContext?) {
-        super.applyBlur(context)
-    }*/
-
-    //? } else if =1.21.5 || =1.21.4 {
-    /*override fun applyBlur() {
-        super.applyBlur()
-    }*/
-
-    //? } else if =1.21.1 {
-    /*override fun applyBlur(delta: Float) {
-        super.applyBlur(delta)
-    }*/
-    //? }
 
 }
 
