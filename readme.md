@@ -47,8 +47,8 @@ Report bugs here:
     - Gradients: `<gradient:#8968CD:#FFA6CA>`
     - Shadow: `<shadow:hex:alpha>`
 
-![img.png](imageCache/configMenuDevOptions.png)
-![Parsed Lore](imageCache/dragScreen.png)
+![ConfigMenu](https://github.com/ThatOneDevil/yoinkgui/blob/master/imageCache/configMenuDevOptions.png?raw=true)
+![DragScreen](https://github.com/ThatOneDevil/yoinkgui/blob/master/imageCache/dragScreen.png?raw=true)
 
 ---
 
@@ -60,6 +60,6 @@ Report bugs here:
 4. The output `.txt` file will appear in your `config` folder.  
 5. The file path is also displayed in chat, as shown below
 
-![Example item with lore](imageCache/exampleItem.png)
+![ExampleItem](https://github.com/ThatOneDevil/yoinkgui/blob/master/imageCache/exampleItem.png?raw=true)
 
-![Parsed Lore](imageCache/exampleOutput.png)
+![ExampleOutput](https://github.com/ThatOneDevil/yoinkgui/blob/master/imageCache/exampleOutput.png?raw=true)
