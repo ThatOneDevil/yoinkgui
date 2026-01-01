@@ -12,6 +12,10 @@ import org.lwjgl.glfw.GLFW
 @Environment(EnvType.CLIENT)
 class ButtonPositionScreen(private val parent: Screen?) : Screen(Text.literal("Position Yoink Button")) {
 
+    override fun init() {
+        super.init()
+    }
+
     private val config: YoinkGuiSettings = YoinkGUIClient.yoinkGuiSettings
     private var dragging = false
     private var dragOffsetX = 0
@@ -45,20 +49,10 @@ class ButtonPositionScreen(private val parent: Screen?) : Screen(Text.literal("P
     private val scaledButtonHeight: Int
         get() = (baseButtonHeight * scaleFactor).toInt()
 
-    override fun init() {
-        super.init()
-    }
-
     override fun render(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
-        // Handle keyboard input manually via GLFW
+        super.render(context, mouseX, mouseY, delta)
+
         val window = client?.window?.handle
-        if (window != null) {
-            if (GLFW.glfwGetKey(window, GLFW.GLFW_KEY_ESCAPE) == GLFW.GLFW_PRESS ||
-                GLFW.glfwGetKey(window, GLFW.GLFW_KEY_ENTER) == GLFW.GLFW_PRESS) {
-                close()
-                return
-            }
-        }
 
         if (window != null) {
             val isMousePressed = GLFW.glfwGetMouseButton(window, GLFW.GLFW_MOUSE_BUTTON_LEFT) == GLFW.GLFW_PRESS
@@ -121,7 +115,6 @@ class ButtonPositionScreen(private val parent: Screen?) : Screen(Text.literal("P
             0xFFFFFFFF.toInt()
         )
 
-        super.render(context, mouseX, mouseY, delta)
     }
 
     override fun mouseScrolled(mouseX: Double, mouseY: Double, horizontalAmount: Double, verticalAmount: Double): Boolean {

@@ -4,7 +4,7 @@ plugins {
 	id("me.modmuss50.mod-publish-plugin") version "0.8.4"
 }
 
-val modVersion = "1.7.0"
+val modVersion = "1.7.2"
 
 version = "${modVersion}+${property("mod.mod_version") as String}"
 group = property("maven_group") as String
@@ -100,7 +100,7 @@ tasks.processResources {
 }
 
 tasks.withType<JavaCompile>().configureEach {
-	options.release.set(21)
+    options.release.set(21)
 }
 
 java {
@@ -131,44 +131,47 @@ val generateTemplates = tasks.register<Copy>("generateTemplates") {
 sourceSets.main.configure { java.srcDir(generateTemplates.map { it.outputs }) }
 
 publishMods {
-	displayName.set("YoinkGUI $cleanVersion for MC $mcVersion")
-	file.set(tasks.remapJar.get().archiveFile)
-	changelog.set(
-		rootProject.file("changelogs/${cleanVersion}.md")
-			.takeIf { it.exists() }
-			?.readText()
-			?: "No changelog provided."
-	)
-	type = STABLE
-	modLoaders.add("fabric")
+    displayName.set("YoinkGUI $cleanVersion for MC $mcVersion")
+    file.set(tasks.remapJar.get().archiveFile)
+    changelog.set(
+        rootProject.file("src/main/resources/changelogs/${cleanVersion}.md")
+            .takeIf { it.exists() }
+            ?.readText()
+            ?: "No changelog provided."
+    )
 
-	fun versionList(prop: String) = findProperty(prop)?.toString()
-		?.split(',')
-		?.map { it.trim() }
-		?: emptyList()
+    type = STABLE
+    modLoaders.add("fabric")
 
-	modrinth {
-		projectId.set(property("modrinthId") as String)
-		accessToken.set(providers.environmentVariable("MODRINTH_API_KEY"))
-		minecraftVersions.addAll(versionList("pub.modrinthMC"))
+    fun versionList(prop: String) = findProperty(prop)?.toString()
+        ?.split(',')
+        ?.map { it.trim() }
+        ?: emptyList()
 
-		requires { slug.set("fabric-api") }
-		requires { slug.set("fabric-language-kotlin") }
+    modrinth {
+        projectId.set(property("modrinthId") as String)
+        accessToken.set(providers.environmentVariable("MODRINTH_API_KEY"))
+        minecraftVersions.addAll(versionList("pub.modrinthMC"))
+
+        requires { slug.set("fabric-api") }
+        requires { slug.set("fabric-language-kotlin") }
         requires { slug.set("yacl") }
         requires { slug.set("modmenu") }
-	}
+    }
 
-	curseforge {
-		projectId.set(property("curseforgeId") as String)
-		accessToken.set(providers.environmentVariable("CURSEFORGE_API_KEY"))
-		minecraftVersions.addAll(versionList("pub.curseMC"))
+    curseforge {
+        projectId.set(property("curseforgeId") as String)
+        accessToken.set(providers.environmentVariable("CURSEFORGE_API_KEY"))
+        minecraftVersions.addAll(versionList("pub.curseMC"))
 
-		requires { slug.set("fabric-api") }
-		requires { slug.set("fabric-language-kotlin") }
+        requires { slug.set("fabric-api") }
+        requires { slug.set("fabric-language-kotlin") }
         requires { slug.set("yacl") }
         requires { slug.set("modmenu") }
-	}
-
+    }
 }
+
+
+
 
 

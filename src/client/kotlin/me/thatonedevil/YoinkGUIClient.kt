@@ -80,7 +80,6 @@ object YoinkGUIClient : ClientModInitializer {
         yoinkGuiSettings // Load settings on client init
     }
 
-
     fun handleParseButton(client: MinecraftClient) {
         CoroutineScope(Dispatchers.IO).launch {
             try {

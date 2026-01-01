@@ -5,6 +5,7 @@ import me.thatonedevil.config.YoinkGuiSettings;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.ingame.*;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -18,6 +19,14 @@ public class ScreenMixin {
     private void render(DrawContext context, int mouseX, int mouseY, float deltaTicks, CallbackInfo ci) {
         MinecraftClient client = MinecraftClient.getInstance();
         if (client.player == null || client.world == null) {
+            return;
+        }
+
+        if (!(client.currentScreen instanceof InventoryScreen
+                || client.currentScreen instanceof GenericContainerScreen
+                || client.currentScreen instanceof MerchantScreen
+                || client.currentScreen instanceof CreativeInventoryScreen
+                || client.currentScreen instanceof ShulkerBoxScreen)) {
             return;
         }
 

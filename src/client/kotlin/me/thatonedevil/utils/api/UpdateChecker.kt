@@ -11,6 +11,7 @@ import me.thatonedevil.YoinkGUIClient.logger
 import me.thatonedevil.utils.LatestErrorLog
 import me.thatonedevil.utils.Utils.debug
 import me.thatonedevil.utils.Utils.sendChat
+import me.thatonedevil.utils.Utils.toClickCommand
 import me.thatonedevil.utils.Utils.toClickURL
 import me.thatonedevil.utils.Utils.toComponent
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents
@@ -60,10 +61,10 @@ object UpdateChecker {
             getUpdateVersion()?.let { version ->
                 sendChat(
                     "\n<color:#FFA6CA>A new update is available: &m&c${BuildConfig.VERSION}&r &a${version.cleanVersion}".toComponent(),
-                    "<color:#8968CD>${version.getUpdateLink()} &7&o(Click to open)\n".toClickURL(version.getUpdateLink())
+                    "<color:#8968CD>${version.getUpdateLink()}\n&7&o(Click to open)\n".toClickURL(version.getUpdateLink())
                 )
             } ?: run {
-                sendChat("<color:#77DD77>You have the latest version of YoinkGUI!")
+                sendChat("<color:#77DD77>You have the latest version of YoinkGUI!".toClickCommand("/yoinkguiclient changelog"))
             }
         }
     }

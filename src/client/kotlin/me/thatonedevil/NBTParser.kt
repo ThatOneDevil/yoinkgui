@@ -79,7 +79,7 @@ object NBTParser {
         val start = LocalDateTime.now()
         val formattedTime = start.format(DateTimeFormatter.ofPattern("MM-dd HH-mm-ss"))
         try {
-            val yoinkDir = File(configDir, "yoinkgui").apply { mkdirs() }
+            val yoinkDir = File(configDir, "assets/yoinkgui").apply { mkdirs() }
             val fileName = "${serverName}-${formattedTime}.txt"
             val file = File(yoinkDir, fileName)
 

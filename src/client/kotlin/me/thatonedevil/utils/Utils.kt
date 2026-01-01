@@ -48,6 +48,9 @@ object Utils {
     fun String.toClickURL(message: String): Component {
         return this.toComponent().clickEvent(ClickEvent.openUrl(message))
     }
+    fun String.toClickCommand(command: String): Component {
+        return this.toComponent().clickEvent(ClickEvent.runCommand(command))
+    }
 
     // Ensure message sending runs on the client/render thread
     fun sendChat(message: String) {
