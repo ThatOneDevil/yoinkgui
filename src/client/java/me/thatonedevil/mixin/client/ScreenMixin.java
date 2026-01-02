@@ -5,6 +5,7 @@ import me.thatonedevil.config.YoinkGuiSettings;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.ingame.*;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -17,7 +18,15 @@ public class ScreenMixin {
     @Inject(at = @At("HEAD"), method = "render")
     private void render(DrawContext context, int mouseX, int mouseY, float deltaTicks, CallbackInfo ci) {
         MinecraftClient client = MinecraftClient.getInstance();
-        if (client.player == null) {
+        if (client.player == null || client.world == null) {
+            return;
+        }
+
+        if (!(client.currentScreen instanceof InventoryScreen
+                || client.currentScreen instanceof GenericContainerScreen
+                || client.currentScreen instanceof MerchantScreen
+                || client.currentScreen instanceof CreativeInventoryScreen
+                || client.currentScreen instanceof ShulkerBoxScreen)) {
             return;
         }
 
@@ -31,18 +40,13 @@ public class ScreenMixin {
 
         int baseButtonWidth = 160;
         int baseButtonHeight = 20;
-        int baseButtonX = 40;
-        int baseButtonY = 35;
 
-
-        int parseButtonX = (int) (baseButtonX * scaleFactor);
-        int parseButtonY = (int) (baseButtonY * scaleFactor);
+        int parseButtonX = config.getButtonX().get();
+        int parseButtonY = config.getButtonY().get();
         int parseButtonWidth = (int) (baseButtonWidth * scaleFactor);
         int parseButtonHeight = (int) (baseButtonHeight * scaleFactor);
         String parseButtonText = "Yoink and Parse NBT into file";
 
-        // Register HUD rendering event
-        // Calculate mouse position in UI space
         int scaledWidth = client.getWindow().getScaledWidth();
         int scaledHeight = client.getWindow().getScaledHeight();
         int mouseXUi = (int) (client.mouse.getX() * scaledWidth / client.getWindow().getWidth());
@@ -51,7 +55,6 @@ public class ScreenMixin {
         YoinkGUIClient.INSTANCE.setParseButtonHovered(mouseXUi >= parseButtonX && mouseXUi <= parseButtonX + parseButtonWidth &&
                 mouseYUi >= parseButtonY && mouseYUi <= parseButtonY + parseButtonHeight);
 
-        // Draw second button (Parse NBT) with appropriate color
         int parseBgColor = YoinkGUIClient.INSTANCE.getParseButtonHovered() ? 0xAA444444 : 0xAA000000;
         context.fill(parseButtonX, parseButtonY, parseButtonX + parseButtonWidth, parseButtonY + parseButtonHeight, parseBgColor);
         context.drawCenteredTextWithShadow(

@@ -5,9 +5,9 @@
 [![Download on Modrinth](https://raw.githubusercontent.com/intergrav/devins-badges/c7fd18efdadd1c3f12ae56b49afd834640d2d797/assets/cozy/available/modrinth_vector.svg)](https://modrinth.com/mod/yoinkgui)
 [![Download on CurseForge](https://raw.githubusercontent.com/intergrav/devins-badges/c7fd18efdadd1c3f12ae56b49afd834640d2d797/assets/cozy/available/curseforge_vector.svg)](https://www.curseforge.com/minecraft/mc-mods/yoinkgui)
 [![fapi-badge](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/requires/fabric-api_vector.svg)](https://modrinth.com/mod/fabric-api)
-[![sinytra-connector](https://github.com/Sinytra/.github/blob/main/badges/connector/cozy.svg)](https://modrinth.com/mod/connector)
+[![sinytra-connector](https://raw.githubusercontent.com/Sinytra/.github/refs/heads/main/badges/connector/cozy.svg)](https://modrinth.com/mod/connector)
 
-![Build Status](https://github.com/ThatOneDevil/yoinkgui/actions/workflows/build.yml/badge.svg)
+[![Build Status](https://github.com/ThatOneDevil/yoinkgui/actions/workflows/build.yml/badge.svg)](https://github.com/ThatOneDevil/yoinkgui)
 [![Modrinth Donwloads](https://img.shields.io/modrinth/dt/yoinkgui?color=00AF5C&label=downloads&logo=modrinth)](https://modrinth.com/mod/yoinkgui)
 [![CurseForge Downloads](https://cf.way2muchnoise.eu/full_yoinkgui_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/yoinkgui)
 [![Discord](https://img.shields.io/discord/1405856687851704420?color=blue&logo=discord&label=Discord)](https://discord.gg/kcegGvZvpC)
@@ -36,12 +36,19 @@ Report bugs here:
 
 ## ✨ Features
 
+- Press **M** to open the configuration menu and customize your parsing options
+
 - **Full Minecraft formatting code support**:
-  - **Color codes**
-  - **Bold**, *Italic*, __Underline__, ~~Strikethrough~~, and obfuscated text
+    - **Color codes, &c &e**
+    - **Bold**, *Italic*, __Underline__, ~~Strikethrough~~, and obfuscated text
+
 - **Hex and gradient support** (MiniMessage format):
-  - Hex colors: `<color:#FF00AA>`
-  - Gradients: `<gradient:#8968CD:#FFA6CA>`
+    - Hex colors: `<color:#FF00AA>`
+    - Gradients: `<gradient:#8968CD:#FFA6CA>`
+    - Shadow: `<shadow:hex:alpha>`
+
+![ConfigMenu](https://github.com/ThatOneDevil/yoinkgui/blob/master/imageCache/configMenuDevOptions.png?raw=true)
+![DragScreen](https://github.com/ThatOneDevil/yoinkgui/blob/master/imageCache/dragScreen.png?raw=true)
 
 ---
 
@@ -53,10 +60,6 @@ Report bugs here:
 4. The output `.txt` file will appear in your `config` folder.  
 5. The file path is also displayed in chat, as shown below
 
-**Example of the path message:**
+![ExampleItem](https://github.com/ThatOneDevil/yoinkgui/blob/master/imageCache/exampleItem.png?raw=true)
 
-![Example of the path message](https://cdn.modrinth.com/data/cached_images/681a4eb24635ac98ae987f4a72a741c27c4c3c87.png)
-
-![Example item with lore](https://cdn.modrinth.com/data/cached_images/acb2558b12d52504936e9d1e1afd8f54a93d04ef.png)
-
-![Parsed Lore](https://cdn.modrinth.com/data/cached_images/c468d843708f68328354a1c17ea48f4d8b4dd297.png)
+![ExampleOutput](https://github.com/ThatOneDevil/yoinkgui/blob/master/imageCache/exampleOutput.png?raw=true)

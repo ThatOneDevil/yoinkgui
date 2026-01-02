@@ -1,9 +1,12 @@
 package me.thatonedevil.utils
 
+import me.thatonedevil.YoinkGUIClient.logger
+import me.thatonedevil.YoinkGUIClient.yoinkGuiSettings
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.minimessage.MiniMessage
 import net.minecraft.client.MinecraftClient
+
 //? if >1.21.1 {
 import net.kyori.adventure.platform.modcommon.MinecraftClientAudiences
 //?} else {
@@ -39,11 +42,14 @@ object Utils {
         return miniMessage.deserialize(convertLegacyToMini(this))
     }
 
-    fun String.toClickable(message: String): Component {
+    fun String.toClickCopy(message: String): Component {
         return this.toComponent().clickEvent(ClickEvent.copyToClipboard(message))
     }
     fun String.toClickURL(message: String): Component {
         return this.toComponent().clickEvent(ClickEvent.openUrl(message))
+    }
+    fun String.toClickCommand(command: String): Component {
+        return this.toComponent().clickEvent(ClickEvent.runCommand(command))
     }
 
     // Ensure message sending runs on the client/render thread
@@ -54,12 +60,24 @@ object Utils {
     }
 
     fun sendChat(vararg messages: Component) {
-        val mc = MinecraftClient.getInstance()
-        val action = Runnable {
-            for (component in messages) {
-                audience.sendMessage(component)
+        try {
+            val mc = MinecraftClient.getInstance()
+            val action = Runnable {
+                for (component in messages) {
+                    audience.sendMessage(component)
+                }
             }
+            mc?.execute(action) ?: action.run()
+        } catch (e: Exception) {
+            LatestErrorLog.record(e, "Error sending chat message (MiniMessage)")
+            debug("Failed to send chat message: ${e.message}")
         }
-        mc?.execute(action) ?: action.run()
     }
+
+    fun debug(message: String) {
+        if (yoinkGuiSettings.debugMode.get() == true) {
+            logger.info(message)
+        }
+    }
+
 }

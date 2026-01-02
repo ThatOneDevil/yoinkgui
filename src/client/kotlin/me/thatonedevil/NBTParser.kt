@@ -4,11 +4,14 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import me.thatonedevil.utils.Utils.toClickable
+import me.thatonedevil.YoinkGUIClient.logger
+import me.thatonedevil.config.YoinkGuiSettings
+import me.thatonedevil.utils.Utils.toClickCopy
 import me.thatonedevil.utils.Utils.toComponent
-import me.thatonedevil.YoinkGUI.logger
 import me.thatonedevil.utils.Utils
 import me.thatonedevil.nbt.ComponentValueRegistry
+import me.thatonedevil.utils.LatestErrorLog
+import me.thatonedevil.utils.api.UpdateChecker.serverName
 import java.io.File
 import java.io.FileWriter
 import java.time.Duration
@@ -21,12 +24,8 @@ object NBTParser {
 
     private fun parseTextComponent(obj: JsonObject): String = buildString {
         val result = ComponentValueRegistry.process(obj)
-        if (result.text.isNotEmpty()) {
-            append(result.text)
-            if (result.stopPropagation) return@buildString
-        }
-
-        append(obj.get("text")?.asString ?: "")
+        append(result.text)
+        if (result.stopPropagation) return@buildString
 
         obj.get("extra")?.asJsonArray?.forEach {
             if (it.isJsonObject) append(parseTextComponent(it.asJsonObject))
@@ -46,11 +45,12 @@ object NBTParser {
         val json = gson.fromJson(raw, JsonObject::class.java)
         val components = json.getAsJsonObject("components") ?: return@buildString
 
-        val hasName = components.has("minecraft:custom_name")
+        val hasName = components.has("minecraft:custom_name") || components.has("minecraft:item_name")
         val hasLore = components.has("minecraft:lore")
         if (!hasName && !hasLore) return@buildString
 
-        components.get("minecraft:custom_name")?.let { customNameElement ->
+        val nameElement = components.get("minecraft:custom_name") ?: components.get("minecraft:item_name")
+        nameElement?.let { customNameElement ->
             append("Name: ")
             when {
                 customNameElement.isJsonObject -> append(parseTextComponent(customNameElement.asJsonObject))
@@ -76,15 +76,14 @@ object NBTParser {
 
 
     suspend fun saveFormattedNBTToFile(nbtList: List<String>, configDir: File) = withContext(Dispatchers.IO) {
+        val start = LocalDateTime.now()
+        val formattedTime = start.format(DateTimeFormatter.ofPattern("MM-dd HH-mm-ss"))
         try {
-            val start = LocalDateTime.now()
-            val formattedTime = start.format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"))
-            val yoinkDir = File(configDir, "yoinkgui").apply { mkdirs() }
-            val fileName = "formatted_nbt_${formattedTime}.txt"
+            val yoinkDir = File(configDir, "assets/yoinkgui").apply { mkdirs() }
+            val fileName = "${serverName}-${formattedTime}.txt"
             val file = File(yoinkDir, fileName)
 
             FileWriter(file).use { writer ->
-                // keep the original index so we can reference the raw NBT correctly later
                 val contentItems = nbtList.mapIndexedNotNull { i, raw ->
                     val formatted = parseNewNBTFormat(raw)
                     if (formatted.isNotBlank()) Pair(i, formatted) else null
@@ -99,7 +98,8 @@ object NBTParser {
 
                 contentItems.forEachIndexed { outIdx, (originalIndex, formatted) ->
                     writer.write("=== ITEM ${originalIndex + 1} ===\n")
-                    writer.write("Raw NBT: ${nbtList[originalIndex]}\n")
+                    if (YoinkGuiSettings.includeRawNbt.get()) { writer.write("Raw NBT: ${nbtList[originalIndex]}\n") }
+
                     writer.write("\n$formatted\n")
                     if (outIdx < contentItems.lastIndex) writer.write("\n${"=".repeat(50)}\n\n")
                 }
@@ -107,17 +107,15 @@ object NBTParser {
 
             val duration = Duration.between(start, LocalDateTime.now()).toMillis()
 
-            try {
-                Utils.sendChat(
-                    "\n<color:#FFA6CA>Formatted NBT data saved to:".toComponent(),
-                    " <color:#FFA6CA>Parse time: <color:#8968CD>${duration}ms".toComponent(),
-                    "  <color:#8968CD>${file.absolutePath} &7&o(Click to copy)\n".toClickable(file.absolutePath)
-                )
-            } catch (inner: Exception) {
-                logger?.error("Error while sending save notification to chat: ${inner.message}", inner)
-            }
+            Utils.sendChat(
+                "\n<color:#FFA6CA>Formatted NBT data saved to:".toComponent(),
+                " <color:#FFA6CA>Parse time: <color:#8968CD>${duration}ms".toComponent(),
+                "  <color:#8968CD>${file.absolutePath} &7&o(Click to copy)\n".toClickCopy(file.absolutePath)
+            )
+
         } catch (e: Exception) {
-            logger?.error("Error saving NBT file: ${e.message}", e)
+            LatestErrorLog.record(e, "Error saving NBT file")
+            logger.error("Error saving NBT file: ${e.message}", e)
         }
     }
 }

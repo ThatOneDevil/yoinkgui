@@ -2,7 +2,7 @@ package me.thatonedevil.config
 
 import dev.isxander.yacl3.api.Option
 import dev.isxander.yacl3.api.OptionDescription
-import dev.isxander.yacl3.api.controller.FloatSliderControllerBuilder
+import dev.isxander.yacl3.api.controller.EnumControllerBuilder
 import dev.isxander.yacl3.api.controller.TickBoxControllerBuilder
 import dev.isxander.yacl3.config.v3.ConfigEntry
 import dev.isxander.yacl3.config.v3.value
@@ -16,6 +16,7 @@ object YaclConfigHelper {
         defaultValue: Boolean = true,
         description: String? = null
     ): Option<Boolean> {
+
         return Option.createBuilder<Boolean>()
             .name(Text.of(name))
             .apply { description?.let { description(OptionDescription.of(Text.of(it))) } }
@@ -24,26 +25,23 @@ object YaclConfigHelper {
             .build()
     }
 
-    fun floatSliderOption(
+
+    fun <T : Enum<T>> enumOptionString(
         name: String,
-        field: ConfigEntry<Float>,
-        defaultValue: Float,
-        range: ClosedFloatingPointRange<Float>,
-        step: Float = 0.1f,
-        formatValue: ((Float) -> Text)? = null,
-        description: String? = null
-    ): Option<Float> {
-        return Option.createBuilder<Float>()
+        field: ConfigEntry<String>,
+        enumClass: Class<T>,
+        defaultValue: T
+    ): Option<T> {
+        return Option.createBuilder<T>()
             .name(Text.of(name))
-            .apply { description?.let { description(OptionDescription.of(Text.of(it))) } }
-            .binding(defaultValue, { field.value }, { field.value = it })
-            .controller { option ->
-                FloatSliderControllerBuilder.create(option)
-                    .range(range.start, range.endInclusive)
-                    .step(step)
-                    .apply { formatValue?.let { formatValue(it) } }
-            }
+            .binding(
+                defaultValue,
+                { try { java.lang.Enum.valueOf(enumClass, field.value) } catch (_: Exception) { defaultValue } },
+                { field.value = it.name }
+            )
+            .controller { option -> EnumControllerBuilder.create(option).enumClass(enumClass) }
             .build()
     }
+
 }
 

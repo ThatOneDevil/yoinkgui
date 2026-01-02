@@ -7,11 +7,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.thatonedevil.BuildConfig
-import me.thatonedevil.YoinkGUI.logger
+import me.thatonedevil.YoinkGUIClient.logger
+import me.thatonedevil.utils.LatestErrorLog
+import me.thatonedevil.utils.Utils.debug
 import me.thatonedevil.utils.Utils.sendChat
+import me.thatonedevil.utils.Utils.toClickCommand
 import me.thatonedevil.utils.Utils.toClickURL
 import me.thatonedevil.utils.Utils.toComponent
-import net.fabricmc.fabric.api.client.networking.v1.ClientLoginConnectionEvents
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
@@ -19,6 +22,7 @@ import java.net.URI
 
 object UpdateChecker {
 
+    var serverName: String? = "Unknown"
     var currentUpdateVersion: ModrinthVersion? = null
 
     suspend fun getUpdateVersion(): ModrinthVersion? {
@@ -40,7 +44,14 @@ object UpdateChecker {
     }
 
     fun setupJoinListener() {
-        ClientLoginConnectionEvents.INIT.register { _, _ ->
+        ClientPlayConnectionEvents.JOIN.register { _, _, client ->
+            serverName = when (client.currentServerEntry?.address){
+                "0", "localhost" -> "Singleplayer"
+                else -> client.currentServerEntry?.address ?: "Singleplayer"
+            }
+
+            debug("Server name: $serverName")
+
             checkVersion()
         }
     }
@@ -50,10 +61,10 @@ object UpdateChecker {
             getUpdateVersion()?.let { version ->
                 sendChat(
                     "\n<color:#FFA6CA>A new update is available: &m&c${BuildConfig.VERSION}&r &a${version.cleanVersion}".toComponent(),
-                    "<color:#8968CD>${version.getUpdateLink()} &7&o(Click to open)\n".toClickURL(version.getUpdateLink())
+                    "<color:#8968CD>${version.getUpdateLink()}\n&7&o(Click to open)\n".toClickURL(version.getUpdateLink())
                 )
             } ?: run {
-                sendChat("<color:#77DD77>You have the latest version of YoinkGUI!")
+                sendChat("<color:#77DD77>You have the latest version of YoinkGUI! &7&o(Click to open changelog)".toClickCommand("/yoinkguiclient changelog"))
             }
         }
     }
@@ -67,15 +78,16 @@ object UpdateChecker {
             for (element in elements) {
                 val version = ModrinthVersion(element)
                 if (version.supportsGameVersion(BuildConfig.MC_VERSION)) {
-                    logger?.info("Found compatible version: ${version.cleanVersion} for MC ${BuildConfig.MC_VERSION}")
+                    debug("Found compatible version: ${version.cleanVersion} for MC ${BuildConfig.MC_VERSION}")
                     return version
                 }
             }
 
-            logger?.error("No compatible version found for MC ${BuildConfig.MC_VERSION}")
+            logger.error("No compatible version found for MC ${BuildConfig.MC_VERSION}")
             return null
-        } catch (_: IOException) {
-            logger?.error("Checking for update failed!")
+        } catch (error: IOException) {
+            LatestErrorLog.record(error, "Update Check Failure")
+            logger.error("Checking for update failed!")
         }
         return null
     }

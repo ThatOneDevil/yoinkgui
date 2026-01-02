@@ -4,7 +4,7 @@ plugins {
 	id("me.modmuss50.mod-publish-plugin") version "0.8.4"
 }
 
-val modVersion = "1.6.1-hotfix"
+val modVersion = "1.7.2"
 
 version = "${modVersion}+${property("mod.mod_version") as String}"
 group = property("maven_group") as String
@@ -21,9 +21,8 @@ base {
 
 repositories {
 	mavenCentral()
-	maven {
+	maven("https://s01.oss.sonatype.org/content/repositories/snapshots/"){
 		name = "sonatype-oss-snapshots1"
-		url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
 		mavenContent { snapshotsOnly() }
 	}
     maven("https://maven.terraformersmc.com/") {
@@ -32,6 +31,9 @@ repositories {
     maven("https://maven.isxander.dev/releases") {
         name = "Xander Maven"
     }
+    maven( "https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1") {
+        name = "DevAuth"
+    }
 }
 
 loom {
@@ -39,7 +41,6 @@ loom {
 
 
 	mods {
-
 		create("yoinkgui").project.sourceSets {
             sourceSets["main"]
             sourceSets["client"]
@@ -71,9 +72,12 @@ dependencies {
     modImplementation("com.terraformersmc:modmenu:${modMenu}")
     modImplementation("dev.isxander:yet-another-config-lib:${yacl}")
 
-
     // kotlin
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
+
+    //devauth
+    modRuntimeOnly("me.djtheredstoner:DevAuth-fabric:1.2.2")
+
 }
 
 tasks.processResources {
@@ -95,7 +99,7 @@ tasks.processResources {
 }
 
 tasks.withType<JavaCompile>().configureEach {
-	options.release.set(21)
+    options.release.set(21)
 }
 
 java {
@@ -126,44 +130,47 @@ val generateTemplates = tasks.register<Copy>("generateTemplates") {
 sourceSets.main.configure { java.srcDir(generateTemplates.map { it.outputs }) }
 
 publishMods {
-	displayName.set("YoinkGUI $cleanVersion for MC $mcVersion")
-	file.set(tasks.remapJar.get().archiveFile)
-	changelog.set(
-		rootProject.file("changelogs/${cleanVersion}.md")
-			.takeIf { it.exists() }
-			?.readText()
-			?: "No changelog provided."
-	)
-	type = STABLE
-	modLoaders.add("fabric")
+    displayName.set("YoinkGUI $cleanVersion for MC $mcVersion")
+    file.set(tasks.remapJar.get().archiveFile)
+    changelog.set(
+        rootProject.file("src/main/resources/changelogs/${cleanVersion}.md")
+            .takeIf { it.exists() }
+            ?.readText()
+            ?: "No changelog provided."
+    )
 
-	fun versionList(prop: String) = findProperty(prop)?.toString()
-		?.split(',')
-		?.map { it.trim() }
-		?: emptyList()
+    type = STABLE
+    modLoaders.add("fabric")
 
-	modrinth {
-		projectId.set(property("modrinthId") as String)
-		accessToken.set(providers.environmentVariable("MODRINTH_API_KEY"))
-		minecraftVersions.addAll(versionList("pub.modrinthMC"))
+    fun versionList(prop: String) = findProperty(prop)?.toString()
+        ?.split(',')
+        ?.map { it.trim() }
+        ?: emptyList()
 
-		requires { slug.set("fabric-api") }
-		requires { slug.set("fabric-language-kotlin") }
+    modrinth {
+        projectId.set(property("modrinthId") as String)
+        accessToken.set(providers.environmentVariable("MODRINTH_API_KEY"))
+        minecraftVersions.addAll(versionList("pub.modrinthMC"))
+
+        requires { slug.set("fabric-api") }
+        requires { slug.set("fabric-language-kotlin") }
         requires { slug.set("yacl") }
         requires { slug.set("modmenu") }
-	}
+    }
 
-	curseforge {
-		projectId.set(property("curseforgeId") as String)
-		accessToken.set(providers.environmentVariable("CURSEFORGE_API_KEY"))
-		minecraftVersions.addAll(versionList("pub.curseMC"))
+    curseforge {
+        projectId.set(property("curseforgeId") as String)
+        accessToken.set(providers.environmentVariable("CURSEFORGE_API_KEY"))
+        minecraftVersions.addAll(versionList("pub.curseMC"))
 
-		requires { slug.set("fabric-api") }
-		requires { slug.set("fabric-language-kotlin") }
+        requires { slug.set("fabric-api") }
+        requires { slug.set("fabric-language-kotlin") }
         requires { slug.set("yacl") }
         requires { slug.set("modmenu") }
-	}
-
+    }
 }
+
+
+
 
 

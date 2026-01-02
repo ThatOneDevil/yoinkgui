@@ -1,54 +1,58 @@
 {
-	"schemaVersion": 1,
-	"id": "yoinkgui",
-	"version": "${version}",
-	"name": "YoinkGUI",
-	"description": "A Fabric mod that allows users to easily copy the name and lore of items from any GUI!",
-	"authors": [
-		"ThatOneDevil"
-	],
-	"contact": {
-		"homepage": "https://modrinth.com/project/5j4oEPp2",
-		"sources": "https://github.com/ThatOneDevil/yoinkgui",
-        "issues": "https://github.com/ThatOneDevil/yoinkgui/issues"
-	},
-	"license": "GPL-3.0 license",
-	"icon": "assets/yoinkgui/icon.png",
-	"environment": "*",
-	"entrypoints": {
-       "modmenu": [
-          "me.thatonedevil.config.ModMenuIntegration"
-        ],
-		"main": [
-			{
-				"value": "me.thatonedevil.YoinkGUI",
-				"adapter": "kotlin"
-			}
-		],
-		"client": [
-			{
-				"value": "me.thatonedevil.YoinkGUIClient",
-				"adapter": "kotlin"
-			}
-		]
-	},
-	"mixins": [
-		"yoinkgui.mixins.json",
-		{
-			"config": "yoinkgui.client.mixins.json",
-			"environment": "client"
-		}
-	],
-	"depends": {
-		"fabricloader": ">=0.16.0",
-		"minecraft": "${mc}",
-		"java": ">=21",
-		"fabric-api": "*",
-		"fabric-language-kotlin": "*",
-        "yet_another_config_lib_v3": ">=${yaclVersion}",
-        "modmenu": ">=${modmenuVersion}"
-	},
-	"suggests": {
-		"another-mod": "*"
-	}
+  "schemaVersion": 1,
+  "id": "yoinkgui",
+  "version": "${version}",
+  "name": "YoinkGUI",
+  "description": "A Fabric mod that allows users to easily copy the name and lore of items from any GUI!",
+  "authors": [
+    "ThatOneDevil"
+  ],
+  "contact": {
+    "homepage": "https://modrinth.com/project/5j4oEPp2",
+    "sources": "https://github.com/ThatOneDevil/yoinkgui",
+    "issues": "https://github.com/ThatOneDevil/yoinkgui/issues"
+  },
+  "license": "GPL-3.0 license",
+  "icon": "assets/yoinkgui/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "modmenu": [
+      "me.thatonedevil.config.ModMenuIntegration"
+    ],
+    "main": [
+      {
+        "value": "me.thatonedevil.YoinkGUI",
+        "adapter": "kotlin"
+      }
+    ],
+    "client": [
+      {
+        "value": "me.thatonedevil.YoinkGUIClient",
+        "adapter": "kotlin"
+      }
+    ]
+  },
+  "mixins": [
+    "yoinkgui.mixins.json",
+    {
+      "config": "yoinkgui.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "minecraft": "${mc}",
+    "java": ">=21",
+    "fabric-api": "*",
+    "fabric-language-kotlin": "*",
+    "yet_another_config_lib_v3": ">=${yaclVersion}",
+    "modmenu": ">=${modmenuVersion}"
+  },
+  "custom": {
+    "modmenu": {
+      "links": {
+        "Discord": "https://discord.com/invite/kcegGvZvpC"
+      }
+    }
+  }
 }
