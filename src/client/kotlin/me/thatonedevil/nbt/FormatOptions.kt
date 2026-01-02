@@ -13,4 +13,5 @@ enum class FormatOptions : NameableEnum {
             MINIMESSAGE -> Text.of("Minimessage")
             LEGACY -> Text.of("Legacy")
         }
-    }}
+    }
+}

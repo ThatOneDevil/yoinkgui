@@ -64,7 +64,7 @@ object UpdateChecker {
                     "<color:#8968CD>${version.getUpdateLink()}\n&7&o(Click to open)\n".toClickURL(version.getUpdateLink())
                 )
             } ?: run {
-                sendChat("<color:#77DD77>You have the latest version of YoinkGUI!".toClickCommand("/yoinkguiclient changelog"))
+                sendChat("<color:#77DD77>You have the latest version of YoinkGUI! &7&o(Click to open changelog)".toClickCommand("/yoinkguiclient changelog"))
             }
         }
     }

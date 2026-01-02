@@ -47,5 +47,12 @@
     "fabric-language-kotlin": "*",
     "yet_another_config_lib_v3": ">=${yaclVersion}",
     "modmenu": ">=${modmenuVersion}"
+  },
+  "custom": {
+    "modmenu": {
+      "links": {
+        "Discord": "https://discord.com/invite/kcegGvZvpC"
+      }
+    }
   }
 }

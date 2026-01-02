@@ -110,7 +110,8 @@ object NBTParser {
             Utils.sendChat(
                 "\n<color:#FFA6CA>Formatted NBT data saved to:".toComponent(),
                 " <color:#FFA6CA>Parse time: <color:#8968CD>${duration}ms".toComponent(),
-                "  <color:#8968CD>${file.absolutePath} &7&o(Click to copy)\n".toClickCopy(file.absolutePath))
+                "  <color:#8968CD>${file.absolutePath} &7&o(Click to copy)\n".toClickCopy(file.absolutePath)
+            )
 
         } catch (e: Exception) {
             LatestErrorLog.record(e, "Error saving NBT file")

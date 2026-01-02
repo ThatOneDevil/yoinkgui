@@ -50,7 +50,7 @@ class ModMenuIntegration : ModMenuApi {
                         defaultValue = false,
                         description = "Enables debug logging to help diagnose issues."
                     ))
-                    .name(Text.of("Toggle formating option"))
+                    .name(Text.of("Toggle formatting option"))
                     .option(enumOptionString(
                         name = "Default NBT Format",
                         field = yoinkGuiSettings.formatOption,

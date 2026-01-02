@@ -77,7 +77,6 @@ object ComponentValueRegistry {
 private fun isLegacyFormat(): Boolean = YoinkGuiSettings.formatOption.get() == "LEGACY"
 
 object ColorHandler : ComponentValueHandler {
-    // Keep canonical maps constant; select at runtime for uniform behaviour and dynamic switching
     private val LEGACY_COLOR_CODES = mapOf(
         "black" to "&0", "dark_blue" to "&1", "dark_green" to "&2", "dark_aqua" to "&3",
         "dark_red" to "&4", "dark_purple" to "&5", "gold" to "&6", "gray" to "&7",
@@ -95,14 +94,13 @@ object ColorHandler : ComponentValueHandler {
     private fun formatColor(color: String?): String {
         if (color == null) return ""
         val lower = color.lowercase()
-        val legacy = isLegacyFormat()
-        val map = if (legacy) LEGACY_COLOR_CODES else MINIMESSAGE_COLOR_CODES
+        val map = if (isLegacyFormat()) LEGACY_COLOR_CODES else MINIMESSAGE_COLOR_CODES
 
         // Named color
         map[lower]?.let { return it }
 
         if (color.startsWith("#")) {
-            return if (legacy) {
+            return if (isLegacyFormat()) {
                 // Legacy can't represent hex reliably and messyly, so skip
                 ""
             } else {
