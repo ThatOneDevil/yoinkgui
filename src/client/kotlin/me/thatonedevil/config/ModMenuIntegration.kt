@@ -36,6 +36,12 @@ class ModMenuIntegration : ModMenuApi {
                         field = yoinkGuiSettings.enableYoinkButton,
                         defaultValue = true
                     ))
+                    .option(booleanOption(
+                        name = "Enable Single Item Yoink",
+                        field = yoinkGuiSettings.enableSingleItemYoink,
+                        defaultValue = true,
+                        description = "Allows yoinking single items when pressing X while hovering."
+                    ))
                     .build())
                 .build())
 

@@ -8,54 +8,38 @@ import me.thatonedevil.config.YoinkGuiSettings
 import me.thatonedevil.gui.ButtonPositionScreen
 import me.thatonedevil.inventory.TopInventory
 import me.thatonedevil.inventory.YoinkInventory
+import me.thatonedevil.keybinds.KeybindManager
 import me.thatonedevil.utils.LatestErrorLog
 import me.thatonedevil.utils.Utils.sendChat
 import me.thatonedevil.utils.Utils.toClickCopy
 import me.thatonedevil.utils.api.UpdateChecker
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
 import net.minecraft.client.MinecraftClient
-import net.minecraft.client.option.KeyBinding
-import net.minecraft.client.util.InputUtil
-import net.minecraft.util.Identifier
+import net.minecraft.item.ItemStack
 import org.lwjgl.glfw.GLFW
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 object YoinkGUIClient : ClientModInitializer {
     var parseButtonHovered = false
-    private var wasLeftClicking = false
+    var wasLeftClicking = false
+    private var hoveredItemStack: ItemStack? = null
+
     val logger: Logger = LoggerFactory.getLogger(BuildConfig.MOD_ID)
 
     @JvmStatic
     val yoinkGuiSettings = YoinkGuiSettings
 
-    //? if >=1.21.9 {
-    private val positionButtonKeybind = KeyBindingHelper.registerKeyBinding(
-        KeyBinding(
-            "key.yoinkgui.position",
-            InputUtil.Type.KEYSYM,
-            GLFW.GLFW_KEY_M,
-            KeyBinding.Category.create(Identifier.of("keybinds"))
-        )
-    )
-    //? } else {
-    /*private val positionButtonKeybind = KeyBindingHelper.registerKeyBinding(
-        KeyBinding(
-            "key.yoinkgui.position",
-            InputUtil.Type.KEYSYM,
-            GLFW.GLFW_KEY_M,
-            "key.category.minecraft.keybinds"
-        )
-    )*/
-    //?}
-
     override fun onInitializeClient() {
+        UpdateChecker.setupJoinListener()
+        YoinkGuiClientCommandRegistry.register()
+        KeybindManager().register()
+
+        yoinkGuiSettings // Load settings on client init
+
+        // Button click logic.
         ClientTickEvents.END_CLIENT_TICK.register { client ->
-            if (positionButtonKeybind.wasPressed()) {
-                client.setScreen(ButtonPositionScreen(client.currentScreen))
-            }
 
             val isLeftClicking = GLFW.glfwGetMouseButton(client.window.handle, GLFW.GLFW_MOUSE_BUTTON_LEFT) == GLFW.GLFW_PRESS
 
@@ -74,10 +58,6 @@ object YoinkGUIClient : ClientModInitializer {
 
             wasLeftClicking = isLeftClicking
         }
-
-        UpdateChecker.setupJoinListener()
-        YoinkGuiClientCommandRegistry.register()
-        yoinkGuiSettings // Load settings on client init
     }
 
     fun handleParseButton(client: MinecraftClient) {
@@ -102,5 +82,17 @@ object YoinkGUIClient : ClientModInitializer {
 
             }
         }
+    }
+
+    //temporary
+    @JvmStatic
+    fun getHoveredItemStack(): ItemStack? {
+        return hoveredItemStack
+    }
+
+
+    @JvmStatic
+    fun setHoveredItemStack(itemStack: ItemStack?) {
+        hoveredItemStack = itemStack
     }
 }

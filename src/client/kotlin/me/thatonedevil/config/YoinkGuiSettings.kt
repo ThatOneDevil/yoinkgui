@@ -19,6 +19,8 @@ open class YoinkGuiSettings() : JsonFileCodecConfig<YoinkGuiSettings>(
     }
 
     val enableYoinkButton by register<Boolean>(default = true, BOOL)
+    val enableSingleItemYoink by register<Boolean>(default = true, BOOL)
+
     val buttonScaleFactor by register<Float>(default = 1.0f, FLOAT)
     val buttonX by register<Int>(default = 40, INT)
     val buttonY by register<Int>(default = 35, INT)
