@@ -1,7 +1,6 @@
 package me.thatonedevil.keybinds
 
 import me.thatonedevil.utils.Utils
-import net.minecraft.client.MinecraftClient
 import org.lwjgl.glfw.GLFW
 
 class YoinkSingleKeybind : Key{
@@ -15,7 +14,6 @@ class YoinkSingleKeybind : Key{
     }
 
     override fun whenPressed() {
-        val client = MinecraftClient.getInstance()
         Utils.sendChat("/yoink single keybind pressed")
     }
 

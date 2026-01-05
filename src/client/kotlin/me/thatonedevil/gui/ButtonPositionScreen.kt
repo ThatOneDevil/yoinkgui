@@ -75,7 +75,7 @@ class ButtonPositionScreen(private val parent: Screen?) : Screen(Text.literal("P
             buttonY = (mouseY - dragOffsetY).coerceIn(0, height - scaledButtonHeight)
         }
 
-        val buttonColor = if (isMouseOverButton(mouseX, mouseY)) 0xAA444444.toInt() else 0xAA000000.toInt()
+        val buttonColor = if (isMouseOverButton(mouseX, mouseY)) 0xAA444 else 0xAA000
         context.fill(
             buttonX,
             buttonY,
@@ -88,7 +88,7 @@ class ButtonPositionScreen(private val parent: Screen?) : Screen(Text.literal("P
             Text.literal("Yoink and Parse NBT into file"),
             buttonX + scaledButtonWidth / 2,
             buttonY + (scaledButtonHeight - 8) / 2,
-            0xFFFFFFFF.toInt()
+            0xFFFFF
         )
 
         context.drawCenteredTextWithShadow(
@@ -96,7 +96,7 @@ class ButtonPositionScreen(private val parent: Screen?) : Screen(Text.literal("P
             Text.literal("Drag the button to reposition it"),
             width / 2,
             20,
-            0xFFFFFFFF.toInt()
+            0xFFFFF
         )
 
         context.drawCenteredTextWithShadow(
@@ -104,7 +104,7 @@ class ButtonPositionScreen(private val parent: Screen?) : Screen(Text.literal("P
             Text.literal("Use mouse wheel to scale (Current: ${"%.2f".format(scaleFactor)}x)"),
             width / 2,
             35,
-            0xFFFFFFFF.toInt()
+            0xFFFFF
         )
 
         context.drawCenteredTextWithShadow(
@@ -112,7 +112,7 @@ class ButtonPositionScreen(private val parent: Screen?) : Screen(Text.literal("P
             Text.literal("Press ESC or ENTER to save and exit"),
             width / 2,
             50,
-            0xFFFFFFFF.toInt()
+            0xFFFFF
         )
 
     }

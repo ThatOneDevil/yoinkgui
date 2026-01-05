@@ -55,14 +55,14 @@ public class ScreenMixin {
         YoinkGUIClient.INSTANCE.setParseButtonHovered(mouseXUi >= parseButtonX && mouseXUi <= parseButtonX + parseButtonWidth &&
                 mouseYUi >= parseButtonY && mouseYUi <= parseButtonY + parseButtonHeight);
 
-        int parseBgColor = YoinkGUIClient.INSTANCE.getParseButtonHovered() ? 0xAA444444 : 0xAA000000;
+        int parseBgColor = YoinkGUIClient.INSTANCE.getParseButtonHovered() ? 0xAA444 : 0xAA000;
         context.fill(parseButtonX, parseButtonY, parseButtonX + parseButtonWidth, parseButtonY + parseButtonHeight, parseBgColor);
         context.drawCenteredTextWithShadow(
                 client.textRenderer,
                 literal(parseButtonText),
                 parseButtonX + parseButtonWidth / 2,
                 parseButtonY + (parseButtonHeight - 8) / 2,
-                0xFFFFFFFF
+                0xFFFFF
         );
 
     }

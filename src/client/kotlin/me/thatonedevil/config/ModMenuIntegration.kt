@@ -18,7 +18,7 @@ class ModMenuIntegration : ModMenuApi {
         createScreen(parentScreen)
     }
 
-    private fun createScreen(parentScreen: Screen?): Screen {
+    fun createScreen(parentScreen: Screen?): Screen {
         val screen = YetAnotherConfigLib.createBuilder()
             .save {
                 YoinkGuiSettings.saveToFile()

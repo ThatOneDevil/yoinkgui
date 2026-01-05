@@ -2,6 +2,7 @@ package me.thatonedevil.commands
 
 import com.mojang.brigadier.Command
 import com.mojang.brigadier.CommandDispatcher
+import me.thatonedevil.config.ModMenuIntegration
 import me.thatonedevil.gui.ButtonPositionScreen
 import me.thatonedevil.gui.ChangelogScreen
 import me.thatonedevil.utils.api.UpdateChecker
@@ -51,6 +52,16 @@ object YoinkGuiClientCommandRegistry {
                 .then(
                     ClientCommandManager.literal("debug")
                         .executes { _ -> debugCommand.execute() }
+                )
+                .then(
+                    ClientCommandManager.literal("config")
+                        .executes { context ->
+                            val client = context.source.client
+                            client.send {
+                                client.setScreen(ModMenuIntegration().createScreen(null))
+                            }
+                            Command.SINGLE_SUCCESS
+                        }
                 )
 
         )
