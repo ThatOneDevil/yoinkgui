@@ -28,7 +28,7 @@ public class ItemStackMixin {
 
         tooltip.add(Text.literal(""));
 
-        tooltip.add(Text.literal("§ePress X to yoink item"));
+        tooltip.add(Text.literal("§ePress Y to yoink item"));
 
         YoinkGUIClient.setHoveredItemStack((ItemStack)(Object)this);
     }

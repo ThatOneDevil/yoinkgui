@@ -32,10 +32,12 @@ interface Key {
         return KeyBindingHelper.registerKeyBinding(keyBinding)
     }
 
+    //? if >=1.21.9 {
     companion object {
         val newKeybindCategory: KeyBinding.Category =
             KeyBinding.Category.create(Identifier.of("keybinds"))
     }
+    //? }
 
 
 }

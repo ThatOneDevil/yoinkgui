@@ -11,7 +11,7 @@ class YoinkSingleKeybind : Key{
     }
 
     override fun key(): Int {
-        return GLFW.GLFW_KEY_X
+        return GLFW.GLFW_KEY_Y
     }
 
     override fun whenPressed() {
