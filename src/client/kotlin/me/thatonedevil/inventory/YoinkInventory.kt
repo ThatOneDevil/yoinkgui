@@ -29,16 +29,19 @@ class YoinkInventory(private val player: ClientPlayerEntity, private val invento
 
     }
 
-    fun yoinkSingleItem(itemStack: ItemStack): String? {
-        if (topInventory == null || itemStack.isEmpty) {
-            sendChat("<color:#FF6961>No inventory found or item is empty!")
-            return null
-        }
+    companion object {
+        fun yoinkSingleItem(player: ClientPlayerEntity, itemStack: ItemStack): String? {
+            if (itemStack.isEmpty) {
+                sendChat("<color:#FF6961>No inventory found or item is empty!")
+                return null
+            }
 
-        val registryOps = player.registryManager.getOps(NbtOps.INSTANCE)
-        val encodeResult = ItemStack.CODEC.encodeStart(registryOps, itemStack)
-        return encodeResult.result().get().toString()
+            val registryOps = player.registryManager.getOps(NbtOps.INSTANCE)
+            val encodeResult = ItemStack.CODEC.encodeStart(registryOps, itemStack)
+            return encodeResult.result().get().toString()
+        }
     }
+
 
     fun getYoinkedItems(): List<NbtElement> = encodedItems
 }

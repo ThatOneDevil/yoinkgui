@@ -76,15 +76,14 @@ object NBTParser {
     }
 
     private suspend fun saveNbtFile(
-        configDir: File,
-        subDir: String,
+        configDir: String,
         rawItems: List<String>
     ) = withContext(Dispatchers.IO) {
         val start = LocalDateTime.now()
         val formattedTime = start.format(DateTimeFormatter.ofPattern("MM-dd HH-mm-ss"))
 
         try {
-            val yoinkDir = File(configDir, subDir).apply { mkdirs() }
+            val yoinkDir = File(configDir).apply { mkdirs() }
             val file = File(yoinkDir, "${serverName}-${formattedTime}.txt")
 
             FileWriter(file).use { writer ->
@@ -131,22 +130,20 @@ object NBTParser {
 
     suspend fun saveFormattedNBTToFile(
         nbtList: List<String>,
-        configDir: File
+        configDir: String
     ) {
         saveNbtFile(
-            configDir,
-            "assets/yoinkgui",
+            "${configDir}/yoinkgui",
             nbtList
         )
     }
 
     suspend fun saveSingleItem(
         rawNbt: String,
-        configDir: File
+        configDir: String
     ) {
         saveNbtFile(
-            configDir,
-            "assets/items/yoinkgui",
+            "${configDir}/yoinkgui/items",
             listOf(rawNbt)
         )
     }

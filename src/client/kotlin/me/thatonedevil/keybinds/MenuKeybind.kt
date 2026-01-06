@@ -1,6 +1,8 @@
 package me.thatonedevil.keybinds
 
 import me.thatonedevil.gui.ButtonPositionScreen
+import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents
+import net.fabricmc.fabric.api.client.screen.v1.ScreenKeyboardEvents
 import net.minecraft.client.MinecraftClient
 import org.lwjgl.glfw.GLFW
 
@@ -16,12 +18,6 @@ class MenuKeybind : Key{
 
     override fun whenPressed() {
         val client = MinecraftClient.getInstance()
-
-        // Close screen when button pressed again while in ButtonPositionScreen
-        if (client.currentScreen is ButtonPositionScreen) {
-            client.setScreen(null)
-            return
-        }
 
         client.setScreen(ButtonPositionScreen(client.currentScreen))
     }

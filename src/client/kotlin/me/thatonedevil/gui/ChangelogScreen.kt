@@ -60,7 +60,7 @@ class ChangelogScreen(private val parent: Screen?) : Screen(Text.literal("Change
                 Text.literal("No changelog available."),
                 centerX,
                 height / 2,
-                0xFFE0E
+                0xFFE0E0E0.toInt()
             )
             return
         }
@@ -79,7 +79,7 @@ class ChangelogScreen(private val parent: Screen?) : Screen(Text.literal("Change
                     line,
                     centerX,
                     y,
-                    0xFFE0E
+                    0xFFE0E0E0.toInt()
                 )
             }
             y += lineHeight
@@ -92,7 +92,7 @@ class ChangelogScreen(private val parent: Screen?) : Screen(Text.literal("Change
             Text.literal("Press ESC to close"),
             centerX,
             height - 20,
-            0xFFAAA
+            0xFFAAAAAA.toInt()
         )
 
         if (maxScroll > 0) {
@@ -102,7 +102,7 @@ class ChangelogScreen(private val parent: Screen?) : Screen(Text.literal("Change
                 Text.literal("↕ Scroll: $scrollPercentage%"),
                 centerX,
                 height - 10,
-                0xFF888
+                0xFF888888.toInt()
             )
         }
     }

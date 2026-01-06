@@ -4,7 +4,7 @@
   "compatibilityLevel": "JAVA_21",
   "client": [
     "ScreenMixin",
-    "ItemStackMixin"
+    "HandledScreenAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

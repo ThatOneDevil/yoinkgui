@@ -2,14 +2,21 @@ package me.thatonedevil.mixin.client;
 
 import me.thatonedevil.YoinkGUIClient;
 import me.thatonedevil.config.YoinkGuiSettings;
+import me.thatonedevil.handlers.ParseButtonHandler;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.*;
+import net.minecraft.item.ItemStack;
+import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static net.minecraft.text.Text.literal;
 
@@ -52,19 +59,40 @@ public class ScreenMixin {
         int mouseXUi = (int) (client.mouse.getX() * scaledWidth / client.getWindow().getWidth());
         int mouseYUi = (int) (client.mouse.getY() * scaledHeight / client.getWindow().getHeight());
 
-        YoinkGUIClient.INSTANCE.setParseButtonHovered(mouseXUi >= parseButtonX && mouseXUi <= parseButtonX + parseButtonWidth &&
+        ParseButtonHandler.INSTANCE.setParseButtonHovered(mouseXUi >= parseButtonX && mouseXUi <= parseButtonX + parseButtonWidth &&
                 mouseYUi >= parseButtonY && mouseYUi <= parseButtonY + parseButtonHeight);
 
-        int parseBgColor = YoinkGUIClient.INSTANCE.getParseButtonHovered() ? 0xAA444 : 0xAA000;
+        int parseBgColor = ParseButtonHandler.INSTANCE.getParseButtonHovered() ? 0xAA444444 : 0xAA000000;
         context.fill(parseButtonX, parseButtonY, parseButtonX + parseButtonWidth, parseButtonY + parseButtonHeight, parseBgColor);
         context.drawCenteredTextWithShadow(
                 client.textRenderer,
                 literal(parseButtonText),
                 parseButtonX + parseButtonWidth / 2,
                 parseButtonY + (parseButtonHeight - 8) / 2,
-                0xFFFFF
+                0xFFFFFFFF
         );
+    }
 
+    @Inject(method = "getTooltipFromItem", at = @At("RETURN"), cancellable = true)
+    private static void onGetTooltipFromItem(MinecraftClient client, ItemStack stack, CallbackInfoReturnable<List<Text>> cir) {
+        if (!(client.currentScreen instanceof HandledScreen)) {
+            return;
+        }
+
+        YoinkGuiSettings config = YoinkGUIClient.getYoinkGuiSettings();
+
+        if (!config.getEnableSingleItemYoink().get()) {
+            return;
+        }
+
+        List<Text> originalTooltip = cir.getReturnValue();
+
+        List<Text> modifiedTooltip = new ArrayList<>(originalTooltip);
+
+        modifiedTooltip.add(literal(""));
+        modifiedTooltip.add(literal("§ePress Y to Yoink item"));
+
+        cir.setReturnValue(modifiedTooltip);
     }
 
 }
