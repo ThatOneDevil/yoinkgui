@@ -1,5 +1,6 @@
 package me.thatonedevil.handlers
 
+import me.thatonedevil.YoinkGUIClient.yoinkGuiSettings
 import me.thatonedevil.mixin.client.HandledScreenAccessor
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents
 import net.fabricmc.fabric.api.client.screen.v1.ScreenKeyboardEvents
@@ -13,6 +14,10 @@ object KeyboardEventHandler {
         ScreenEvents.AFTER_INIT.register { _, screen, _, _ ->
             ScreenKeyboardEvents.afterKeyPress(screen).register { screen, keyInput ->
                 if (!isValidInventoryScreen(screen)) {
+                    return@register
+                }
+
+                if (!yoinkGuiSettings.enableSingleItemYoink.get()) {
                     return@register
                 }
 
