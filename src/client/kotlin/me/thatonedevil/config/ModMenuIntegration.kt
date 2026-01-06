@@ -18,7 +18,7 @@ class ModMenuIntegration : ModMenuApi {
         createScreen(parentScreen)
     }
 
-    private fun createScreen(parentScreen: Screen?): Screen {
+    fun createScreen(parentScreen: Screen?): Screen {
         val screen = YetAnotherConfigLib.createBuilder()
             .save {
                 YoinkGuiSettings.saveToFile()
@@ -35,6 +35,12 @@ class ModMenuIntegration : ModMenuApi {
                         name = "Enable Yoink Button",
                         field = yoinkGuiSettings.enableYoinkButton,
                         defaultValue = true
+                    ))
+                    .option(booleanOption(
+                        name = "Enable Single Item Yoink",
+                        field = yoinkGuiSettings.enableSingleItemYoink,
+                        defaultValue = true,
+                        description = "Allows yoinking single items when pressing X while hovering."
                     ))
                     .build())
                 .build())

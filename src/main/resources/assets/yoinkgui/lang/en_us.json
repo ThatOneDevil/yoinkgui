@@ -1,5 +1,7 @@
 {
   "key.category.minecraft.keybinds": "Yoinkgui Key Binds",
-  "key.yoinkgui.position": "Open Button Position Screen"
+
+  "key.yoinkgui.position": "Open Button Position Screen",
+  "key.yoinkgui.yoinksingle": "Yoink Single item"
 }
 

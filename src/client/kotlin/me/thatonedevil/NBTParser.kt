@@ -12,6 +12,7 @@ import me.thatonedevil.utils.Utils
 import me.thatonedevil.nbt.ComponentValueRegistry
 import me.thatonedevil.utils.LatestErrorLog
 import me.thatonedevil.utils.api.UpdateChecker.serverName
+import net.minecraft.nbt.NbtElement
 import java.io.File
 import java.io.FileWriter
 import java.time.Duration
@@ -74,34 +75,42 @@ object NBTParser {
         }
     }
 
-
-    suspend fun saveFormattedNBTToFile(nbtList: List<String>, configDir: File) = withContext(Dispatchers.IO) {
+    private suspend fun saveNbtFile(
+        configDir: String,
+        rawItems: List<String>
+    ) = withContext(Dispatchers.IO) {
         val start = LocalDateTime.now()
         val formattedTime = start.format(DateTimeFormatter.ofPattern("MM-dd HH-mm-ss"))
+
         try {
-            val yoinkDir = File(configDir, "assets/yoinkgui").apply { mkdirs() }
-            val fileName = "${serverName}-${formattedTime}.txt"
-            val file = File(yoinkDir, fileName)
+            val yoinkDir = File(configDir).apply { mkdirs() }
+            val file = File(yoinkDir, "${serverName}-${formattedTime}.txt")
 
             FileWriter(file).use { writer ->
-                val contentItems = nbtList.mapIndexedNotNull { i, raw ->
-                    val formatted = parseNewNBTFormat(raw)
-                    if (formatted.isNotBlank()) Pair(i, formatted) else null
+                val items = rawItems.mapNotNull { raw ->
+                    val formatted = runCatching { parseNewNBTFormat(raw) }.getOrNull()
+                    if (formatted.isNullOrBlank()) null else raw to formatted
                 }
 
                 writer.write("=== Formatted NBT Data ===\n")
                 writer.write("Generated: $formattedTime\n")
-                writer.write("Items with content: ${contentItems.size} / ${nbtList.size}\n\n")
+                writer.write("Items with content: ${items.size} / ${rawItems.size}\n\n")
+
                 writer.write("=== Details ===\n")
                 writer.write("Mod Version: ${BuildConfig.VERSION}\n")
                 writer.write("Minecraft Version: ${BuildConfig.MC_VERSION}\n\n")
 
-                contentItems.forEachIndexed { outIdx, (originalIndex, formatted) ->
-                    writer.write("=== ITEM ${originalIndex + 1} ===\n")
-                    if (YoinkGuiSettings.includeRawNbt.get()) { writer.write("Raw NBT: ${nbtList[originalIndex]}\n") }
+                items.forEachIndexed { index, (raw, formatted) ->
+                    writer.write("=== ITEM ${index + 1} ===\n")
+                    if (YoinkGuiSettings.includeRawNbt.get()) {
+                        writer.write("Raw NBT: $raw\n")
+                    }
 
                     writer.write("\n$formatted\n")
-                    if (outIdx < contentItems.lastIndex) writer.write("\n${"=".repeat(50)}\n\n")
+
+                    if (index < items.lastIndex) {
+                        writer.write("\n${"=".repeat(50)}\n\n")
+                    }
                 }
             }
 
@@ -118,4 +127,25 @@ object NBTParser {
             logger.error("Error saving NBT file: ${e.message}", e)
         }
     }
+
+    suspend fun saveFormattedNBTToFile(
+        nbtList: List<String>,
+        configDir: String
+    ) {
+        saveNbtFile(
+            "${configDir}/yoinkgui",
+            nbtList
+        )
+    }
+
+    suspend fun saveSingleItem(
+        rawNbt: String,
+        configDir: String
+    ) {
+        saveNbtFile(
+            "${configDir}/yoinkgui/items",
+            listOf(rawNbt)
+        )
+    }
+
 }

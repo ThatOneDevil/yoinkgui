@@ -3,7 +3,8 @@
   "package": "me.thatonedevil.mixin.client",
   "compatibilityLevel": "JAVA_21",
   "client": [
-    "ScreenMixin"
+    "ScreenMixin",
+    "HandledScreenAccessor"
   ],
   "injectors": {
     "defaultRequire": 1
