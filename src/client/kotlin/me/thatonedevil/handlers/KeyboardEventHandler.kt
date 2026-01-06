@@ -11,6 +11,7 @@ import net.minecraft.screen.slot.Slot
 object KeyboardEventHandler {
 
     fun register() {
+        //? if >=1.21.9 {
         ScreenEvents.AFTER_INIT.register { _, screen, _, _ ->
             ScreenKeyboardEvents.afterKeyPress(screen).register { screen, keyInput ->
                 if (!isValidInventoryScreen(screen)) {
@@ -29,7 +30,30 @@ object KeyboardEventHandler {
                 }
             }
         }
+        //? } else {
+        /*ScreenEvents.AFTER_INIT.register { _, screen, _, _ ->
+            ScreenKeyboardEvents.afterKeyPress(screen).register { screen, key, _, _ ->
+                if (!isValidInventoryScreen(screen)) {
+                    return@register
+                }
+
+                if (!yoinkGuiSettings.enableSingleItemYoink.get()) {
+                    return@register
+                }
+
+                if (key == InputUtil.GLFW_KEY_Y) {
+                    val slot: Slot? = (screen as HandledScreenAccessor).`yoinkgui$getFocusedSlot`()
+                    if (slot != null && !slot.stack.isEmpty) {
+                        ItemParseHandler.handleSingleItemParse(slot.stack)
+                    }
+                }
+            }
+
+        }*/
+        //?}
     }
+
+
 
     private fun isValidInventoryScreen(screen: Any): Boolean {
         return screen is InventoryScreen
