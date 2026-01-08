@@ -21,8 +21,10 @@ Intended strictly for convenience and development purposes.
 ---
 
 ## 🐛 Issues
-Report bugs here:  
-[https://github.com/ThatOneDevil/yoinkgui/issues](https://github.com/ThatOneDevil/yoinkgui/issues)
+- Use the command `/yoinkguiclient debug`
+- Click the message to copy the error and make a issue on the github.
+- Github: [https://github.com/ThatOneDevil/yoinkgui/issues](https://github.com/ThatOneDevil/yoinkgui/issues)
+
 
 ---
 
