@@ -1,7 +1,7 @@
 plugins {
-	id("org.jetbrains.kotlin.jvm") version "2.2.0"
+    id("org.jetbrains.kotlin.jvm") version "2.3.0"
 	id("fabric-loom") version "1.13-SNAPSHOT"
-	id("me.modmuss50.mod-publish-plugin") version "0.8.4"
+	id("me.modmuss50.mod-publish-plugin") version "1.1.0"
 }
 
 val modVersion = "1.8.0"
@@ -10,7 +10,7 @@ version = "${modVersion}+${property("mod.mod_version") as String}"
 group = property("maven_group") as String
 
 var cleanVersion = version.toString().split("+").first()
-val mcVersion = property("deps.minecraft_version")!!.toString()
+val mcVersion = property("deps.minecraft_version").toString()
 val mcDep = property("mcDep").toString()
 val yacl = property("deps.yacl").toString()
 val modMenu = property("deps.modmenu").toString()
@@ -20,11 +20,11 @@ base {
 }
 
 repositories {
+    maven("https://s01.oss.sonatype.org/content/repositories/snapshots/"){
+        name = "sonatype-oss-snapshots1"
+        mavenContent { snapshotsOnly() }
+    }
 	mavenCentral()
-	maven("https://s01.oss.sonatype.org/content/repositories/snapshots/"){
-		name = "sonatype-oss-snapshots1"
-		mavenContent { snapshotsOnly() }
-	}
     maven("https://maven.terraformersmc.com/") {
         name = "Terraformers"
     }
@@ -34,11 +34,11 @@ repositories {
     maven( "https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1") {
         name = "DevAuth"
     }
+
 }
 
 loom {
 	splitEnvironmentSourceSets()
-
 
 	mods {
 		create("yoinkgui").project.sourceSets {

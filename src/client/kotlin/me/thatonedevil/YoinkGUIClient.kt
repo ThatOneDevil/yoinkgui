@@ -2,7 +2,7 @@ package me.thatonedevil
 
 import me.thatonedevil.commands.YoinkGuiClientCommandRegistry
 import me.thatonedevil.config.YoinkGuiSettings
-import me.thatonedevil.handlers.KeyboardEventHandler
+import me.thatonedevil.handlers.SingleItemYoinkHandler
 import me.thatonedevil.handlers.ParseButtonHandler
 import me.thatonedevil.keybinds.KeybindManager
 import me.thatonedevil.utils.api.UpdateChecker
@@ -26,6 +26,6 @@ object YoinkGUIClient : ClientModInitializer {
 
         // Register event handlers
         ParseButtonHandler.register()
-        KeyboardEventHandler.register()
+        SingleItemYoinkHandler.register()
     }
 }

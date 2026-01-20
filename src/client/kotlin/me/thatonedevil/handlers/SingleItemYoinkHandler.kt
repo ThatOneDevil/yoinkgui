@@ -8,7 +8,7 @@ import net.minecraft.client.gui.screen.ingame.*
 import net.minecraft.client.util.InputUtil
 import net.minecraft.screen.slot.Slot
 
-object KeyboardEventHandler {
+object SingleItemYoinkHandler {
 
     fun register() {
         //? if >=1.21.9 {
