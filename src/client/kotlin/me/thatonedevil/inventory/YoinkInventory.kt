@@ -18,7 +18,7 @@ class YoinkInventory(private val player: ClientPlayerEntity, private val invento
         }
 
         val registryOps = player.registryManager.getOps(NbtOps.INSTANCE)
-        inventory.inventoryItems()?.forEach { itemStack ->
+        inventory.inventoryItems().forEach { itemStack ->
             if (!itemStack.isEmpty) {
                 val encodeResult = ItemStack.CODEC.encodeStart(registryOps, itemStack)
                 encodeResult.result().ifPresent { nbtElement ->
