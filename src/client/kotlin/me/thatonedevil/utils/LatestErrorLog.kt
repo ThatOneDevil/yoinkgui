@@ -15,8 +15,5 @@ object LatestErrorLog {
     fun getLatestMessage(): String? = latestMessage.get()
 
     fun getLatestStackTraceMessage(): String? = getLatestThrowable()?.stackTraceToString() ?: getLatestMessage()
-    fun getLatestErrorName(): String? =
-        getLatestThrowable()?.let { it::class.simpleName }
-            ?: getLatestMessage()
-
+    fun getLatestErrorName(): String? = getLatestThrowable()?.let { it::class.simpleName } ?: getLatestMessage()
 }

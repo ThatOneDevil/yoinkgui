@@ -1,9 +1,8 @@
 package me.thatonedevil.handlers
 
-import me.thatonedevil.gui.ButtonPositionScreen
+import me.thatonedevil.screen.ButtonPositionScreen
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import org.lwjgl.glfw.GLFW
-
 
 object ParseButtonHandler {
     var parseButtonHovered = false

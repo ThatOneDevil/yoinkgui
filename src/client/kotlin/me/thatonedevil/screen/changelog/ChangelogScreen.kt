@@ -1,8 +1,7 @@
-package me.thatonedevil.gui
+package me.thatonedevil.screen.changelog
 
 
 import me.thatonedevil.BuildConfig.VERSION
-import me.thatonedevil.gui.MarkdownLoader.parse
 import me.thatonedevil.utils.LatestErrorLog
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
@@ -28,7 +27,7 @@ class ChangelogScreen(private val parent: Screen?) : Screen(Text.literal("Change
 
             if (resourceStream != null) {
                 content = resourceStream.bufferedReader().use {
-                    parse(it.readLines(), width - 40)
+                    MarkdownLoader.parse(it.readLines(), width - 40)
                 }
                 updateMaxScroll()
             }

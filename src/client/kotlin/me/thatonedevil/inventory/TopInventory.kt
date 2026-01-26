@@ -3,23 +3,54 @@ package me.thatonedevil.inventory
 import me.thatonedevil.utils.Utils.debug
 import net.minecraft.client.MinecraftClient
 import net.minecraft.item.ItemStack
+import net.minecraft.screen.MerchantScreenHandler
 
-class TopInventory(client: MinecraftClient) {
+class TopInventory(private val client: MinecraftClient) {
 
-    private val topInventory = client.player?.currentScreenHandler
+    private val currentScreenHandler
+        get() = client.player?.currentScreenHandler
 
     fun getTopInventory(): Any? {
-        debug("Top Inventory: $topInventory")
-        return topInventory
+        return currentScreenHandler?.also {
+            debug("Top Inventory: $it")
+        }
     }
 
     fun isTopInventoryEmpty(): Boolean {
-        return topInventory?.stacks!!.isEmpty()
+        return currentScreenHandler?.stacks?.isEmpty() ?: true
     }
 
-    fun inventoryItems(): MutableList<ItemStack>? {
-        val items = topInventory?.stacks?.stream()?.toList()
-        debug("Items: $items")
-        return items
+    fun inventoryItems(): List<ItemStack> {
+        val handler = currentScreenHandler ?: run {
+            debug("Top inventory is null")
+            return emptyList()
+        }
+
+        return when (handler) {
+            is MerchantScreenHandler -> getTradeItems(handler)
+            else -> getRegularItems(handler)
+        }
     }
+
+    private fun getTradeItems(handler: MerchantScreenHandler): List<ItemStack> {
+        val tradeItems = handler.recipes.flatMap { tradeOffer ->
+            buildList {
+                add(tradeOffer.firstBuyItem.itemStack)
+                tradeOffer.secondBuyItem.ifPresent { add(it.itemStack) }
+                add(tradeOffer.sellItem)
+            }
+        }.filterNot { it.isEmpty }
+
+        debug("Trade items: $tradeItems")
+        return tradeItems
+    }
+
+    private fun getRegularItems(handler: Any): List<ItemStack> {
+        return (handler as? net.minecraft.screen.ScreenHandler)
+            ?.stacks
+            ?.filterNot { it.isEmpty }
+            ?.also { debug("Items: $it") }
+            ?: emptyList()
+    }
+
 }

@@ -3,8 +3,8 @@ package me.thatonedevil.commands
 import com.mojang.brigadier.Command
 import com.mojang.brigadier.CommandDispatcher
 import me.thatonedevil.config.ModMenuIntegration
-import me.thatonedevil.gui.ButtonPositionScreen
-import me.thatonedevil.gui.ChangelogScreen
+import me.thatonedevil.screen.ButtonPositionScreen
+import me.thatonedevil.screen.changelog.ChangelogScreen
 import me.thatonedevil.utils.api.UpdateChecker
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback
@@ -62,8 +62,6 @@ object YoinkGuiClientCommandRegistry {
                             }
                             Command.SINGLE_SUCCESS
                         }
-                )
-
-        )
+                ))
     }
 }

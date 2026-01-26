@@ -1,10 +1,10 @@
 plugins {
     id("org.jetbrains.kotlin.jvm") version "2.3.0"
-	id("fabric-loom") version "1.13-SNAPSHOT"
+	id("fabric-loom") version "1.15-SNAPSHOT"
 	id("me.modmuss50.mod-publish-plugin") version "1.1.0"
 }
 
-val modVersion = "1.8.0"
+val modVersion = "1.9.0"
 
 version = "${modVersion}+${property("mod.mod_version") as String}"
 group = property("maven_group") as String

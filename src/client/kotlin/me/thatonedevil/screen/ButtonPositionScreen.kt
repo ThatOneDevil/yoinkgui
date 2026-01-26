@@ -1,4 +1,4 @@
-package me.thatonedevil.gui
+package me.thatonedevil.screen
 
 import me.thatonedevil.YoinkGUIClient
 import me.thatonedevil.config.YoinkGuiSettings
