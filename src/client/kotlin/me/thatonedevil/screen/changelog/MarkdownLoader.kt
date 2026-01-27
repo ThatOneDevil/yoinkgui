@@ -14,7 +14,7 @@ object MarkdownLoader {
 
     fun parse(lines: List<String>, wrapWidth: Int): List<Text> {
         return lines.flatMap { rawLine ->
-            parseLine(rawLine.replace("`", ""), wrapWidth)
+            parseLine(rawLine, wrapWidth)
         }
     }
 
@@ -29,13 +29,13 @@ object MarkdownLoader {
             listOf(createStyledText(line.removePrefix("### "), SUBSECTION, bold = true))
 
         line.startsWith("- ") || line.startsWith("* ") ->
-            wrapAndStyle("• ${line.drop(2)}", wrapWidth, BULLET)
+            wrapAndStyleWithCode("• ${line.drop(2)}", wrapWidth, BULLET)
 
         line.isBlank() ->
             listOf(Text.empty())
 
         else ->
-            wrapAndStyle(line, wrapWidth, NORMAL)
+            wrapAndStyleWithCode(line, wrapWidth, NORMAL)
     }
 
     private fun createStyledText(text: String, color: TextColor, bold: Boolean = false): Text {
@@ -44,10 +44,44 @@ object MarkdownLoader {
         }
     }
 
-    private fun wrapAndStyle(text: String, maxWidth: Int, color: TextColor): List<Text> {
+    private fun wrapAndStyleWithCode(text: String, maxWidth: Int, color: TextColor): List<Text> {
         return wrapText(text, maxWidth).map { wrappedLine ->
-            Text.literal(wrappedLine).styled { it.withColor(color) }
+            parseInlineCode(wrappedLine, color)
         }
+    }
+
+    private fun parseInlineCode(text: String, defaultColor: TextColor): Text {
+        val result = Text.empty()
+        val regex = "`([^`]+)`".toRegex()
+        var lastIndex = 0
+
+        regex.findAll(text).forEach { match ->
+            // Add text before code block
+            if (match.range.first > lastIndex) {
+                result.append(
+                    Text.literal(text.substring(lastIndex, match.range.first))
+                        .styled { it.withColor(defaultColor) }
+                )
+            }
+
+            // Add code block with background and color
+            result.append(
+                Text.literal(match.groupValues[1])
+                    .styled { it.withColor(SECTION).withShadowColor(0xF5F5F5) }
+            )
+
+            lastIndex = match.range.last + 1
+        }
+
+        // Add remaining text
+        if (lastIndex < text.length) {
+            result.append(
+                Text.literal(text.substring(lastIndex))
+                    .styled { it.withColor(defaultColor) }
+            )
+        }
+
+        return result
     }
 
     private fun wrapText(text: String, maxWidth: Int): List<String> {
@@ -62,7 +96,7 @@ object MarkdownLoader {
             val testLine = if (currentLine.isEmpty()) word else "$currentLine $word"
 
             if (renderer.getWidth(testLine) > maxWidth) {
-                // Line would be too long, finalize current line
+                // Line would be too long
                 if (currentLine.isNotEmpty()) {
                     lines += currentLine.toString()
                     currentLine = StringBuilder(word)
