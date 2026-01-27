@@ -11,6 +11,7 @@ object MarkdownLoader {
     private val SUBSECTION = TextColor.fromRgb(0xC7EDE6)
     private val BULLET = TextColor.fromRgb(0xDADADA)
     private val NORMAL = TextColor.fromRgb(0xB5B5B5)
+    private val CODE_BLOCK = TextColor.fromRgb(0x7FE3CD)
 
     fun parse(lines: List<String>, wrapWidth: Int): List<Text> {
         return lines.flatMap { rawLine ->
@@ -67,7 +68,7 @@ object MarkdownLoader {
             // Add code block with background and color
             result.append(
                 Text.literal(match.groupValues[1])
-                    .styled { it.withColor(SECTION).withShadowColor(0xF5F5F5) }
+                    .styled { it.withColor(CODE_BLOCK) }
             )
 
             lastIndex = match.range.last + 1
