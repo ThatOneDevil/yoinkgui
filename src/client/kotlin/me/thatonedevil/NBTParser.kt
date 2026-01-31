@@ -13,6 +13,7 @@ import me.thatonedevil.utils.Utils
 import me.thatonedevil.nbt.ComponentValueRegistry
 import me.thatonedevil.utils.LatestErrorLog
 import me.thatonedevil.utils.api.UpdateChecker.serverName
+import net.minecraft.nbt.NbtCompound
 import java.io.File
 import java.io.IOException
 import java.time.Duration
@@ -24,9 +25,20 @@ object NBTParser {
     private val gson = Gson()
     private val timeFormatter = DateTimeFormatter.ofPattern("MM-dd HH-mm-ss")
 
+    private const val MINECRAFT_CUSTOM_NAME = "minecraft:custom_name"
+    private const val MINECRAFT_ITEM_NAME = "minecraft:item_name"
+    private const val MINECRAFT_LORE = "minecraft:lore"
+    private const val COMPONENTS_KEY = "components"
+
+    private data class ParsedItem(
+        val raw: String,
+        val formatted: String
+    )
+
     private fun parseTextComponent(obj: JsonObject): String = buildString {
         val result = ComponentValueRegistry.process(obj)
         append(result.text)
+
         if (result.stopPropagation) return@buildString
 
         obj.get("extra")?.asJsonArray?.forEach { element ->
@@ -36,62 +48,136 @@ object NBTParser {
         }
     }
 
-    private fun parseJsonStringAsTextComponent(jsonString: String): String {
+    private fun parseJsonStringAsTextComponent(jsonString: String?): String {
+        if (jsonString == null) return ""
+
         return try {
-            val parsed = gson.fromJson(jsonString, JsonObject::class.java)
+            val parsed = gson.fromJson(jsonString, JsonObject::class.java) ?: return ""
+
             parseTextComponent(parsed)
         } catch (e: JsonSyntaxException) {
+            LatestErrorLog.record(e, "Failed to parse JSON string as text component")
             logger.debug("Failed to parse JSON string as text component: $jsonString", e)
             jsonString
+        }
+    }
+
+    private fun extractItemName(components: JsonObject): String? {
+        val nameElement = components.get(MINECRAFT_CUSTOM_NAME)
+            ?: components.get(MINECRAFT_ITEM_NAME)
+            ?: return "Unknown"
+
+        return when {
+            nameElement.isJsonObject -> parseTextComponent(nameElement.asJsonObject)
+            nameElement.isJsonPrimitive -> parseJsonStringAsTextComponent(nameElement.asString)
+            else -> "Unknown format"
+        }
+    }
+
+    private fun extractItemLore(components: JsonObject): String? {
+        val loreArray = components.getAsJsonArray(MINECRAFT_LORE) ?: return null
+
+        return buildString {
+            append("Lore:\n")
+            loreArray.forEachIndexed { index, line ->
+                val parsed = when {
+                    line.isJsonPrimitive && line.asString.isBlank() -> ""
+                    line.isJsonObject -> parseTextComponent(line.asJsonObject)
+                    line.isJsonPrimitive -> parseJsonStringAsTextComponent(line.asString)
+                    else -> ""
+                }
+                append("Line $index: $parsed\n")
+            }
         }
     }
 
     private fun parseNewNBTFormat(raw: String): String? {
         return try {
             val json = gson.fromJson(raw, JsonObject::class.java)
-            val components = json.getAsJsonObject("components") ?: return null
+            val components = json.getAsJsonObject(COMPONENTS_KEY) ?: return null
 
-            val hasName = components.has("minecraft:custom_name") || components.has("minecraft:item_name")
-            val hasLore = components.has("minecraft:lore")
+            val hasName = components.has(MINECRAFT_CUSTOM_NAME) || components.has(MINECRAFT_ITEM_NAME)
+            val hasLore = components.has(MINECRAFT_LORE)
+
             if (!hasName && !hasLore) return null
 
             buildString {
-                // Parse name
-                val nameElement = components.get("minecraft:custom_name")
-                    ?: components.get("minecraft:item_name")
-                nameElement?.let { customNameElement ->
-                    append("Name: ")
-                    when {
-                        customNameElement.isJsonObject ->
-                            append(parseTextComponent(customNameElement.asJsonObject))
-                        customNameElement.isJsonPrimitive ->
-                            append(parseJsonStringAsTextComponent(customNameElement.asString))
-                        else -> append("Unknown format")
-                    }
-                    append("\n\n")
+                extractItemName(components)?.let { name ->
+                    append("Name: $name\n\n")
                 }
 
-                // Parse lore
-                components.getAsJsonArray("minecraft:lore")?.let { lore ->
-                    append("Lore:\n")
-                    lore.forEachIndexed { index, line ->
-                        val parsed = when {
-                            line.isJsonPrimitive && line.asString.isBlank() -> ""
-                            line.isJsonObject -> parseTextComponent(line.asJsonObject)
-                            line.isJsonPrimitive -> parseJsonStringAsTextComponent(line.asString)
-                            else -> ""
-                        }
-                        append("Line $index: $parsed\n")
-                    }
+                extractItemLore(components)?.let { lore ->
+                    append(lore)
                 }
             }
         } catch (e: JsonSyntaxException) {
+            LatestErrorLog.record(e, "Failed to parse NBT format")
             logger.debug("Failed to parse NBT format: $raw", e)
             null
         }
     }
 
-    private data class ParsedItem(val raw: String, val formatted: String)
+    private fun parseItems(rawItems: List<String>): List<ParsedItem> {
+        return rawItems.mapNotNull { raw ->
+            parseNewNBTFormat(raw)?.let { formatted ->
+                ParsedItem(raw, formatted)
+            }
+        }
+    }
+
+    private fun writeFileHeader(
+        writer: java.io.BufferedWriter,
+        formattedTime: String,
+        itemCount: Int,
+        totalCount: Int
+    ) {
+        writer.write("=== Formatted NBT Data ===\n")
+        writer.write("Generated: $formattedTime\n")
+        writer.write("Items with content: $itemCount / $totalCount\n\n")
+        writer.write("=== Details ===\n")
+        writer.write("Mod Version: ${BuildConfig.VERSION}\n")
+        writer.write("Minecraft Version: ${BuildConfig.MC_VERSION}\n\n")
+    }
+
+    private fun writeItem(
+        writer: java.io.BufferedWriter,
+        index: Int,
+        item: ParsedItem,
+        includeRawNbt: Boolean,
+        isLastItem: Boolean
+    ) {
+        writer.write("=== ITEM ${index + 1} ===\n")
+
+        if (includeRawNbt) {
+            writer.write("Raw NBT: ${item.raw}\n")
+        }
+
+        writer.write("\n${item.formatted}\n")
+
+        if (!isLastItem) {
+            writer.write("\n${"=".repeat(50)}\n\n")
+        }
+    }
+
+    private fun ensureDirectoryExists(dirPath: String): File {
+        return File(dirPath).apply {
+            if (!exists() && !mkdirs()) {
+                throw IOException("Failed to create directory: $absolutePath")
+            }
+        }
+    }
+
+    private fun generateFilename(formattedTime: String): String {
+        return "${serverName}-${formattedTime}.txt"
+    }
+
+    private fun sendSuccessMessage(file: File, duration: Long) {
+        Utils.sendChat(
+            "\n<color:#FFA6CA>Formatted NBT data saved to:".toComponent(),
+            " <color:#FFA6CA>Parse time: <color:#8968CD>${duration}ms".toComponent(),
+            "  <color:#8968CD>${file.absolutePath} &7&o(Click to copy)\n".toClickCopy(file.absolutePath)
+        )
+    }
 
     private suspend fun saveNbtFile(
         configDir: String,
@@ -101,52 +187,28 @@ object NBTParser {
         val formattedTime = start.format(timeFormatter)
 
         try {
-            val yoinkDir = File(configDir).apply {
-                if (!exists() && !mkdirs()) {
-                    throw IOException("Failed to create directory: $absolutePath")
-                }
-            }
+            val yoinkDir = ensureDirectoryExists(configDir)
 
-            val file = File(yoinkDir, "${serverName}-${formattedTime}.txt")
+            val file = File(yoinkDir, generateFilename(formattedTime))
 
-            // Parse items before writing
-            val items = rawItems.mapNotNull { raw ->
-                parseNewNBTFormat(raw)?.let { formatted ->
-                    ParsedItem(raw, formatted)
-                }
-            }
+            val items = parseItems(rawItems)
 
-            // Write file
             file.bufferedWriter().use { writer ->
-                writer.write("=== Formatted NBT Data ===\n")
-                writer.write("Generated: $formattedTime\n")
-                writer.write("Items with content: ${items.size} / ${rawItems.size}\n\n")
+                writeFileHeader(writer, formattedTime, items.size, rawItems.size)
 
-                writer.write("=== Details ===\n")
-                writer.write("Mod Version: ${BuildConfig.VERSION}\n")
-                writer.write("Minecraft Version: ${BuildConfig.MC_VERSION}\n\n")
-
-                items.forEachIndexed { index, (raw, formatted) ->
-                    writer.write("=== ITEM ${index + 1} ===\n")
-                    if (YoinkGuiSettings.includeRawNbt.get()) {
-                        writer.write("Raw NBT: $raw\n")
-                    }
-
-                    writer.write("\n$formatted\n")
-
-                    if (index < items.lastIndex) {
-                        writer.write("\n${"=".repeat(50)}\n\n")
-                    }
+                items.forEachIndexed { index, item ->
+                    writeItem(
+                        writer = writer,
+                        index = index,
+                        item = item,
+                        includeRawNbt = YoinkGuiSettings.includeRawNbt.get(),
+                        isLastItem = index == items.lastIndex
+                    )
                 }
             }
 
             val duration = Duration.between(start, LocalDateTime.now()).toMillis()
-
-            Utils.sendChat(
-                "\n<color:#FFA6CA>Formatted NBT data saved to:".toComponent(),
-                " <color:#FFA6CA>Parse time: <color:#8968CD>${duration}ms".toComponent(),
-                "  <color:#8968CD>${file.absolutePath} &7&o(Click to copy)\n".toClickCopy(file.absolutePath)
-            )
+            sendSuccessMessage(file, duration)
 
             Result.success(file)
         } catch (e: Exception) {

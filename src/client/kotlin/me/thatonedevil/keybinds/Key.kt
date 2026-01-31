@@ -1,9 +1,9 @@
 package me.thatonedevil.keybinds
 
+import me.thatonedevil.YoinkGUIClient.keybindCategory
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
 import net.minecraft.client.option.KeyBinding
 import net.minecraft.client.util.InputUtil
-import net.minecraft.util.Identifier
 
 interface Key {
     fun keyName(): String
@@ -18,7 +18,7 @@ interface Key {
             keyName(),
             keyType(),
             key(),
-            newKeybindCategory
+            keybindCategory
         )
         //? } else {
         /*val keyBinding = KeyBinding(
@@ -32,12 +32,6 @@ interface Key {
         return KeyBindingHelper.registerKeyBinding(keyBinding)
     }
 
-    //? if >=1.21.9 {
-    companion object {
-        val newKeybindCategory: KeyBinding.Category =
-            KeyBinding.Category.create(Identifier.of("keybinds"))
-    }
-    //? }
 
 
 }

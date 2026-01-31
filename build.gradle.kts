@@ -4,7 +4,7 @@ plugins {
 	id("me.modmuss50.mod-publish-plugin") version "1.1.0"
 }
 
-val modVersion = "1.9.0"
+val modVersion = "1.9.1"
 
 version = "${modVersion}+${property("mod.mod_version") as String}"
 group = property("maven_group") as String

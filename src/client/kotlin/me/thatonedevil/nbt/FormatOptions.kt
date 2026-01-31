@@ -10,8 +10,8 @@ enum class FormatOptions : NameableEnum {
 
     override fun getDisplayName(): Text? {
         return when (this) {
-            MINIMESSAGE -> Text.of("Minimessage")
-            LEGACY -> Text.of("Legacy")
+            MINIMESSAGE -> Text.of("MINIMESSAGE")
+            LEGACY -> Text.of("LEGACY")
         }
     }
 }

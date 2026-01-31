@@ -12,6 +12,7 @@ object MarkdownLoader {
     private val BULLET = TextColor.fromRgb(0xDADADA)
     private val NORMAL = TextColor.fromRgb(0xB5B5B5)
     private val CODE_BLOCK = TextColor.fromRgb(0x7FE3CD)
+    private val ITALIC = TextColor.fromRgb(0xFFD4A3) // Soft peach/gold color
 
     fun parse(lines: List<String>, wrapWidth: Int): List<Text> {
         return lines.flatMap { rawLine ->
@@ -30,13 +31,13 @@ object MarkdownLoader {
             listOf(createStyledText(line.removePrefix("### "), SUBSECTION, bold = true))
 
         line.startsWith("- ") || line.startsWith("* ") ->
-            wrapAndStyleWithCode("• ${line.drop(2)}", wrapWidth, BULLET)
+            wrapAndStyleWithFormatting("• ${line.drop(2)}", wrapWidth, BULLET)
 
         line.isBlank() ->
             listOf(Text.empty())
 
         else ->
-            wrapAndStyleWithCode(line, wrapWidth, NORMAL)
+            wrapAndStyleWithFormatting(line, wrapWidth, NORMAL)
     }
 
     private fun createStyledText(text: String, color: TextColor, bold: Boolean = false): Text {
@@ -45,33 +46,53 @@ object MarkdownLoader {
         }
     }
 
-    private fun wrapAndStyleWithCode(text: String, maxWidth: Int, color: TextColor): List<Text> {
+    private fun wrapAndStyleWithFormatting(text: String, maxWidth: Int, color: TextColor): List<Text> {
         return wrapText(text, maxWidth).map { wrappedLine ->
-            parseInlineCode(wrappedLine, color)
+            parseInlineFormatting(wrappedLine, color)
         }
     }
 
-    private fun parseInlineCode(text: String, defaultColor: TextColor): Text {
+    private fun parseInlineFormatting(text: String, defaultColor: TextColor): Text {
         val result = Text.empty()
-        val regex = "`([^`]+)`".toRegex()
+        val codeRegex = "`([^`]+)`".toRegex()
+        val italicRegex = "\\*([^*]+)\\*".toRegex()
+
+        // Find all matches and sort by position
+        val codeMatches = codeRegex.findAll(text).map {
+            Triple(it.range.first, it.range.last, Pair("code", it.groupValues[1]))
+        }
+        val italicMatches = italicRegex.findAll(text).map {
+            Triple(it.range.first, it.range.last, Pair("italic", it.groupValues[1]))
+        }
+
+        val allMatches = (codeMatches + italicMatches).sortedBy { it.first }
+
         var lastIndex = 0
 
-        regex.findAll(text).forEach { match ->
-            // Add text before code block
-            if (match.range.first > lastIndex) {
+        allMatches.forEach { (start, end, typeAndContent) ->
+            val (type, content) = typeAndContent
+
+            // Add text before this match
+            if (start > lastIndex) {
                 result.append(
-                    Text.literal(text.substring(lastIndex, match.range.first))
+                    Text.literal(text.substring(lastIndex, start))
                         .styled { it.withColor(defaultColor) }
                 )
             }
 
-            // Add code block with background and color
-            result.append(
-                Text.literal(match.groupValues[1])
-                    .styled { it.withColor(CODE_BLOCK) }
-            )
+            // Add formatted text
+            when (type) {
+                "code" -> result.append(
+                    Text.literal(content)
+                        .styled { it.withColor(CODE_BLOCK) }
+                )
+                "italic" -> result.append(
+                    Text.literal(content)
+                        .styled { it.withColor(ITALIC).withItalic(true) }
+                )
+            }
 
-            lastIndex = match.range.last + 1
+            lastIndex = end + 1
         }
 
         // Add remaining text
