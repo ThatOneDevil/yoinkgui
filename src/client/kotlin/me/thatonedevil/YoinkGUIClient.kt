@@ -12,12 +12,11 @@ import net.minecraft.client.option.KeyBinding
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-
 object YoinkGUIClient : ClientModInitializer {
     val logger: Logger = LoggerFactory.getLogger(BuildConfig.MOD_ID)
 
     @JvmStatic
-    val yoinkGuiSettings = YoinkGuiSettings
+    val yoinkGuiSettings: YoinkGuiSettings = YoinkGuiSettings
 
     //? if >=1.21.9 {
     val keybindCategory: KeyBinding.Category = KeyBinding.Category.create(Identifier.of("keybinds"))

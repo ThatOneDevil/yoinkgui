@@ -9,15 +9,6 @@ import net.fabricmc.loader.api.FabricLoader
 open class YoinkGuiSettings() : JsonFileCodecConfig<YoinkGuiSettings>(
     FabricLoader.getInstance().configDir.resolve("yoinkgui.json")
 ) {
-    constructor(settings: YoinkGuiSettings) : this() {
-        this.enableYoinkButton.value = settings.enableYoinkButton.value
-        this.buttonScaleFactor.value = settings.buttonScaleFactor.value
-        this.buttonX.value = settings.buttonX.value
-        this.buttonY.value = settings.buttonY.value
-        this.debugMode.value = settings.debugMode.value
-        this._firstLaunch.value = settings._firstLaunch.value
-    }
-
     val enableYoinkButton by register<Boolean>(default = true, BOOL)
     val enableSingleItemYoink by register<Boolean>(default = true, BOOL)
 
@@ -34,20 +25,19 @@ open class YoinkGuiSettings() : JsonFileCodecConfig<YoinkGuiSettings>(
     val toggleShadowParser by register<Boolean>(default = true, BOOL)
     val toggleGradientParser by register<Boolean>(default = true, BOOL)
 
-    var firstLaunch = false
-    val _firstLaunch by register<Boolean>(default = true, BOOL)
+    val isFirstLaunch by register<Boolean>(default = true, BOOL)
+    var hasJustLaunched = false
 
     companion object : YoinkGuiSettings() {
         init {
             if (!loadFromFile()) {
                 saveToFile()
             }
-            if (_firstLaunch.value) {
-                firstLaunch = true
-                _firstLaunch.value = false
+            if (isFirstLaunch.value) {
+                hasJustLaunched = true
+                isFirstLaunch.value = false
                 saveToFile()
             }
-
         }
     }
 }

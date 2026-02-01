@@ -3,7 +3,7 @@ package me.thatonedevil.handlers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import me.thatonedevil.NBTParser
+import me.thatonedevil.nbt.NBTParser
 import me.thatonedevil.YoinkGUIClient
 import me.thatonedevil.inventory.TopInventory
 import me.thatonedevil.inventory.YoinkInventory

@@ -1,19 +1,19 @@
-package me.thatonedevil
+package me.thatonedevil.nbt
 
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.JsonSyntaxException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import me.thatonedevil.YoinkGUIClient.logger
+import me.thatonedevil.BuildConfig
+import me.thatonedevil.YoinkGUIClient
 import me.thatonedevil.config.YoinkGuiSettings
+import me.thatonedevil.utils.LatestErrorLog
+import me.thatonedevil.utils.Utils
 import me.thatonedevil.utils.Utils.toClickCopy
 import me.thatonedevil.utils.Utils.toComponent
-import me.thatonedevil.utils.Utils
-import me.thatonedevil.nbt.ComponentValueRegistry
-import me.thatonedevil.utils.LatestErrorLog
-import me.thatonedevil.utils.api.UpdateChecker.serverName
-import net.minecraft.nbt.NbtCompound
+import me.thatonedevil.utils.api.UpdateChecker
+import java.io.BufferedWriter
 import java.io.File
 import java.io.IOException
 import java.time.Duration
@@ -57,7 +57,7 @@ object NBTParser {
             parseTextComponent(parsed)
         } catch (e: JsonSyntaxException) {
             LatestErrorLog.record(e, "Failed to parse JSON string as text component")
-            logger.debug("Failed to parse JSON string as text component: $jsonString", e)
+            YoinkGUIClient.logger.debug("Failed to parse JSON string as text component: $jsonString", e)
             jsonString
         }
     }
@@ -112,7 +112,7 @@ object NBTParser {
             }
         } catch (e: JsonSyntaxException) {
             LatestErrorLog.record(e, "Failed to parse NBT format")
-            logger.debug("Failed to parse NBT format: $raw", e)
+            YoinkGUIClient.logger.debug("Failed to parse NBT format: $raw", e)
             null
         }
     }
@@ -126,7 +126,7 @@ object NBTParser {
     }
 
     private fun writeFileHeader(
-        writer: java.io.BufferedWriter,
+        writer: BufferedWriter,
         formattedTime: String,
         itemCount: Int,
         totalCount: Int
@@ -140,7 +140,7 @@ object NBTParser {
     }
 
     private fun writeItem(
-        writer: java.io.BufferedWriter,
+        writer: BufferedWriter,
         index: Int,
         item: ParsedItem,
         includeRawNbt: Boolean,
@@ -168,7 +168,7 @@ object NBTParser {
     }
 
     private fun generateFilename(formattedTime: String): String {
-        return "${serverName}-${formattedTime}.txt"
+        return "${UpdateChecker.serverName}-${formattedTime}.txt"
     }
 
     private fun sendSuccessMessage(file: File, duration: Long) {
@@ -213,7 +213,7 @@ object NBTParser {
             Result.success(file)
         } catch (e: Exception) {
             LatestErrorLog.record(e, "Error saving NBT file to $configDir")
-            logger.error("Error saving NBT file: ${e.message}", e)
+            YoinkGUIClient.logger.error("Error saving NBT file: ${e.message}", e)
             Result.failure(e)
         }
     }
