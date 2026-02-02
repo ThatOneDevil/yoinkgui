@@ -6,6 +6,8 @@ import me.thatonedevil.config.YoinkGuiSettings
 import me.thatonedevil.utils.Utils.debug
 
 interface ComponentValueHandler {
+    val name: String
+        get() = this.javaClass.simpleName
     fun handle(obj: JsonObject): HandlerResult
 }
 
@@ -31,7 +33,7 @@ object ComponentValueRegistry {
         if (YoinkGuiSettings.toggleGradientParser.get()) { register(GradientHandler) }
         register(TextHandler)
 
-        debug("ComponentValueRegistry handlers refreshed. Current handlers: ${handlers.map { it.javaClass.simpleName }}")
+        debug("ComponentValueRegistry handlers refreshed. Current handlers: ${handlers.map { it.name }}")
     }
 
 

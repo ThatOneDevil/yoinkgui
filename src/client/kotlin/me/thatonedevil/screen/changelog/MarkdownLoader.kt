@@ -12,7 +12,7 @@ object MarkdownLoader {
     private val BULLET = TextColor.fromRgb(0xDADADA)
     private val NORMAL = TextColor.fromRgb(0xB5B5B5)
     private val CODE_BLOCK = TextColor.fromRgb(0x7FE3CD)
-    private val ITALIC = TextColor.fromRgb(0xFFD4A3) // Soft peach/gold color
+    private val ITALIC = TextColor.fromRgb(0xFFD4A3)
 
     fun parse(lines: List<String>, wrapWidth: Int): List<Text> {
         return lines.flatMap { rawLine ->
