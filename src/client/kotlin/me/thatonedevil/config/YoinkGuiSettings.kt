@@ -28,6 +28,21 @@ open class YoinkGuiSettings() : JsonFileCodecConfig<YoinkGuiSettings>(
     val isFirstLaunch by register<Boolean>(default = true, BOOL)
     var hasJustLaunched = false
 
+    constructor(settings: YoinkGuiSettings) : this() {
+        enableYoinkButton.value = settings.enableYoinkButton.value
+        enableSingleItemYoink.value = settings.enableSingleItemYoink.value
+        buttonScaleFactor.value = settings.buttonScaleFactor.value
+        buttonX.value = settings.buttonX.value
+        buttonY.value = settings.buttonY.value
+        debugMode.value = settings.debugMode.value
+        formatOption.value = settings.formatOption.value
+        includeRawNbt.value = settings.includeRawNbt.value
+        toggleColorParser.value = settings.toggleColorParser.value
+        toggleStyleParser.value = settings.toggleStyleParser.value
+        toggleShadowParser.value = settings.toggleShadowParser.value
+        toggleGradientParser.value = settings.toggleGradientParser.value
+    }
+
     companion object : YoinkGuiSettings() {
         init {
             if (!loadFromFile()) {

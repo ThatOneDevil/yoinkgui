@@ -1,3 +1,5 @@
+import me.modmuss50.mpp.ReleaseType
+
 plugins {
     id("org.jetbrains.kotlin.jvm") version "2.3.0"
 	id("fabric-loom") version "1.15-SNAPSHOT"
@@ -5,11 +7,11 @@ plugins {
 }
 
 val modVersion = "1.9.1"
+val releaseType = ReleaseType.BETA
 
 version = "${modVersion}+${property("mod.mod_version") as String}"
 group = property("maven_group") as String
 
-var cleanVersion = version.toString().split("+").first()
 val mcVersion = property("deps.minecraft_version").toString()
 val mcDep = property("mcDep").toString()
 val yacl = property("deps.yacl").toString()
@@ -98,6 +100,24 @@ tasks.processResources {
 
 }
 
+val templateSource = file("../../src/templates/kotlin")
+val templateDest = layout.buildDirectory.dir("generated/sources/templates")
+
+val generateTemplates = tasks.register<Copy>("generateTemplates") {
+    val props = mapOf(
+        "version" to modVersion,
+        "mcVersion" to mcVersion,
+        "releaseType" to releaseType.toString())
+
+    inputs.properties(props)
+
+    from(templateSource)
+    into(templateDest)
+    expand(props)
+}
+
+sourceSets.main.configure { java.srcDir(generateTemplates.map { it.outputs }) }
+
 tasks.withType<JavaCompile>().configureEach {
     options.release.set(21)
 }
@@ -116,24 +136,12 @@ tasks.jar {
 	}
 }
 
-val templateSource = file("../../src/templates/kotlin")
-val templateDest = layout.buildDirectory.dir("generated/sources/templates")
-val generateTemplates = tasks.register<Copy>("generateTemplates") {
-	val props = mapOf("version" to cleanVersion, "mcVersion" to mcVersion)
-	inputs.properties(props)
-
-	from(templateSource)
-	into(templateDest)
-	expand(props)
-}
-
-sourceSets.main.configure { java.srcDir(generateTemplates.map { it.outputs }) }
 
 publishMods {
-    displayName.set("YoinkGUI $cleanVersion for MC $mcVersion")
+    displayName.set("YoinkGUI $modVersion for MC $mcVersion")
     file.set(tasks.remapJar.get().archiveFile)
     changelog.set(
-        rootProject.file("src/main/resources/changelogs/${cleanVersion}.md")
+        rootProject.file("src/main/resources/changelogs/${modVersion}.md")
             .takeIf { it.exists() }
             ?.readText()
             ?: "No changelog provided."
@@ -148,6 +156,7 @@ publishMods {
         ?: emptyList()
 
     modrinth {
+        type.set(releaseType)
         projectId.set(property("modrinthId") as String)
         accessToken.set(providers.environmentVariable("MODRINTH_API_KEY"))
         minecraftVersions.addAll(versionList("pub.modrinthMC"))
@@ -159,6 +168,7 @@ publishMods {
     }
 
     curseforge {
+        type.set(releaseType)
         projectId.set(property("curseforgeId") as String)
         accessToken.set(providers.environmentVariable("CURSEFORGE_API_KEY"))
         minecraftVersions.addAll(versionList("pub.curseMC"))

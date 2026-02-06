@@ -2,6 +2,7 @@ package me.thatonedevil.commands
 
 import com.mojang.brigadier.Command
 import me.thatonedevil.BuildConfig.MC_VERSION
+import me.thatonedevil.BuildConfig.RELEASE
 import me.thatonedevil.BuildConfig.VERSION
 import me.thatonedevil.utils.LatestErrorLog
 import me.thatonedevil.utils.Utils.sendChat
@@ -28,6 +29,7 @@ class DebugCommand {
             .append("&f--- <color:#FFA6CA>YoinkGUI Debug Info &f---\n".toComponent())
             .append(" <color:#8968CD>Game Version: <color:#FFD4A3>$MC_VERSION\n".toComponent())
             .append(" <color:#8968CD>Mod Version: <color:#FFD4A3>$VERSION\n".toComponent())
+            .append(" <color:#8968CD>Release Type: <color:#FFD4A3>${RELEASE}\n".toComponent())
             .append(" <color:#8968CD>Java Version: <color:#FFD4A3>${System.getProperty("java.version")}\n".toComponent())
             .append(Component.newline())
             .append("&f--- <color:#FFA6CA>YoinkGUI Error Info &f---\n".toComponent())
