@@ -4,6 +4,7 @@ import me.thatonedevil.utils.Utils.debug
 import net.minecraft.client.MinecraftClient
 import net.minecraft.item.ItemStack
 import net.minecraft.screen.MerchantScreenHandler
+import net.minecraft.screen.ScreenHandler
 
 class TopInventory(private val client: MinecraftClient) {
 
@@ -46,7 +47,7 @@ class TopInventory(private val client: MinecraftClient) {
     }
 
     private fun getRegularItems(handler: Any): List<ItemStack> {
-        return (handler as? net.minecraft.screen.ScreenHandler)
+        return (handler as? ScreenHandler)
             ?.stacks
             ?.filterNot { it.isEmpty }
             ?.also { debug("Items: $it") }
