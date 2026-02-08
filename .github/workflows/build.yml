@@ -65,7 +65,6 @@ jobs:
       - name: Build ${{ matrix.target }}
         run: |
           ./gradlew "Refresh active project"
-          ./gradlew buildAndCollectActive --no-daemon --stacktrace
 
       - name: Sanitize artifact name for upload
         run: |
