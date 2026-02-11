@@ -18,26 +18,11 @@ on:
         default: false
 
 jobs:
-  generate-build-matrix:
-    runs-on: ubuntu-latest
-    name: Generate build matrix
-    outputs:
-      matrix: ${{ steps.generate-matrix.outputs.matrix }}
-    steps:
-      - uses: actions/checkout@v4
-      - name: Generate matrix from versions.json
-        id: generate-matrix
-        run: |
-          MATRIX=$(jq -c '{include: (.branches[""] | map({target: .}))}' ./versions/versions.json)
-          echo "matrix=$MATRIX" >> $GITHUB_OUTPUT
-
   build:
-    needs: generate-build-matrix
-    runs-on: ubuntu-latest
-    name: Build ${{ matrix.target }}
     strategy:
-      fail-fast: false
-      matrix: ${{ fromJson(needs.generate-build-matrix.outputs.matrix) }}
+      matrix:
+        java: [21]
+    runs-on: ubuntu-22.04
     permissions:
       contents: read
       packages: write
@@ -46,48 +31,36 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Temurin JDK 21 with Gradle cache
+      - name: Setup Temurin JDK ${{ matrix.java }} with Gradle cache
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 21
+          java-version: ${{ matrix.java }}
           cache: gradle
           cache-dependency-path: |
             **/*.gradle*
             **/gradle-wrapper.properties
+            gradle/libs.versions.toml
+            buildSrc/**/*.kt
+            buildSrc/**/*.gradle.kts
+            **/versions.properties
 
       - name: Make Gradle wrapper executable
         run: chmod +x ./gradlew
 
-      - name: Sanitize artifact name
-        run: |
-          raw="${{ matrix.target }}"
-          clean="${raw%%:*}"
-          echo "ARTIFACT_NAME=$clean" >> $GITHUB_ENV
-
-      - name: Build ${{ matrix.target }}
-        run: |
-          ./gradlew "yoinkgui:versions:${{ env.ARTIFACT_NAME }}:build" --no-daemon --stacktrace
+      - name: Build with Gradle
+        run: ./gradlew build --no-daemon
 
       - name: Upload build artifacts
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.force_nightly == 'true')
         uses: actions/upload-artifact@v4
         with:
-          name: yoinkgui-${{ env.ARTIFACT_NAME }}-${{ github.run_number }}
-          path: versions/${{ env.ARTIFACT_NAME }}/build/libs/*.jar
+          name: yoinkgui-nightly-${{ github.run_number }}
+          path: versions/*/build/libs/*.jar
           retention-days: 30
 
-  notify:
-    needs: build
-    runs-on: ubuntu-latest
-    if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.force_nightly == 'true')
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 1
-
       - name: Send Discord notification
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.force_nightly == 'true')
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         run: |
@@ -98,3 +71,4 @@ jobs:
           curl -H "Content-Type: application/json" \
             -d "{\"embeds\": [{\"title\": \"🌙 Nightly Build Complete\", \"description\": \"YoinkGUI nightly build has finished successfully!\", \"color\": 5814783, \"fields\": [{\"name\": \"Commit\", \"value\": \"[\`$COMMIT_SHA\`](https://github.com/${{ github.repository }}/commit/${{ github.sha }}) - $COMMIT_MSG\", \"inline\": false}, {\"name\": \"Download\", \"value\": \"[Click here to download artifacts]($ARTIFACT_URL)\", \"inline\": false}], \"timestamp\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"}]}" \
             $DISCORD_WEBHOOK
+
