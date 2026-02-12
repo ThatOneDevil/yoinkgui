@@ -9,7 +9,6 @@ import me.thatonedevil.screen.ButtonPositionScreen
 import me.thatonedevil.screen.changelog.ChangelogScreen
 import me.thatonedevil.utils.Utils.sendChat
 import me.thatonedevil.utils.Utils.toClickURL
-import me.thatonedevil.utils.Utils.toComponent
 import me.thatonedevil.utils.api.UpdateChecker
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback

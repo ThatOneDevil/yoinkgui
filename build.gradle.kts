@@ -2,7 +2,7 @@ import me.modmuss50.mpp.ReleaseType
 
 plugins {
     id("org.jetbrains.kotlin.jvm") version "2.3.0"
-	id("fabric-loom") version "1.15-SNAPSHOT"
+	id("net.fabricmc.fabric-loom-remap") version "1.15-SNAPSHOT"
 	id("me.modmuss50.mod-publish-plugin") version "1.1.0"
 }
 
@@ -57,13 +57,13 @@ loom {
 }
 
 dependencies {
-	// mappings
-    minecraft("com.mojang:minecraft:${property("deps.minecraft_version")}")
-	mappings("net.fabricmc:yarn:${property("deps.yarn_mappings")}:v2")
+    // mappings
+    minecraft("com.mojang:minecraft:${project.property("deps.minecraft_version")}")
+    mappings(loom.officialMojangMappings())
 
     // fabric
-	modImplementation("net.fabricmc:fabric-loader:${property("loader_version")}")
-	modImplementation("net.fabricmc.fabric-api:fabric-api:${property("deps.fabric_api")}")
+    modImplementation("net.fabricmc:fabric-loader:${project.property("loader_version")}")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:${property("deps.fabric_api")}")
 	modImplementation("net.fabricmc:fabric-language-kotlin:${property("fabric_kotlin_version")}")
 
     // adventure
@@ -119,12 +119,12 @@ val generateTemplates = tasks.register<Copy>("generateTemplates") {
 sourceSets.main.configure { java.srcDir(generateTemplates.map { it.outputs }) }
 
 tasks.withType<JavaCompile>().configureEach {
-    options.release.set(21)
+    options.release.set(25)
 }
 
 java {
 	withSourcesJar()
-	val java = JavaVersion.VERSION_21
+	val java = JavaVersion.VERSION_25
 	targetCompatibility = java
 	sourceCompatibility = java
 }
