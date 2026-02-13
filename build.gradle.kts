@@ -2,8 +2,8 @@ import me.modmuss50.mpp.ReleaseType
 
 plugins {
     id("org.jetbrains.kotlin.jvm") version "2.3.0"
-	id("net.fabricmc.fabric-loom-remap") version "1.15-SNAPSHOT"
-	id("me.modmuss50.mod-publish-plugin") version "1.1.0"
+    id("fabric-loom") version "1.15-SNAPSHOT"
+    id("me.modmuss50.mod-publish-plugin") version "1.1.0"
 }
 
 val modVersion = "1.9.1"
@@ -18,7 +18,7 @@ val yacl = property("deps.yacl").toString()
 val modMenu = property("deps.modmenu").toString()
 
 base {
-	archivesName.set(property("mod.archives_base_name") as String)
+    archivesName.set(property("mod.archives_base_name") as String)
 }
 
 repositories {
@@ -26,7 +26,7 @@ repositories {
         name = "sonatype-oss-snapshots1"
         mavenContent { snapshotsOnly() }
     }
-	mavenCentral()
+    mavenCentral()
     maven("https://maven.terraformersmc.com/") {
         name = "Terraformers"
     }
@@ -40,39 +40,39 @@ repositories {
 }
 
 loom {
-	splitEnvironmentSourceSets()
+    splitEnvironmentSourceSets()
 
-	mods {
-		create("yoinkgui").project.sourceSets {
+    mods {
+        create("yoinkgui").project.sourceSets {
             sourceSets["main"]
             sourceSets["client"]
         }
-	}
+    }
 
-	runConfigs.all {
-		ideConfigGenerated(true)
-		runDir("../../run")
-	}
+    runConfigs.all {
+        ideConfigGenerated(true)
+        runDir("../../run")
+    }
 
 }
 
 dependencies {
     // mappings
-    minecraft("com.mojang:minecraft:${project.property("deps.minecraft_version")}")
-    mappings(loom.officialMojangMappings())
+    minecraft("com.mojang:minecraft:${property("deps.minecraft_version")}")
+    mappings("net.fabricmc:yarn:${property("deps.yarn_mappings")}:v2")
 
     // fabric
-    implementation("net.fabricmc:fabric-loader:${project.property("loader_version")}")
-    implementation("net.fabricmc.fabric-api:fabric-api:${property("deps.fabric_api")}")
-    implementation("net.fabricmc:fabric-language-kotlin:${property("fabric_kotlin_version")}")
+    modImplementation("net.fabricmc:fabric-loader:${property("loader_version")}")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:${property("deps.fabric_api")}")
+    modImplementation("net.fabricmc:fabric-language-kotlin:${property("fabric_kotlin_version")}")
 
     // adventure
-    implementation(include("net.kyori:adventure-platform-fabric:${property("deps.adventure_api")}")!!)
+    modImplementation(include("net.kyori:adventure-platform-fabric:${property("deps.adventure_api")}")!!)
 
 
     // config libs
-    implementation("com.terraformersmc:modmenu:${modMenu}")
-    implementation("dev.isxander:yet-another-config-lib:${yacl}")
+    modImplementation("com.terraformersmc:modmenu:${modMenu}")
+    modImplementation("dev.isxander:yet-another-config-lib:${yacl}")
 
     // kotlin
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
@@ -83,20 +83,20 @@ dependencies {
 }
 
 tasks.processResources {
-	val mcDep: String by project
+    val mcDep: String by project
 
-	val props = mapOf(
-		"version" to project.version,
-		"mc" to mcDep,
+    val props = mapOf(
+        "version" to project.version,
+        "mc" to mcDep,
         "yaclVersion" to yacl,
         "modmenuVersion" to modMenu
-	)
+    )
 
-	props.forEach(inputs::property)
+    props.forEach(inputs::property)
 
-	filesMatching("fabric.mod.json") {
-		expand(props)
-	}
+    filesMatching("fabric.mod.json") {
+        expand(props)
+    }
 
 }
 
@@ -123,23 +123,23 @@ tasks.withType<JavaCompile>().configureEach {
 }
 
 java {
-	withSourcesJar()
-	val java = JavaVersion.VERSION_25
-	targetCompatibility = java
-	sourceCompatibility = java
+    withSourcesJar()
+    val java = JavaVersion.VERSION_25
+    targetCompatibility = java
+    sourceCompatibility = java
 }
 
 tasks.jar {
-	inputs.property("archivesName", base.archivesName)
-	from("LICENSE") {
-		rename { "${it}_${inputs.properties["archivesName"]}" }
-	}
+    inputs.property("archivesName", base.archivesName)
+    from("LICENSE") {
+        rename { "${it}_${inputs.properties["archivesName"]}" }
+    }
 }
 
 
 publishMods {
     displayName.set("YoinkGUI $modVersion for MC $mcVersion")
-    file.set(tasks.jar.get().archiveFile)
+    file.set(tasks.remapJar.get().archiveFile)
     changelog.set(
         rootProject.file("src/main/resources/changelogs/${modVersion}.md")
             .takeIf { it.exists() }
@@ -179,7 +179,6 @@ publishMods {
         requires { slug.set("modmenu") }
     }
 }
-
 
 
 

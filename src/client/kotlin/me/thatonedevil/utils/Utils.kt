@@ -5,11 +5,10 @@ import me.thatonedevil.YoinkGUIClient.yoinkGuiSettings
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.minimessage.MiniMessage
+import net.minecraft.client.MinecraftClient
 
 //? if >1.21.1 {
 import net.kyori.adventure.platform.modcommon.MinecraftClientAudiences
-import net.minecraft.client.Minecraft
-
 //?} else {
 /*import net.kyori.adventure.platform.fabric.FabricClientAudiences*/
 //?}
@@ -59,9 +58,9 @@ object Utils {
     // Ensure message sending runs on the client/render thread
     fun sendChat(message: String) {
         try {
-            val mc = Minecraft.getInstance()
+            val mc = MinecraftClient.getInstance()
             val action = Runnable { audience.sendMessage(message.toComponent()) }
-            mc.execute(action)
+            mc?.execute(action) ?: action.run()
         } catch (e: Exception) {
             LatestErrorLog.record(e, "Error sending chat message (MiniMessage)")
             debug("Failed to send chat message: ${e.message}")
@@ -70,9 +69,9 @@ object Utils {
 
     fun sendChat(vararg messages: Component) {
         try {
-            val mc = Minecraft.getInstance()
+            val mc = MinecraftClient.getInstance()
             val action = Runnable { for (component in messages) { audience.sendMessage(component) } }
-            mc.execute(action)
+            mc?.execute(action) ?: action.run()
         } catch (e: Exception) {
             LatestErrorLog.record(e, "Error sending chat message (MiniMessage)")
             debug("Failed to send chat message: ${e.message}")

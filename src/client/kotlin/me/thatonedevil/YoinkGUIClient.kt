@@ -7,8 +7,8 @@ import me.thatonedevil.handlers.ParseButtonHandler
 import me.thatonedevil.keybinds.KeybindManager
 import me.thatonedevil.utils.api.UpdateChecker
 import net.fabricmc.api.ClientModInitializer
-import net.minecraft.client.KeyMapping
-import net.minecraft.resources.Identifier
+import net.minecraft.util.Identifier
+import net.minecraft.client.option.KeyBinding
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -19,7 +19,7 @@ object YoinkGUIClient : ClientModInitializer {
     val yoinkGuiSettings: YoinkGuiSettings = YoinkGuiSettings
 
     //? if >=1.21.9 {
-    val keybindCategory: KeyMapping.Category = KeyMapping.Category.register(Identifier.withDefaultNamespace("keybinds"))
+    val keybindCategory: KeyBinding.Category = KeyBinding.Category.create(Identifier.of("keybinds"))
     //? }
 
     override fun onInitializeClient() {
