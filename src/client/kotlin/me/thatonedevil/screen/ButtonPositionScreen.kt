@@ -4,13 +4,15 @@ import me.thatonedevil.YoinkGUIClient
 import me.thatonedevil.config.YoinkGuiSettings
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
-import net.minecraft.client.gui.DrawContext
-import net.minecraft.client.gui.screen.Screen
-import net.minecraft.text.Text
+import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.screens.Screen
+import net.minecraft.network.chat.Component
+
 import org.lwjgl.glfw.GLFW
+import kotlin.math.min
 
 @Environment(EnvType.CLIENT)
-class ButtonPositionScreen(private val parent: Screen?) : Screen(Text.literal("Position Yoink Button")) {
+class ButtonPositionScreen(private val parent: Screen?) : Screen(Component.literal("Position Yoink Button")) {
 
     override fun init() {
         super.init()
@@ -49,25 +51,23 @@ class ButtonPositionScreen(private val parent: Screen?) : Screen(Text.literal("P
     private val scaledButtonHeight: Int
         get() = (baseButtonHeight * scaleFactor).toInt()
 
-    override fun render(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
         super.render(context, mouseX, mouseY, delta)
 
-        val window = client?.window?.handle
+        val window = minecraft.window.handle()
 
-        if (window != null) {
-            val isMousePressed = GLFW.glfwGetMouseButton(window, GLFW.GLFW_MOUSE_BUTTON_LEFT) == GLFW.GLFW_PRESS
-            if (isMousePressed && !wasMousePressed) {
-                if (isMouseOverButton(mouseX, mouseY)) {
-                    dragging = true
-                    dragOffsetX = mouseX - buttonX
-                    dragOffsetY = mouseY - buttonY
-                }
-            } else if (!isMousePressed && wasMousePressed) {
-                dragging = false
+        val isMousePressed = GLFW.glfwGetMouseButton(window, GLFW.GLFW_MOUSE_BUTTON_LEFT) == GLFW.GLFW_PRESS
+        if (isMousePressed && !wasMousePressed) {
+            if (isMouseOverButton(mouseX, mouseY)) {
+                dragging = true
+                dragOffsetX = mouseX - buttonX
+                dragOffsetY = mouseY - buttonY
             }
-
-            wasMousePressed = isMousePressed
+        } else if (!isMousePressed && wasMousePressed) {
+            dragging = false
         }
+
+        wasMousePressed = isMousePressed
 
         // Handle dragging
         if (dragging) {
@@ -83,33 +83,33 @@ class ButtonPositionScreen(private val parent: Screen?) : Screen(Text.literal("P
             buttonY + scaledButtonHeight,
             buttonColor
         )
-        context.drawCenteredTextWithShadow(
-            textRenderer,
-            Text.literal("Yoink and Parse NBT into file"),
+        context.drawCenteredString(
+            font,
+            Component.literal("Yoink and Parse NBT into file"),
             buttonX + scaledButtonWidth / 2,
             buttonY + (scaledButtonHeight - 8) / 2,
             0xFFFFFFFF.toInt()
         )
 
-        context.drawCenteredTextWithShadow(
-            textRenderer,
-            Text.literal("Drag the button to reposition it"),
+        context.drawCenteredString(
+            font,
+            Component.literal("Drag the button to reposition it"),
             width / 2,
             20,
             0xFFFFFFFF.toInt()
         )
 
-        context.drawCenteredTextWithShadow(
-            textRenderer,
-            Text.literal("Use mouse wheel to scale (Current: ${"%.2f".format(scaleFactor)}x)"),
+        context.drawCenteredString(
+            font,
+            Component.literal("Use mouse wheel to scale (Current: ${"%.2f".format(scaleFactor)}x)"),
             width / 2,
             35,
             0xFFFFFFFF.toInt()
         )
 
-        context.drawCenteredTextWithShadow(
-            textRenderer,
-            Text.literal("Press ESC or ENTER to save and exit"),
+        context.drawCenteredString(
+            font,
+            Component.literal("Press ESC or ENTER to save and exit"),
             width / 2,
             50,
             0xFFFFFFFF.toInt()
@@ -127,9 +127,9 @@ class ButtonPositionScreen(private val parent: Screen?) : Screen(Text.literal("P
         return true
     }
 
-    override fun close() {
+    override fun onClose() {
         YoinkGuiSettings.saveToFile()
-        client?.setScreen(parent)
+        minecraft.setScreen(parent)
     }
 
     private fun isMouseOverButton(mouseX: Int, mouseY: Int): Boolean {

@@ -1,8 +1,9 @@
 package me.thatonedevil.screen.changelog
 
-import net.minecraft.client.MinecraftClient
-import net.minecraft.text.Text
-import net.minecraft.text.TextColor
+import net.minecraft.client.Minecraft
+import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.MutableComponent
+import net.minecraft.network.chat.TextColor
 
 object MarkdownLoader {
 
@@ -14,13 +15,13 @@ object MarkdownLoader {
     private val CODE_BLOCK = TextColor.fromRgb(0x7FE3CD)
     private val ITALIC = TextColor.fromRgb(0xFFD4A3)
 
-    fun parse(lines: List<String>, wrapWidth: Int): List<Text> {
+    fun parse(lines: List<String>, wrapWidth: Int): List<Component> {
         return lines.flatMap { rawLine ->
             parseLine(rawLine, wrapWidth)
         }
     }
 
-    private fun parseLine(line: String, wrapWidth: Int): List<Text> = when {
+    private fun parseLine(line: String, wrapWidth: Int): List<Component> = when {
         line.startsWith("# ") ->
             listOf(createStyledText(line.removePrefix("# "), TITLE, bold = true))
 
@@ -34,26 +35,26 @@ object MarkdownLoader {
             wrapAndStyleWithFormatting("• ${line.drop(2)}", wrapWidth, BULLET)
 
         line.isBlank() ->
-            listOf(Text.empty())
+            listOf(Component.empty())
 
         else ->
             wrapAndStyleWithFormatting(line, wrapWidth, NORMAL)
     }
 
-    private fun createStyledText(text: String, color: TextColor, bold: Boolean = false): Text {
-        return Text.literal(text).styled { style ->
+    private fun createStyledText(text: String, color: TextColor, bold: Boolean = false): Component {
+        return Component.literal(text).setStyle() { style ->
             style.withColor(color).let { if (bold) it.withBold(true) else it }
         }
     }
 
-    private fun wrapAndStyleWithFormatting(text: String, maxWidth: Int, color: TextColor): List<Text> {
+    private fun wrapAndStyleWithFormatting(text: String, maxWidth: Int, color: TextColor): List<Component> {
         return wrapText(text, maxWidth).map { wrappedLine ->
             parseInlineFormatting(wrappedLine, color)
         }
     }
 
-    private fun parseInlineFormatting(text: String, defaultColor: TextColor): Text {
-        val result = Text.empty()
+    private fun parseInlineFormatting(text: String, defaultColor: TextColor): Component {
+        val result = Component.empty()
         val codeRegex = "`([^`]+)`".toRegex()
         val italicRegex = "\\*([^*]+)\\*".toRegex()
 
@@ -75,20 +76,17 @@ object MarkdownLoader {
             // Add text before this match
             if (start > lastIndex) {
                 result.append(
-                    Text.literal(text.substring(lastIndex, start))
-                        .styled { it.withColor(defaultColor) }
+                    value = Component.nullToEmpty(text.substring(lastIndex, start)).style.withColor(defaultColor)
                 )
             }
 
             // Add formatted text
             when (type) {
                 "code" -> result.append(
-                    Text.literal(content)
-                        .styled { it.withColor(CODE_BLOCK) }
+                    value = Component.nullToEmpty(content).style.withColor(CODE_BLOCK)
                 )
                 "italic" -> result.append(
-                    Text.literal(content)
-                        .styled { it.withColor(ITALIC).withItalic(true) }
+                    value = Component.nullToEmpty(content).style.withColor(ITALIC).withItalic(true)
                 )
             }
 
@@ -98,8 +96,7 @@ object MarkdownLoader {
         // Add remaining text
         if (lastIndex < text.length) {
             result.append(
-                Text.literal(text.substring(lastIndex))
-                    .styled { it.withColor(defaultColor) }
+                value = Component.literal(text.substring(lastIndex)).style.withColor(defaultColor)
             )
         }
 
@@ -109,7 +106,7 @@ object MarkdownLoader {
     private fun wrapText(text: String, maxWidth: Int): List<String> {
         if (text.isEmpty()) return listOf("")
 
-        val renderer = MinecraftClient.getInstance().textRenderer
+        val renderer = Minecraft.getInstance().font
         val words = text.split(" ")
         val lines = mutableListOf<String>()
         var currentLine = StringBuilder()
@@ -117,7 +114,7 @@ object MarkdownLoader {
         for (word in words) {
             val testLine = if (currentLine.isEmpty()) word else "$currentLine $word"
 
-            if (renderer.getWidth(testLine) > maxWidth) {
+            if (renderer.width(testLine) > maxWidth) {
                 // Line would be too long
                 if (currentLine.isNotEmpty()) {
                     lines += currentLine.toString()
