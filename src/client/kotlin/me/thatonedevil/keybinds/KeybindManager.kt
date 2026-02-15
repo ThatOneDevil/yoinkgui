@@ -1,7 +1,7 @@
 package me.thatonedevil.keybinds
 
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
-import net.minecraft.client.option.KeyBinding
+import net.minecraft.client.KeyMapping
 
 class KeybindManager {
 
@@ -9,7 +9,7 @@ class KeybindManager {
         MenuKeybind(), YoinkSingleKeybind()
     )
 
-    private val bindings = mutableMapOf<KeyBinding, Key>()
+    private val bindings = mutableMapOf<KeyMapping, Key>()
 
     fun register() {
         keys.forEach { key ->
@@ -19,7 +19,7 @@ class KeybindManager {
 
         ClientTickEvents.END_CLIENT_TICK.register {
             bindings.forEach { (binding, key) ->
-                if (binding.wasPressed()) {
+                if (binding.consumeClick()) {
                     key.whenPressed()
                 }
             }

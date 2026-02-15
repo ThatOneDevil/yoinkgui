@@ -2,7 +2,7 @@ import me.modmuss50.mpp.ReleaseType
 
 plugins {
     id("org.jetbrains.kotlin.jvm") version "2.3.0"
-    id("fabric-loom") version "1.15-SNAPSHOT"
+    id("net.fabricmc.fabric-loom-remap") version "1.15-SNAPSHOT"
     id("me.modmuss50.mod-publish-plugin") version "1.1.0"
 }
 
@@ -58,21 +58,21 @@ loom {
 
 dependencies {
     // mappings
-    minecraft("com.mojang:minecraft:${property("deps.minecraft_version")}")
-    mappings("net.fabricmc:yarn:${property("deps.yarn_mappings")}:v2")
+    minecraft("com.mojang:minecraft:${project.property("deps.minecraft_version")}")
+    mappings(loom.officialMojangMappings())
 
     // fabric
-    modImplementation("net.fabricmc:fabric-loader:${property("loader_version")}")
-    modImplementation("net.fabricmc.fabric-api:fabric-api:${property("deps.fabric_api")}")
-    modImplementation("net.fabricmc:fabric-language-kotlin:${property("fabric_kotlin_version")}")
+    implementation("net.fabricmc:fabric-loader:${project.property("loader_version")}")
+    implementation("net.fabricmc.fabric-api:fabric-api:${property("deps.fabric_api")}")
+    implementation("net.fabricmc:fabric-language-kotlin:${property("fabric_kotlin_version")}")
 
     // adventure
-    modImplementation(include("net.kyori:adventure-platform-fabric:${property("deps.adventure_api")}")!!)
+    implementation(include("net.kyori:adventure-platform-fabric:${property("deps.adventure_api")}")!!)
 
 
     // config libs
-    modImplementation("com.terraformersmc:modmenu:${modMenu}")
-    modImplementation("dev.isxander:yet-another-config-lib:${yacl}")
+    implementation("com.terraformersmc:modmenu:${modMenu}")
+    implementation("dev.isxander:yet-another-config-lib:${yacl}")
 
     // kotlin
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
@@ -139,7 +139,7 @@ tasks.jar {
 
 publishMods {
     displayName.set("YoinkGUI $modVersion for MC $mcVersion")
-    file.set(tasks.remapJar.get().archiveFile)
+    file.set(tasks.jar.get().archiveFile)
     changelog.set(
         rootProject.file("src/main/resources/changelogs/${modVersion}.md")
             .takeIf { it.exists() }
@@ -179,7 +179,3 @@ publishMods {
         requires { slug.set("modmenu") }
     }
 }
-
-
-
-

@@ -14,6 +14,7 @@ import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource
 import net.kyori.adventure.text.Component
+import net.minecraft.server.commands.OpCommand
 
 object YoinkGuiClientCommandRegistry {
 
@@ -32,20 +33,20 @@ object YoinkGuiClientCommandRegistry {
                     UpdateChecker.checkVersion()
                 }
                 .addCommand("menu") {
-                    it.source.client.send {
-                        it.source.client.setScreen(ButtonPositionScreen(it.source.client.currentScreen))
+                    it.source.client.schedule {
+                        it.source.client.setScreen(ButtonPositionScreen(it.source.client.screen))
                     }
                 }
                 .addCommand("changelog") {
-                    it.source.client.send {
-                        it.source.client.setScreen(ChangelogScreen(it.source.client.currentScreen))
+                    it.source.client.schedule {
+                        it.source.client.setScreen(ChangelogScreen(it.source.client.screen))
                     }
                 }
                 .addCommand("debug") {
                     debugCommand.execute()
                 }
                 .addCommand("config") {
-                    it.source.client.send {
+                    it.source.client.schedule {
                         it.source.client.setScreen(ModMenuIntegration().createScreen(null))
                     }
                 }

@@ -45,9 +45,9 @@ object UpdateChecker {
 
     fun setupJoinListener() {
         ClientPlayConnectionEvents.JOIN.register { _, _, client ->
-            serverName = when (client.currentServerEntry?.address){
+            serverName = when (minecraft.currentServer?.ip){
                 "0", "localhost" -> "Singleplayer"
-                else -> client.currentServerEntry?.address ?: "Singleplayer"
+                else -> client.currentServer?.ip ?: "Singleplayer"
             }
 
             debug("Server name: $serverName")
