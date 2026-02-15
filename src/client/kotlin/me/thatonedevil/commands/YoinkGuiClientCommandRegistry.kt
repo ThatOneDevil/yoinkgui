@@ -14,7 +14,6 @@ import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource
 import net.kyori.adventure.text.Component
-import net.minecraft.server.commands.OpCommand
 
 object YoinkGuiClientCommandRegistry {
 
