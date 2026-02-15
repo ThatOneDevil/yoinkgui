@@ -5,14 +5,14 @@ import me.thatonedevil.BuildConfig.VERSION
 import me.thatonedevil.utils.LatestErrorLog
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
-import net.minecraft.client.gui.DrawContext
-import net.minecraft.client.gui.screen.Screen
-import net.minecraft.text.Text
+import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.screens.Screen
+import net.minecraft.network.chat.Component
 import kotlin.math.max
 
 @Environment(EnvType.CLIENT)
-class ChangelogScreen(private val parent: Screen?) : Screen(Text.literal("Changelog")) {
-    private lateinit var content: List<Text>
+class ChangelogScreen(private val parent: Screen?) : Screen(Component.literal("Changelog")) {
+    private lateinit var content: List<Component>
     private var scrollOffset = 0.0
     private var maxScroll = 0.0
 
@@ -50,13 +50,13 @@ class ChangelogScreen(private val parent: Screen?) : Screen(Text.literal("Change
         return true
     }
 
-    override fun render(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
         val centerX = width / 2
 
         if (!this::content.isInitialized || content.isEmpty()) {
-            context.drawCenteredTextWithShadow(
-                textRenderer,
-                Text.literal("No changelog available."),
+            context.drawCenteredString(
+                font,
+                Component.literal("No changelog available."),
                 centerX,
                 height / 2,
                 0xFFE0E0E0.toInt()
@@ -73,8 +73,8 @@ class ChangelogScreen(private val parent: Screen?) : Screen(Text.literal("Change
 
         content.forEach { line ->
             if (y + lineHeight > scissorTop && y < scissorBottom) {
-                context.drawCenteredTextWithShadow(
-                    textRenderer,
+                context.drawCenteredString(
+                    font,
                     line,
                     centerX,
                     y,
@@ -86,9 +86,9 @@ class ChangelogScreen(private val parent: Screen?) : Screen(Text.literal("Change
 
         context.disableScissor()
 
-        context.drawCenteredTextWithShadow(
-            textRenderer,
-            Text.literal("Press ESC to close"),
+        context.drawCenteredString(
+            font,
+            Component.literal("Press ESC to close"),
             centerX,
             height - 20,
             0xFFAAAAAA.toInt()
@@ -96,9 +96,9 @@ class ChangelogScreen(private val parent: Screen?) : Screen(Text.literal("Change
 
         if (maxScroll > 0) {
             val scrollPercentage = (scrollOffset / maxScroll * 100).toInt()
-            context.drawCenteredTextWithShadow(
-                textRenderer,
-                Text.literal("↕ Scroll: $scrollPercentage%"),
+            context.drawCenteredString(
+                font,
+                Component.literal("↕ Scroll: $scrollPercentage%"),
                 centerX,
                 height - 10,
                 0xFF888888.toInt()
@@ -106,7 +106,7 @@ class ChangelogScreen(private val parent: Screen?) : Screen(Text.literal("Change
         }
     }
 
-    override fun close() {
-        client?.setScreen(parent)
+    override fun onClose() {
+        minecraft?.setScreen(parent)
     }
 }

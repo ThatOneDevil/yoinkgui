@@ -10,8 +10,8 @@ import me.thatonedevil.config.YaclConfigHelper.booleanOption
 import me.thatonedevil.config.YaclConfigHelper.enumOptionString
 import me.thatonedevil.nbt.ComponentValueRegistry.refreshHandlers
 import me.thatonedevil.nbt.FormatOptions
-import net.minecraft.client.gui.screen.Screen
-import net.minecraft.text.Text
+import net.minecraft.client.gui.screens.Screen
+import net.minecraft.network.chat.Component
 
 class ModMenuIntegration : ModMenuApi {
     override fun getModConfigScreenFactory(): ConfigScreenFactory<*> = ConfigScreenFactory { parentScreen ->
@@ -24,12 +24,12 @@ class ModMenuIntegration : ModMenuApi {
                 YoinkGuiSettings.saveToFile()
                 refreshHandlers()
             }
-            .title(Text.of("YoinkGUI Settings"))
+            .title(Component.nullToEmpty("YoinkGUI Settings"))
             .category(ConfigCategory.createBuilder()
-                .name(Text.of("Button settings"))
-                .tooltip(Text.of("Button settings"))
+                .name(Component.nullToEmpty("Button settings"))
+                .tooltip(Component.nullToEmpty("Button settings"))
                 .group(OptionGroup.createBuilder()
-                    .name(Text.of("Button Options"))
+                    .name(Component.nullToEmpty("Button Options"))
 
                     .option(booleanOption(
                         name = "Enable Yoink Button",
@@ -46,17 +46,17 @@ class ModMenuIntegration : ModMenuApi {
                 .build())
 
             .category(ConfigCategory.createBuilder()
-                .name(Text.of("Dev settings"))
-                .tooltip(Text.of("Developer settings"))
+                .name(Component.nullToEmpty("Dev settings"))
+                .tooltip(Component.nullToEmpty("Developer settings"))
                 .group(OptionGroup.createBuilder()
-                    .name(Text.of("Dev Options"))
+                    .name(Component.nullToEmpty("Dev Options"))
                     .option(booleanOption(
                         name = "Debug Mode",
                         field = yoinkGuiSettings.debugMode,
                         defaultValue = false,
                         description = "Enables debug logging to help diagnose issues."
                     ))
-                    .name(Text.of("Toggle formatting option"))
+                    .name(Component.nullToEmpty("Toggle formatting option"))
                     .option(enumOptionString(
                         name = "Default NBT Format",
                         field = yoinkGuiSettings.formatOption,
@@ -65,7 +65,7 @@ class ModMenuIntegration : ModMenuApi {
                     ))
                     .build())
                 .group(OptionGroup.createBuilder()
-                    .name(Text.of("Nbt Parser Options"))
+                    .name(Component.nullToEmpty("Nbt Parser Options"))
                     .option(booleanOption(
                         name = "Include Raw NBT",
                         field = yoinkGuiSettings.includeRawNbt,

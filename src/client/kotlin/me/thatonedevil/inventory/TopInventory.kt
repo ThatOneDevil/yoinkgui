@@ -1,15 +1,15 @@
 package me.thatonedevil.inventory
 
 import me.thatonedevil.utils.Utils.debug
-import net.minecraft.client.MinecraftClient
-import net.minecraft.item.ItemStack
-import net.minecraft.screen.MerchantScreenHandler
-import net.minecraft.screen.ScreenHandler
+import net.minecraft.client.Minecraft
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.inventory.MerchantMenu
+import net.minecraft.world.inventory.AbstractContainerMenu
 
-class TopInventory(private val client: MinecraftClient) {
+class TopInventory(private val client: Minecraft) {
 
     private val currentScreenHandler
-        get() = client.player?.currentScreenHandler
+        get() = client.player?.containerMenu
 
     fun getTopInventory(): Any? {
         return currentScreenHandler?.also {
@@ -18,7 +18,7 @@ class TopInventory(private val client: MinecraftClient) {
     }
 
     fun isTopInventoryEmpty(): Boolean {
-        return currentScreenHandler?.stacks?.isEmpty() ?: true
+        return currentScreenHandler?.items?.isEmpty() ?: true
     }
 
     fun inventoryItems(): List<ItemStack> {
@@ -28,17 +28,17 @@ class TopInventory(private val client: MinecraftClient) {
         }
 
         return when (handler) {
-            is MerchantScreenHandler -> getTradeItems(handler)
+            is MerchantMenu -> getTradeItems(handler)
             else -> getRegularItems(handler)
         }
     }
 
-    private fun getTradeItems(handler: MerchantScreenHandler): List<ItemStack> {
-        val tradeItems = handler.recipes.flatMap { tradeOffer ->
+    private fun getTradeItems(handler: MerchantMenu): List<ItemStack> {
+        val tradeItems = handler.offers.flatMap { tradeOffer ->
             buildList {
-                add(tradeOffer.firstBuyItem.itemStack)
-                tradeOffer.secondBuyItem.ifPresent { add(it.itemStack) }
-                add(tradeOffer.sellItem)
+                add(tradeOffer.itemCostA.itemStack)
+                tradeOffer.itemCostB.ifPresent { add(it.itemStack) }
+                add(tradeOffer.result)
             }
         }.filterNot { it.isEmpty }
 
@@ -47,8 +47,8 @@ class TopInventory(private val client: MinecraftClient) {
     }
 
     private fun getRegularItems(handler: Any): List<ItemStack> {
-        return (handler as? ScreenHandler)
-            ?.stacks
+        return (handler as? AbstractContainerMenu)
+            ?.items
             ?.filterNot { it.isEmpty }
             ?.also { debug("Items: $it") }
             ?: emptyList()

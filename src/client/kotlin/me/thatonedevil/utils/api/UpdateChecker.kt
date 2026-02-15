@@ -15,6 +15,7 @@ import me.thatonedevil.utils.Utils.toClickCommand
 import me.thatonedevil.utils.Utils.toClickURL
 import me.thatonedevil.utils.Utils.toComponent
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents
+import net.minecraft.client.Minecraft
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
@@ -45,9 +46,9 @@ object UpdateChecker {
 
     fun setupJoinListener() {
         ClientPlayConnectionEvents.JOIN.register { _, _, client ->
-            serverName = when (client.currentServerEntry?.address){
+            serverName = when (Minecraft.getInstance().currentServer?.ip){
                 "0", "localhost" -> "Singleplayer"
-                else -> client.currentServerEntry?.address ?: "Singleplayer"
+                else -> client.currentServer?.ip ?: "Singleplayer"
             }
 
             debug("Server name: $serverName")

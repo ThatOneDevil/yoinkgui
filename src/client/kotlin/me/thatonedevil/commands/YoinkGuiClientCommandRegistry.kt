@@ -9,7 +9,6 @@ import me.thatonedevil.screen.ButtonPositionScreen
 import me.thatonedevil.screen.changelog.ChangelogScreen
 import me.thatonedevil.utils.Utils.sendChat
 import me.thatonedevil.utils.Utils.toClickURL
-import me.thatonedevil.utils.Utils.toComponent
 import me.thatonedevil.utils.api.UpdateChecker
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback
@@ -33,20 +32,20 @@ object YoinkGuiClientCommandRegistry {
                     UpdateChecker.checkVersion()
                 }
                 .addCommand("menu") {
-                    it.source.client.send {
-                        it.source.client.setScreen(ButtonPositionScreen(it.source.client.currentScreen))
+                    it.source.client.execute {
+                        it.source.client.setScreen(ButtonPositionScreen(it.source.client.screen))
                     }
                 }
                 .addCommand("changelog") {
-                    it.source.client.send {
-                        it.source.client.setScreen(ChangelogScreen(it.source.client.currentScreen))
+                    it.source.client.execute {
+                        it.source.client.setScreen(ChangelogScreen(it.source.client.screen))
                     }
                 }
                 .addCommand("debug") {
                     debugCommand.execute()
                 }
                 .addCommand("config") {
-                    it.source.client.send {
+                    it.source.client.execute {
                         it.source.client.setScreen(ModMenuIntegration().createScreen(null))
                     }
                 }

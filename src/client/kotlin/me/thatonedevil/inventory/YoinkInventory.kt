@@ -1,15 +1,15 @@
 package me.thatonedevil.inventory
 
 import me.thatonedevil.utils.Utils.sendChat
-import net.minecraft.client.network.ClientPlayerEntity
-import net.minecraft.item.ItemStack
-import net.minecraft.nbt.NbtElement
+import net.minecraft.client.player.LocalPlayer
+import net.minecraft.world.item.ItemStack
+import net.minecraft.nbt.Tag
 import net.minecraft.nbt.NbtOps
 
-class YoinkInventory(private val player: ClientPlayerEntity, private val inventory: TopInventory) {
+class YoinkInventory(private val player: LocalPlayer, private val inventory: TopInventory) {
 
     private val topInventory = inventory.getTopInventory()
-    private val encodedItems = mutableListOf<NbtElement>()
+    private val encodedItems = mutableListOf<Tag>()
 
     fun yoinkItems() {
         if (topInventory == null || inventory.isTopInventoryEmpty()) {
@@ -17,7 +17,7 @@ class YoinkInventory(private val player: ClientPlayerEntity, private val invento
             return
         }
 
-        val registryOps = player.registryManager.getOps(NbtOps.INSTANCE)
+        val registryOps = player.registryAccess().createSerializationContext(NbtOps.INSTANCE)
         inventory.inventoryItems().forEach { itemStack ->
             if (!itemStack.isEmpty) {
                 val encodeResult = ItemStack.CODEC.encodeStart(registryOps, itemStack)
@@ -30,18 +30,18 @@ class YoinkInventory(private val player: ClientPlayerEntity, private val invento
     }
 
     companion object {
-        fun yoinkSingleItem(player: ClientPlayerEntity, itemStack: ItemStack): String? {
+        fun yoinkSingleItem(player: LocalPlayer, itemStack: ItemStack): String? {
             if (itemStack.isEmpty) {
                 sendChat("<color:#FF6961>No inventory found or item is empty!")
                 return null
             }
 
-            val registryOps = player.registryManager.getOps(NbtOps.INSTANCE)
+            val registryOps = player.registryAccess().createSerializationContext(NbtOps.INSTANCE)
             val encodeResult = ItemStack.CODEC.encodeStart(registryOps, itemStack)
             return encodeResult.result().get().toString()
         }
     }
 
 
-    fun getYoinkedItems(): List<NbtElement> = encodedItems
+    fun getYoinkedItems(): List<Tag> = encodedItems
 }
