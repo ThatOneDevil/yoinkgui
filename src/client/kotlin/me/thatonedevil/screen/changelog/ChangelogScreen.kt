@@ -107,6 +107,6 @@ class ChangelogScreen(private val parent: Screen?) : Screen(Component.literal("C
     }
 
     override fun onClose() {
-        minecraft?.setScreen(parent)
+        minecraft.setScreen(parent)
     }
 }

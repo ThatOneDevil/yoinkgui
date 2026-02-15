@@ -6,7 +6,7 @@ plugins {
     id("me.modmuss50.mod-publish-plugin") version "1.1.0"
 }
 
-val modVersion = "1.9.1"
+val modVersion = "1.9.2"
 val releaseType = ReleaseType.BETA
 
 version = "${modVersion}+${property("mod.mod_version") as String}"

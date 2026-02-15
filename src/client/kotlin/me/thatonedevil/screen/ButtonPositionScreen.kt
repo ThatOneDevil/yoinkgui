@@ -131,7 +131,7 @@ class ButtonPositionScreen(private val parent: Screen?) : Screen(Component.liter
 
     override fun onClose() {
         YoinkGuiSettings.saveToFile()
-        minecraft?.setScreen(parent)
+        minecraft.setScreen(parent)
     }
 
     private fun isMouseOverButton(mouseX: Int, mouseY: Int): Boolean {
