@@ -1,17 +1,17 @@
 package me.thatonedevil.nbt
 
 import dev.isxander.yacl3.api.NameableEnum
-import net.minecraft.text.Text
+import net.minecraft.network.chat.Component
 
 enum class FormatOptions : NameableEnum {
 
     MINIMESSAGE,
     LEGACY;
 
-    override fun getDisplayName(): Text? {
+    override fun getDisplayName(): Component? {
         return when (this) {
-            MINIMESSAGE -> Text.of("MINIMESSAGE")
-            LEGACY -> Text.of("LEGACY")
+            MINIMESSAGE -> Component.nullToEmpty("MINIMESSAGE")
+            LEGACY -> Component.nullToEmpty("LEGACY")
         }
     }
 }

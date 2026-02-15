@@ -10,18 +10,24 @@ object ParseButtonHandler {
 
     fun register() {
         ClientTickEvents.END_CLIENT_TICK.register { client ->
-            if (client.currentScreen == null) {
+            if (client.screen == null) {
                 parseButtonHovered = false
                 wasLeftClicking = false
                 return@register
             }
 
-            if (client.currentScreen is ButtonPositionScreen) {
+            if (client.screen is ButtonPositionScreen) {
                 parseButtonHovered = false
                 return@register
             }
 
-            val isLeftClicking = GLFW.glfwGetMouseButton(client.window.handle, GLFW.GLFW_MOUSE_BUTTON_LEFT) == GLFW.GLFW_PRESS
+            //? if >=1.21.9 {
+            val window = client.window.handle()
+            //? } else {
+            /*val window = client.window.window
+            *///? }
+
+            val isLeftClicking = GLFW.glfwGetMouseButton(window, GLFW.GLFW_MOUSE_BUTTON_LEFT) == GLFW.GLFW_PRESS
 
             if (client.player != null && isLeftClicking && !wasLeftClicking) {
                 if (parseButtonHovered) {

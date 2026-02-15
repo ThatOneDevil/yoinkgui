@@ -52,9 +52,14 @@ object NBTParser {
         if (jsonString == null) return ""
 
         return try {
-            val parsed = gson.fromJson(jsonString, JsonObject::class.java) ?: return ""
+            val element = gson.fromJson(jsonString, com.google.gson.JsonElement::class.java)
 
-            parseTextComponent(parsed)
+            when {
+                element == null -> ""
+                element.isJsonPrimitive -> element.asString
+                element.isJsonObject -> parseTextComponent(element.asJsonObject)
+                else -> jsonString
+            }
         } catch (e: JsonSyntaxException) {
             LatestErrorLog.record(e, "Failed to parse JSON string as text component")
             YoinkGUIClient.logger.debug("Failed to parse JSON string as text component: $jsonString", e)

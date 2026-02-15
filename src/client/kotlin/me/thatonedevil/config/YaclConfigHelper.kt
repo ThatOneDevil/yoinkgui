@@ -6,7 +6,7 @@ import dev.isxander.yacl3.api.controller.EnumControllerBuilder
 import dev.isxander.yacl3.api.controller.TickBoxControllerBuilder
 import dev.isxander.yacl3.config.v3.ConfigEntry
 import dev.isxander.yacl3.config.v3.value
-import net.minecraft.text.Text
+import net.minecraft.network.chat.Component
 
 object YaclConfigHelper {
 
@@ -18,8 +18,8 @@ object YaclConfigHelper {
     ): Option<Boolean> {
 
         return Option.createBuilder<Boolean>()
-            .name(Text.of(name))
-            .apply { description?.let { description(OptionDescription.of(Text.of(it))) } }
+            .name(Component.nullToEmpty(name))
+            .apply { description?.let { description(OptionDescription.of(Component.nullToEmpty(it))) } }
             .binding(defaultValue, { field.value }, { field.value = it })
             .controller(TickBoxControllerBuilder::create)
             .build()
@@ -33,7 +33,7 @@ object YaclConfigHelper {
         defaultValue: T
     ): Option<T> {
         return Option.createBuilder<T>()
-            .name(Text.of(name))
+            .name(Component.nullToEmpty(name))
             .binding(
                 defaultValue,
                 { try { java.lang.Enum.valueOf(enumClass, field.value) } catch (_: Exception) { defaultValue } },

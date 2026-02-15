@@ -5,13 +5,13 @@ import me.thatonedevil.YoinkGUIClient.yoinkGuiSettings
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.minimessage.MiniMessage
-import net.minecraft.client.MinecraftClient
+import net.minecraft.client.Minecraft
 
 //? if >1.21.1 {
 import net.kyori.adventure.platform.modcommon.MinecraftClientAudiences
 //?} else {
-/*import net.kyori.adventure.platform.fabric.FabricClientAudiences*/
-//?}
+/*import net.kyori.adventure.platform.fabric.FabricClientAudiences
+*///?}
 
 
 object Utils {
@@ -20,8 +20,8 @@ object Utils {
     //? if >1.21.1 {
     private val audience = MinecraftClientAudiences.of().audience()
     //?} else {
-    /*private val audience = FabricClientAudiences.of().audience();*/
-    //?}
+    /*private val audience = FabricClientAudiences.of().audience();
+    *///?}
 
     private val colorReplacements = mapOf(
         "&0" to "<black>", "&1" to "<dark_blue>", "&2" to "<dark_green>", "&3" to "<dark_aqua>",
@@ -58,9 +58,9 @@ object Utils {
     // Ensure message sending runs on the client/render thread
     fun sendChat(message: String) {
         try {
-            val mc = MinecraftClient.getInstance()
+            val mc = Minecraft.getInstance()
             val action = Runnable { audience.sendMessage(message.toComponent()) }
-            mc?.execute(action) ?: action.run()
+            mc.execute(action)
         } catch (e: Exception) {
             LatestErrorLog.record(e, "Error sending chat message (MiniMessage)")
             debug("Failed to send chat message: ${e.message}")
@@ -69,9 +69,9 @@ object Utils {
 
     fun sendChat(vararg messages: Component) {
         try {
-            val mc = MinecraftClient.getInstance()
+            val mc = Minecraft.getInstance()
             val action = Runnable { for (component in messages) { audience.sendMessage(component) } }
-            mc?.execute(action) ?: action.run()
+            mc.execute(action)
         } catch (e: Exception) {
             LatestErrorLog.record(e, "Error sending chat message (MiniMessage)")
             debug("Failed to send chat message: ${e.message}")

@@ -1,7 +1,7 @@
 package me.thatonedevil.keybinds
 
 import me.thatonedevil.screen.ButtonPositionScreen
-import net.minecraft.client.MinecraftClient
+import net.minecraft.client.Minecraft
 import org.lwjgl.glfw.GLFW
 
 class MenuKeybind : Key {
@@ -15,9 +15,9 @@ class MenuKeybind : Key {
     }
 
     override fun whenPressed() {
-        val client = MinecraftClient.getInstance()
+        val client = Minecraft.getInstance()
 
-        client.setScreen(ButtonPositionScreen(client.currentScreen))
+        client.setScreen(ButtonPositionScreen(client.screen))
     }
 
 }

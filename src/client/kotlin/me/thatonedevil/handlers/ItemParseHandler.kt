@@ -11,16 +11,16 @@ import me.thatonedevil.inventory.YoinkInventory.Companion.yoinkSingleItem
 import me.thatonedevil.utils.LatestErrorLog
 import me.thatonedevil.utils.Utils.sendChat
 import me.thatonedevil.utils.Utils.toClickCopy
-import net.minecraft.client.MinecraftClient
-import net.minecraft.item.ItemStack
+import net.minecraft.client.Minecraft
+import net.minecraft.world.item.ItemStack
 
 object ItemParseHandler {
 
     fun handleSingleItemParse(itemStack: ItemStack?) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val client = MinecraftClient.getInstance()
-                val configDir = client.runDirectory.resolve("config")
+                val client = Minecraft.getInstance()
+                val configDir = client.gameDirectory.resolve("config")
 
                 if (itemStack == null) {
                     sendChat("<color:#FF6961>No item hovered!")
@@ -44,11 +44,11 @@ object ItemParseHandler {
         }
     }
 
-    fun handleParseButton(client: MinecraftClient) {
+    fun handleParseButton(client: Minecraft) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val player = client.player ?: return@launch
-                val configDir = client.runDirectory.resolve("config").path
+                val configDir = client.gameDirectory.resolve("config").path
                 val yoinkInventory = YoinkInventory(player, TopInventory(client))
                 val yoinkedItems = yoinkInventory.apply { yoinkItems() }.getYoinkedItems().map { it.toString() }
 
