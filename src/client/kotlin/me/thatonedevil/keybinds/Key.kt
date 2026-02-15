@@ -23,13 +23,13 @@ interface Key {
             keybindCategory
         )
         //? } else {
-        /*val keyBinding = KeyBinding(
+        /*val keyBinding = KeyMapping(
             keyName(),
             keyType(),
             key(),
             "key.category.minecraft.keybinds"
-        )*/
-        //?}
+        )
+        *///?}
 
         return KeyBindingHelper.registerKeyBinding(keyBinding)
     }

@@ -45,16 +45,16 @@ object SingleItemYoinkHandler {
                     return@register
                 }
 
-                if (key == InputUtil.GLFW_KEY_Y) {
-                    val slot: Slot? = (screen as HandledScreenAccessor).`yoinkgui$getFocusedSlot`()
-                    if (slot != null && !slot.stack.isEmpty) {
-                        ItemParseHandler.handleSingleItemParse(slot.stack)
+                if (key == InputConstants.KEY_Y) {
+                    val slot: Slot? = (screen as AbstractContainerScreenAccessor).`yoinkgui$getHoveredSlot`()
+                    if (slot != null && !slot.item.isEmpty) {
+                        ItemParseHandler.handleSingleItemParse(slot.item)
                     }
                 }
             }
 
-        }*/
-        //?}
+        }
+        *///?}
     }
 
 

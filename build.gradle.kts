@@ -62,17 +62,17 @@ dependencies {
     mappings(loom.officialMojangMappings())
 
     // fabric
-    implementation("net.fabricmc:fabric-loader:${project.property("loader_version")}")
-    implementation("net.fabricmc.fabric-api:fabric-api:${property("deps.fabric_api")}")
-    implementation("net.fabricmc:fabric-language-kotlin:${property("fabric_kotlin_version")}")
+    modImplementation("net.fabricmc:fabric-loader:${project.property("loader_version")}")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:${property("deps.fabric_api")}")
+    modImplementation("net.fabricmc:fabric-language-kotlin:${property("fabric_kotlin_version")}")
 
     // adventure
-    implementation(include("net.kyori:adventure-platform-fabric:${property("deps.adventure_api")}")!!)
+    modImplementation(include("net.kyori:adventure-platform-fabric:${property("deps.adventure_api")}")!!)
 
 
     // config libs
-    implementation("com.terraformersmc:modmenu:${modMenu}")
-    implementation("dev.isxander:yet-another-config-lib:${yacl}")
+    modImplementation("com.terraformersmc:modmenu:${modMenu}")
+    modImplementation("dev.isxander:yet-another-config-lib:${yacl}")
 
     // kotlin
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")

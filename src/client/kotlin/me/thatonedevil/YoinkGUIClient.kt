@@ -7,10 +7,13 @@ import me.thatonedevil.handlers.ParseButtonHandler
 import me.thatonedevil.keybinds.KeybindManager
 import me.thatonedevil.utils.api.UpdateChecker
 import net.fabricmc.api.ClientModInitializer
-import net.minecraft.resources.Identifier
-import net.minecraft.client.KeyMapping
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+
+//? if >=1.21.9 {
+import net.minecraft.resources.Identifier
+import net.minecraft.client.KeyMapping
+//? }
 
 object YoinkGUIClient : ClientModInitializer {
     val logger: Logger = LoggerFactory.getLogger(BuildConfig.MOD_ID)

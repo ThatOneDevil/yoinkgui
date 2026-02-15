@@ -52,22 +52,24 @@ class ButtonPositionScreen(private val parent: Screen?) : Screen(Component.liter
     override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
         super.render(context, mouseX, mouseY, delta)
 
-        val window = minecraft?.window?.handle()
+        //? if >=1.21.9 {
+        val window = minecraft.window.handle()
+        //? } else {
+        /*val window = minecraft?.window?.window ?: return
+        *///? }
 
-        if (window != null) {
-            val isMousePressed = GLFW.glfwGetMouseButton(window, GLFW.GLFW_MOUSE_BUTTON_LEFT) == GLFW.GLFW_PRESS
-            if (isMousePressed && !wasMousePressed) {
-                if (isMouseOverButton(mouseX, mouseY)) {
-                    dragging = true
-                    dragOffsetX = mouseX - buttonX
-                    dragOffsetY = mouseY - buttonY
-                }
-            } else if (!isMousePressed && wasMousePressed) {
-                dragging = false
+        val isMousePressed = GLFW.glfwGetMouseButton(window, GLFW.GLFW_MOUSE_BUTTON_LEFT) == GLFW.GLFW_PRESS
+        if (isMousePressed && !wasMousePressed) {
+            if (isMouseOverButton(mouseX, mouseY)) {
+                dragging = true
+                dragOffsetX = mouseX - buttonX
+                dragOffsetY = mouseY - buttonY
             }
-
-            wasMousePressed = isMousePressed
+        } else if (!isMousePressed && wasMousePressed) {
+            dragging = false
         }
+
+        wasMousePressed = isMousePressed
 
         // Handle dragging
         if (dragging) {

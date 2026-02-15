@@ -10,8 +10,8 @@ import net.minecraft.client.Minecraft
 //? if >1.21.1 {
 import net.kyori.adventure.platform.modcommon.MinecraftClientAudiences
 //?} else {
-/*import net.kyori.adventure.platform.fabric.FabricClientAudiences*/
-//?}
+/*import net.kyori.adventure.platform.fabric.FabricClientAudiences
+*///?}
 
 
 object Utils {
@@ -20,8 +20,8 @@ object Utils {
     //? if >1.21.1 {
     private val audience = MinecraftClientAudiences.of().audience()
     //?} else {
-    /*private val audience = FabricClientAudiences.of().audience();*/
-    //?}
+    /*private val audience = FabricClientAudiences.of().audience();
+    *///?}
 
     private val colorReplacements = mapOf(
         "&0" to "<black>", "&1" to "<dark_blue>", "&2" to "<dark_green>", "&3" to "<dark_aqua>",

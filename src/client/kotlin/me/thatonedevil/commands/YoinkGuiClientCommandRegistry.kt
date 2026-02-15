@@ -33,12 +33,12 @@ object YoinkGuiClientCommandRegistry {
                     UpdateChecker.checkVersion()
                 }
                 .addCommand("menu") {
-                    it.source.client.schedule {
+                    it.source.client.execute {
                         it.source.client.setScreen(ButtonPositionScreen(it.source.client.screen))
                     }
                 }
                 .addCommand("changelog") {
-                    it.source.client.schedule {
+                    it.source.client.execute {
                         it.source.client.setScreen(ChangelogScreen(it.source.client.screen))
                     }
                 }
@@ -46,7 +46,7 @@ object YoinkGuiClientCommandRegistry {
                     debugCommand.execute()
                 }
                 .addCommand("config") {
-                    it.source.client.schedule {
+                    it.source.client.execute {
                         it.source.client.setScreen(ModMenuIntegration().createScreen(null))
                     }
                 }
