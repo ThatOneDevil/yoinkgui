@@ -1,7 +1,7 @@
 package me.thatonedevil.screen.changelog
 
-
 import me.thatonedevil.BuildConfig.VERSION
+import me.thatonedevil.screen.VersionedScreen
 import me.thatonedevil.utils.LatestErrorLog
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
@@ -11,7 +11,7 @@ import net.minecraft.network.chat.Component
 import kotlin.math.max
 
 @Environment(EnvType.CLIENT)
-class ChangelogScreen(private val parent: Screen?) : Screen(Component.literal("Changelog")) {
+class ChangelogScreen(parent: Screen?) : VersionedScreen("Changelog", parent) {
     private lateinit var content: List<Component>
     private var scrollOffset = 0.0
     private var maxScroll = 0.0
@@ -51,6 +51,7 @@ class ChangelogScreen(private val parent: Screen?) : Screen(Component.literal("C
     }
 
     override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+        super.render(context, mouseX, mouseY, delta)
         val centerX = width / 2
 
         if (!this::content.isInitialized || content.isEmpty()) {
@@ -104,9 +105,5 @@ class ChangelogScreen(private val parent: Screen?) : Screen(Component.literal("C
                 0xFF888888.toInt()
             )
         }
-    }
-
-    override fun onClose() {
-        minecraft?.setScreen(parent)
     }
 }

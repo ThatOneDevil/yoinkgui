@@ -10,11 +10,7 @@ import net.minecraft.network.chat.Component
 import org.lwjgl.glfw.GLFW
 
 @Environment(EnvType.CLIENT)
-class ButtonPositionScreen(private val parent: Screen?) : Screen(Component.literal("Position Yoink Button")) {
-
-    override fun init() {
-        super.init()
-    }
+class ButtonPositionScreen(parent: Screen?) : VersionedScreen("Position Yoink Button", parent) {
 
     private val config: YoinkGuiSettings = YoinkGUIClient.yoinkGuiSettings
     private var dragging = false
@@ -52,13 +48,13 @@ class ButtonPositionScreen(private val parent: Screen?) : Screen(Component.liter
     override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
         super.render(context, mouseX, mouseY, delta)
 
-        //? if >=1.21.9 {
-        val window = minecraft.window.handle()
-        //? } else {
-        /*val window = minecraft?.window?.window ?: return
-        *///? }
+        //? if <1.21.9 {
+        /*if (clientWindow == null) {
+            println("Client window is null, cannot process input")
+            return
+        }*///? }
 
-        val isMousePressed = GLFW.glfwGetMouseButton(window, GLFW.GLFW_MOUSE_BUTTON_LEFT) == GLFW.GLFW_PRESS
+        val isMousePressed = GLFW.glfwGetMouseButton(clientWindow, GLFW.GLFW_MOUSE_BUTTON_LEFT) == GLFW.GLFW_PRESS
         if (isMousePressed && !wasMousePressed) {
             if (isMouseOverButton(mouseX, mouseY)) {
                 dragging = true
@@ -130,8 +126,8 @@ class ButtonPositionScreen(private val parent: Screen?) : Screen(Component.liter
     }
 
     override fun onClose() {
+        super.onClose()
         YoinkGuiSettings.saveToFile()
-        minecraft?.setScreen(parent)
     }
 
     private fun isMouseOverButton(mouseX: Int, mouseY: Int): Boolean {

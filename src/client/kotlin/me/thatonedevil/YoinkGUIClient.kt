@@ -26,6 +26,7 @@ object YoinkGUIClient : ClientModInitializer {
     //? }
 
     override fun onInitializeClient() {
+
         UpdateChecker.setupJoinListener()
         YoinkGuiClientCommandRegistry.register()
         KeybindManager().register()
