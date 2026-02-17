@@ -139,7 +139,7 @@ tasks.jar {
 
 publishMods {
     displayName.set("YoinkGUI $modVersion for MC $mcVersion")
-    file.set(tasks.jar.get().archiveFile)
+    file.set(tasks.remapJar.get().archiveFile)
     changelog.set(
         rootProject.file("src/main/resources/changelogs/${modVersion}.md")
             .takeIf { it.exists() }
