@@ -119,12 +119,12 @@ val generateTemplates = tasks.register<Copy>("generateTemplates") {
 sourceSets.main.configure { java.srcDir(generateTemplates.map { it.outputs }) }
 
 tasks.withType<JavaCompile>().configureEach {
-    options.release.set(25)
+    options.release.set(21)
 }
 
 java {
     withSourcesJar()
-    val java = JavaVersion.VERSION_25
+    val java = JavaVersion.VERSION_21
     targetCompatibility = java
     sourceCompatibility = java
 }
