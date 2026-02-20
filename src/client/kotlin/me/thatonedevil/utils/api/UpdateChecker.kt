@@ -46,17 +46,19 @@ object UpdateChecker {
 
     fun setupJoinListener() {
         ClientPlayConnectionEvents.JOIN.register { _, _, client ->
-            serverName = when (Minecraft.getInstance().currentServer?.ip){
+            serverName = when (Minecraft.getInstance().currentServer?.ip) {
                 "0", "localhost" -> "Singleplayer"
                 else -> client.currentServer?.ip ?: "Singleplayer"
             }
+
+            // Remove port (e.g. ":25565") from server name
+            serverName = serverName?.replace(Regex(":\\d+$"), "")
 
             debug("Server name: $serverName")
 
             checkVersion()
         }
     }
-
     fun checkVersion(){
         CoroutineScope(Dispatchers.IO).launch {
             getUpdateVersion()?.let { version ->
