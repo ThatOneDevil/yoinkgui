@@ -166,7 +166,7 @@ object ShadowHandler : ComponentValueHandler {
         val rgbInt = (red shl 16) or (green shl 8) or blue
         val colorString = namedColors[rgbInt] ?: String.format("%02X%02X%02X", red, green, blue).lowercase()
 
-        return HandlerResult("<shadow:$colorString:$alphaDecimal>")
+        return HandlerResult("<shadow:#$colorString:$alphaDecimal>")
     }
 }
 

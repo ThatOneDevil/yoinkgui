@@ -11,6 +11,7 @@ import me.thatonedevil.config.YoinkGuiSettings
 import me.thatonedevil.utils.LatestErrorLog
 import me.thatonedevil.utils.Utils
 import me.thatonedevil.utils.Utils.toClickCopy
+import me.thatonedevil.utils.Utils.toClickOpenFile
 import me.thatonedevil.utils.Utils.toComponent
 import me.thatonedevil.utils.api.UpdateChecker
 import java.io.BufferedWriter
@@ -180,7 +181,7 @@ object NBTParser {
         Utils.sendChat(
             "\n<color:#FFA6CA>Formatted NBT data saved to:".toComponent(),
             " <color:#FFA6CA>Parse time: <color:#8968CD>${duration}ms".toComponent(),
-            "  <color:#8968CD>${file.absolutePath} &7&o(Click to copy)\n".toClickCopy(file.absolutePath)
+            "  <color:#8968CD>${file.relativeTo(File(".").canonicalFile).path} &7&o(Click to copy)\n".toClickCopy(file.canonicalPath)
         )
     }
 

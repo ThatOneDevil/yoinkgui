@@ -11,7 +11,7 @@ object LatestErrorLog {
         latest.set(t)
         latestMessage.set(context)
         Utils.sendChat(("<color:#FF6961>[YoinkGUI] An error has occurred: ${getLatestErrorName()}.\n" +
-                "/yoinkguiclient debug and report it on GitHub. &7&o(Click to run)").toClickCommand("/yoinkguiclient debug"))
+                "Run /yoinkguiclient debug and report it on GitHub. &7&o(Click to run)").toClickCommand("/yoinkguiclient debug"))
     }
 
     fun getLatestThrowable(): Throwable? = latest.get()

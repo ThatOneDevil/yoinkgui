@@ -48,6 +48,9 @@ object Utils {
     fun Component.toClickCopy(message: String): Component {
         return this.clickEvent(ClickEvent.copyToClipboard(message))
     }
+    fun String.toClickOpenFile(file: String): Component {
+        return this.toComponent().clickEvent(ClickEvent.openFile(file))
+    }
     fun String.toClickURL(message: String): Component {
         return this.toComponent().clickEvent(ClickEvent.openUrl(message))
     }
