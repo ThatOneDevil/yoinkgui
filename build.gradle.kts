@@ -7,7 +7,7 @@ plugins {
 }
 
 val modVersion = "1.9.2"
-val releaseType = ReleaseType.BETA
+val releaseType = ReleaseType.STABLE
 
 version = "${modVersion}+${property("mod.mod_version") as String}"
 group = property("maven_group") as String
