@@ -4,7 +4,7 @@ import me.thatonedevil.YoinkGUIClient;
 import me.thatonedevil.config.YoinkGuiSettings;
 import me.thatonedevil.handlers.ParseButtonHandler;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.ContainerScreen;
@@ -27,8 +27,8 @@ import static net.minecraft.network.chat.Component.literal;
 
 @Mixin(Screen.class)
 public class ScreenMixin {
-    @Inject(at = @At("HEAD"), method = "render")
-    private void render(GuiGraphics context, int mouseX, int mouseY, float deltaTicks, CallbackInfo ci) {
+    @Inject(at = @At("HEAD"), method = "extractRenderState")
+    private void render(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a, CallbackInfo ci) {
         Minecraft client = Minecraft.getInstance();
         if (client.player == null || client.level == null) {
             return;
@@ -68,8 +68,8 @@ public class ScreenMixin {
                 mouseYUi >= parseButtonY && mouseYUi <= parseButtonY + parseButtonHeight);
 
         int parseBgColor = ParseButtonHandler.INSTANCE.getParseButtonHovered() ? 0xAA444444 : 0xAA000000;
-        context.fill(parseButtonX, parseButtonY, parseButtonX + parseButtonWidth, parseButtonY + parseButtonHeight, parseBgColor);
-        context.drawCenteredString(
+        graphics.fill(parseButtonX, parseButtonY, parseButtonX + parseButtonWidth, parseButtonY + parseButtonHeight, parseBgColor);
+        graphics.centeredText(
                 client.font,
                 literal(parseButtonText),
                 parseButtonX + parseButtonWidth / 2,
@@ -79,8 +79,8 @@ public class ScreenMixin {
     }
 
     @Inject(method = "getTooltipFromItem", at = @At("RETURN"), cancellable = true)
-    private static void onGetTooltipFromItem(Minecraft client, ItemStack stack, CallbackInfoReturnable<List<Component>> cir) {
-        if (!(client.screen instanceof AbstractContainerScreen)) {
+    private static void onGetTooltipFromItem(Minecraft minecraft, ItemStack itemStack, CallbackInfoReturnable<List<Component>> cir) {
+        if (!(minecraft.screen instanceof AbstractContainerScreen)) {
             return;
         }
 

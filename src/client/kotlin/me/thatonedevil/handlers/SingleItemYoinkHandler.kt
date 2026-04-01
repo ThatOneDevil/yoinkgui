@@ -15,7 +15,6 @@ import net.minecraft.world.inventory.Slot
 object SingleItemYoinkHandler {
 
     fun register() {
-        //? if >=1.21.9 {
         ScreenEvents.AFTER_INIT.register { _, screen, _, _ ->
             ScreenKeyboardEvents.afterKeyPress(screen).register { screen, keyInput ->
                 if (!isValidInventoryScreen(screen)) {
@@ -34,30 +33,8 @@ object SingleItemYoinkHandler {
                 }
             }
         }
-        //? } else {
-        /*ScreenEvents.AFTER_INIT.register { _, screen, _, _ ->
-            ScreenKeyboardEvents.afterKeyPress(screen).register { screen, key, _, _ ->
-                if (!isValidInventoryScreen(screen)) {
-                    return@register
-                }
 
-                if (!yoinkGuiSettings.enableSingleItemYoink.get()) {
-                    return@register
-                }
-
-                if (key == InputConstants.KEY_Y) {
-                    val slot: Slot? = (screen as AbstractContainerScreenAccessor).`yoinkgui$getHoveredSlot`()
-                    if (slot != null && !slot.item.isEmpty) {
-                        ItemParseHandler.handleSingleItemParse(slot.item)
-                    }
-                }
-            }
-
-        }
-        *///?}
     }
-
-
 
     private fun isValidInventoryScreen(screen: Any): Boolean {
         return screen is InventoryScreen

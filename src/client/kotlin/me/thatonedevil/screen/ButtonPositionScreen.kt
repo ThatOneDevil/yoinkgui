@@ -4,7 +4,7 @@ import me.thatonedevil.YoinkGUIClient
 import me.thatonedevil.config.YoinkGuiSettings
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
 import org.lwjgl.glfw.GLFW
@@ -45,14 +45,9 @@ class ButtonPositionScreen(parent: Screen?) : VersionedScreen("Position Yoink Bu
     private val scaledButtonHeight: Int
         get() = (baseButtonHeight * scaleFactor).toInt()
 
-    override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
-        super.render(context, mouseX, mouseY, delta)
 
-        //? if <1.21.9 {
-        /*if (clientWindow == null) {
-            println("Client window is null, cannot process input")
-            return
-        }*///? }
+    override fun extractRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, a: Float) {
+        super.extractRenderState(context, mouseX, mouseY, a)
 
         val isMousePressed = GLFW.glfwGetMouseButton(clientWindow, GLFW.GLFW_MOUSE_BUTTON_LEFT) == GLFW.GLFW_PRESS
         if (isMousePressed && !wasMousePressed) {
@@ -67,7 +62,6 @@ class ButtonPositionScreen(parent: Screen?) : VersionedScreen("Position Yoink Bu
 
         wasMousePressed = isMousePressed
 
-        // Handle dragging
         if (dragging) {
             buttonX = (mouseX - dragOffsetX).coerceIn(0, width - scaledButtonWidth)
             buttonY = (mouseY - dragOffsetY).coerceIn(0, height - scaledButtonHeight)
@@ -81,7 +75,7 @@ class ButtonPositionScreen(parent: Screen?) : VersionedScreen("Position Yoink Bu
             buttonY + scaledButtonHeight,
             buttonColor
         )
-        context.drawCenteredString(
+        context.centeredText(
             font,
             Component.literal("Yoink and Parse NBT into file"),
             buttonX + scaledButtonWidth / 2,
@@ -89,30 +83,9 @@ class ButtonPositionScreen(parent: Screen?) : VersionedScreen("Position Yoink Bu
             0xFFFFFFFF.toInt()
         )
 
-        context.drawCenteredString(
-            font,
-            Component.literal("Drag the button to reposition it"),
-            width / 2,
-            20,
-            0xFFFFFFFF.toInt()
-        )
-
-        context.drawCenteredString(
-            font,
-            Component.literal("Use mouse wheel to scale (Current: ${"%.2f".format(scaleFactor)}x)"),
-            width / 2,
-            35,
-            0xFFFFFFFF.toInt()
-        )
-
-        context.drawCenteredString(
-            font,
-            Component.literal("Press ESC or ENTER to save and exit"),
-            width / 2,
-            50,
-            0xFFFFFFFF.toInt()
-        )
-
+        context.centeredText(font, Component.literal("Drag the button to reposition it"), width / 2, 20, 0xFFFFFFFF.toInt())
+        context.centeredText(font, Component.literal("Use mouse wheel to scale (Current: ${"%.2f".format(scaleFactor)}x)"), width / 2, 35, 0xFFFFFFFF.toInt())
+        context.centeredText(font, Component.literal("Press ESC or ENTER to save and exit"), width / 2, 50, 0xFFFFFFFF.toInt())
     }
 
     override fun mouseScrolled(mouseX: Double, mouseY: Double, horizontalAmount: Double, verticalAmount: Double): Boolean {

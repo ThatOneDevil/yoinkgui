@@ -10,8 +10,8 @@ import me.thatonedevil.screen.changelog.ChangelogScreen
 import me.thatonedevil.utils.Utils.sendChat
 import me.thatonedevil.utils.Utils.toClickURL
 import me.thatonedevil.utils.api.UpdateChecker
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback
+import net.fabricmc.fabric.api.client.command.v2.ClientCommands
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource
 import net.kyori.adventure.text.Component
 
@@ -27,7 +27,7 @@ object YoinkGuiClientCommandRegistry {
 
     private fun registerCommands(dispatcher: CommandDispatcher<FabricClientCommandSource>) {
         dispatcher.register(
-            ClientCommandManager.literal("yoinkguiclient")
+            ClientCommands.literal("yoinkguiclient")
                 .addCommand("version") {
                     UpdateChecker.checkVersion()
                 }
@@ -63,7 +63,7 @@ object YoinkGuiClientCommandRegistry {
         name: String,
         action: (CommandContext<FabricClientCommandSource>) -> Unit
     ) = this.then(
-        ClientCommandManager.literal(name)
+        ClientCommands.literal(name)
             .executes {
                 action(it)
                 Command.SINGLE_SUCCESS

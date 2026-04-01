@@ -5,7 +5,7 @@ import me.thatonedevil.screen.VersionedScreen
 import me.thatonedevil.utils.LatestErrorLog
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
 import kotlin.math.max
@@ -50,12 +50,12 @@ class ChangelogScreen(parent: Screen?) : VersionedScreen("Changelog", parent) {
         return true
     }
 
-    override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
-        super.render(context, mouseX, mouseY, delta)
+    override fun extractRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, a: Float) {
+        super.extractRenderState(context, mouseX, mouseY, a)
         val centerX = width / 2
 
         if (!this::content.isInitialized || content.isEmpty()) {
-            context.drawCenteredString(
+            context.centeredText(
                 font,
                 Component.literal("No changelog available."),
                 centerX,
@@ -74,7 +74,7 @@ class ChangelogScreen(parent: Screen?) : VersionedScreen("Changelog", parent) {
 
         content.forEach { line ->
             if (y + lineHeight > scissorTop && y < scissorBottom) {
-                context.drawCenteredString(
+                context.centeredText(
                     font,
                     line,
                     centerX,
@@ -87,7 +87,7 @@ class ChangelogScreen(parent: Screen?) : VersionedScreen("Changelog", parent) {
 
         context.disableScissor()
 
-        context.drawCenteredString(
+        context.centeredText(
             font,
             Component.literal("Press ESC to close"),
             centerX,
@@ -97,7 +97,7 @@ class ChangelogScreen(parent: Screen?) : VersionedScreen("Changelog", parent) {
 
         if (maxScroll > 0) {
             val scrollPercentage = (scrollOffset / maxScroll * 100).toInt()
-            context.drawCenteredString(
+            context.centeredText(
                 font,
                 Component.literal("↕ Scroll: $scrollPercentage%"),
                 centerX,

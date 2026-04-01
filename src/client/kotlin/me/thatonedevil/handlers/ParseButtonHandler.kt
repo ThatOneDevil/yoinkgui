@@ -21,11 +21,7 @@ object ParseButtonHandler {
                 return@register
             }
 
-            //? if >=1.21.9 {
             val window = client.window.handle()
-            //? } else {
-            /*val window = client.window.window
-            *///? }
 
             val isLeftClicking = GLFW.glfwGetMouseButton(window, GLFW.GLFW_MOUSE_BUTTON_LEFT) == GLFW.GLFW_PRESS
 
