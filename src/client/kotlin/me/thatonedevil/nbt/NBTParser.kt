@@ -6,12 +6,10 @@ import com.google.gson.JsonSyntaxException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import me.thatonedevil.BuildConfig
-import me.thatonedevil.YoinkGUIClient
 import me.thatonedevil.config.YoinkGuiSettings
-import me.thatonedevil.utils.LatestErrorLog
+import me.thatonedevil.utils.ErrorReporter
 import me.thatonedevil.utils.Utils
 import me.thatonedevil.utils.Utils.toClickCopy
-import me.thatonedevil.utils.Utils.toClickOpenFile
 import me.thatonedevil.utils.Utils.toComponent
 import me.thatonedevil.utils.api.UpdateChecker
 import java.io.BufferedWriter
@@ -62,8 +60,11 @@ object NBTParser {
                 else -> jsonString
             }
         } catch (e: JsonSyntaxException) {
-            LatestErrorLog.record(e, "Failed to parse JSON string as text component")
-            YoinkGUIClient.logger.debug("Failed to parse JSON string as text component: $jsonString", e)
+            ErrorReporter.reportDebug(
+                e,
+                "Failed to parse JSON string as text component",
+                "Failed to parse JSON string as text component: $jsonString"
+            )
             jsonString
         }
     }
@@ -117,8 +118,11 @@ object NBTParser {
                 }
             }
         } catch (e: JsonSyntaxException) {
-            LatestErrorLog.record(e, "Failed to parse NBT format")
-            YoinkGUIClient.logger.debug("Failed to parse NBT format: $raw", e)
+            ErrorReporter.reportDebug(
+                e,
+                "Failed to parse NBT format",
+                "Failed to parse NBT format: $raw"
+            )
             null
         }
     }
@@ -218,8 +222,12 @@ object NBTParser {
 
             Result.success(file)
         } catch (e: Exception) {
-            LatestErrorLog.record(e, "Error saving NBT file to $configDir")
-            YoinkGUIClient.logger.error("Error saving NBT file: ${e.message}", e)
+            ErrorReporter.report(
+                e,
+                "Error saving NBT file to $configDir",
+                "Error saving NBT file",
+                sendDetailedChat = false
+            )
             Result.failure(e)
         }
     }

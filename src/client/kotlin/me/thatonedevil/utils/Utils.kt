@@ -6,22 +6,13 @@ import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.minimessage.MiniMessage
 import net.minecraft.client.Minecraft
-
-//? if >1.21.1 {
 import net.kyori.adventure.platform.modcommon.MinecraftClientAudiences
-//?} else {
-/*import net.kyori.adventure.platform.fabric.FabricClientAudiences
-*///?}
 
 
 object Utils {
     private val miniMessage = MiniMessage.miniMessage()
 
-    //? if >1.21.1 {
     private val audience = MinecraftClientAudiences.of().audience()
-    //?} else {
-    /*private val audience = FabricClientAudiences.of().audience();
-    *///?}
 
     private val colorReplacements = mapOf(
         "&0" to "<black>", "&1" to "<dark_blue>", "&2" to "<dark_green>", "&3" to "<dark_aqua>",
@@ -48,9 +39,7 @@ object Utils {
     fun Component.toClickCopy(message: String): Component {
         return this.clickEvent(ClickEvent.copyToClipboard(message))
     }
-    fun String.toClickOpenFile(file: String): Component {
-        return this.toComponent().clickEvent(ClickEvent.openFile(file))
-    }
+
     fun String.toClickURL(message: String): Component {
         return this.toComponent().clickEvent(ClickEvent.openUrl(message))
     }
@@ -65,8 +54,7 @@ object Utils {
             val action = Runnable { audience.sendMessage(message.toComponent()) }
             mc.execute(action)
         } catch (e: Exception) {
-            LatestErrorLog.record(e, "Error sending chat message (MiniMessage)")
-            debug("Failed to send chat message: ${e.message}")
+            ErrorReporter.reportDebug(e, "Error sending chat message (MiniMessage)", debugMessage = "Failed to send chat message: ${e.message}")
         }
     }
 
@@ -76,8 +64,7 @@ object Utils {
             val action = Runnable { for (component in messages) { audience.sendMessage(component) } }
             mc.execute(action)
         } catch (e: Exception) {
-            LatestErrorLog.record(e, "Error sending chat message (MiniMessage)")
-            debug("Failed to send chat message: ${e.message}")
+            ErrorReporter.reportDebug(e, "Error sending chat message (MiniMessage)", debugMessage = "Failed to send chat message: ${e.message}")
         }
     }
 

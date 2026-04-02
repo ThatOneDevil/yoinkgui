@@ -2,6 +2,7 @@ package me.thatonedevil.screen.changelog
 
 import me.thatonedevil.BuildConfig.VERSION
 import me.thatonedevil.screen.VersionedScreen
+import me.thatonedevil.utils.ErrorReporter
 import me.thatonedevil.utils.LatestErrorLog
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
@@ -32,7 +33,7 @@ class ChangelogScreen(parent: Screen?) : VersionedScreen("Changelog", parent) {
                 updateMaxScroll()
             }
         } catch (e: Exception) {
-            LatestErrorLog.record(e, "Failed to load changelog markdown.")
+            ErrorReporter.report(e, "Failed to load changelog markdown.")
             content = emptyList()
         }
     }

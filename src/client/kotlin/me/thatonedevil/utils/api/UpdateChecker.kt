@@ -8,7 +8,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.thatonedevil.BuildConfig
 import me.thatonedevil.YoinkGUIClient.logger
-import me.thatonedevil.utils.LatestErrorLog
+import me.thatonedevil.utils.ErrorReporter
 import me.thatonedevil.utils.Utils.debug
 import me.thatonedevil.utils.Utils.sendChat
 import me.thatonedevil.utils.Utils.toClickCommand
@@ -89,8 +89,7 @@ object UpdateChecker {
             logger.error("No compatible version found for MC ${BuildConfig.MC_VERSION}")
             return null
         } catch (error: IOException) {
-            LatestErrorLog.record(error, "Update Check Failure")
-            logger.error("Checking for update failed!")
+            ErrorReporter.report(error, "Update Check Failure", "Checking for update failed", sendDetailedChat = false)
         }
         return null
     }

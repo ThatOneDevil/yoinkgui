@@ -8,9 +8,8 @@ import me.thatonedevil.YoinkGUIClient
 import me.thatonedevil.inventory.TopInventory
 import me.thatonedevil.inventory.YoinkInventory
 import me.thatonedevil.inventory.YoinkInventory.Companion.yoinkSingleItem
-import me.thatonedevil.utils.LatestErrorLog
+import me.thatonedevil.utils.ErrorReporter
 import me.thatonedevil.utils.Utils.sendChat
-import me.thatonedevil.utils.Utils.toClickCopy
 import net.minecraft.client.Minecraft
 import net.minecraft.world.item.ItemStack
 
@@ -37,9 +36,7 @@ object ItemParseHandler {
                 NBTParser.saveSingleItem(nbtString, configDir.path)
 
             } catch (e: Exception) {
-                LatestErrorLog.record(e, "Error during single item NBT parsing")
-                sendChat("<color:#FF6961>Error during single item NBT parsing: ${e.message} &7&o(Report on github, Click to copy)".toClickCopy(e.message.toString()))
-                YoinkGUIClient.logger.error("Error during single item NBT parsing: ${e.stackTraceToString()}")
+                ErrorReporter.report(e, "Error during single item NBT parsing")
             }
         }
     }
@@ -60,9 +57,7 @@ object ItemParseHandler {
                 NBTParser.saveFormattedNBTToFile(yoinkedItems, configDir)
 
             } catch (e: Exception) {
-                LatestErrorLog.record(e, "Error during NBT parsing")
-                sendChat("<color:#FF6961>Error during NBT parsing: ${e.message} &7&o(Report on github, Click to copy)".toClickCopy(e.message.toString()))
-                YoinkGUIClient.logger.error("Error during NBT parsing: ${e.stackTraceToString()}")
+                ErrorReporter.report(e, "Error during NBT parsing")
             }
         }
     }
