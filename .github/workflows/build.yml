@@ -46,11 +46,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Temurin JDK 21 with Gradle cache
+      - name: Setup Temurin JDK 25 with Gradle cache
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 21
+          java-version: 25
           cache: gradle
           cache-dependency-path: |
             **/*.gradle*
