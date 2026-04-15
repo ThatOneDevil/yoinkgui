@@ -8,6 +8,9 @@ on:
 jobs:
   call-build:
     uses: ./.github/workflows/build.yml
+    permissions:
+      contents: read
+      packages: write
 
   label-on-failure:
     needs: call-build
