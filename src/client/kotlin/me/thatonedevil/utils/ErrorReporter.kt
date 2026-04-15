@@ -2,14 +2,14 @@ package me.thatonedevil.utils
 
 import me.thatonedevil.YoinkGUIClient
 import me.thatonedevil.utils.Utils.sendChat
+import me.thatonedevil.utils.Utils.toClickCommand
 import me.thatonedevil.utils.Utils.toClickCopy
 
 object ErrorReporter {
     private const val CHAT_FOOTER = " &7&o(Report on github, Click to copy)"
 
-    private fun sendDetailedChatMessage(chatContext: String, throwable: Throwable) {
-        val errorMessage = throwable.message ?: "Unknown error"
-        sendChat("<color:#FF6961>$chatContext: $errorMessage$CHAT_FOOTER".toClickCopy(errorMessage))
+    private fun sendDetailedChatMessage(chatContext: String) {
+        sendChat("<color:#FF6961>$chatContext: $CHAT_FOOTER".toClickCommand("/yoinkguiclient debug"))
     }
 
     fun report(
@@ -21,7 +21,7 @@ object ErrorReporter {
         LatestErrorLog.record(throwable, context)
 
         if (sendDetailedChat) {
-            sendDetailedChatMessage(chatContext, throwable)
+            sendDetailedChatMessage(chatContext)
         }
 
         YoinkGUIClient.logger.error("$context: ${throwable.stackTraceToString()}")
@@ -37,7 +37,7 @@ object ErrorReporter {
         LatestErrorLog.record(throwable, context)
 
         if (sendDetailedChat) {
-            sendDetailedChatMessage(chatContext, throwable)
+            sendDetailedChatMessage(chatContext)
         }
 
         if (debugMessage != null) {
