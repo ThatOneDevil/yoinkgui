@@ -2,12 +2,14 @@ package me.thatonedevil.utils.api
 
 import com.google.gson.Gson
 import com.google.gson.JsonArray
+import dev.isxander.yacl3.config.v3.value
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.thatonedevil.BuildConfig
 import me.thatonedevil.YoinkGUIClient.logger
+import me.thatonedevil.YoinkGUIClient.yoinkGuiSettings
 import me.thatonedevil.utils.ErrorReporter
 import me.thatonedevil.utils.Utils.debug
 import me.thatonedevil.utils.Utils.sendChat
@@ -60,6 +62,7 @@ object UpdateChecker {
         }
     }
     fun checkVersion(){
+        if (!yoinkGuiSettings.enableUpdateNotices.value) return
         CoroutineScope(Dispatchers.IO).launch {
             getUpdateVersion()?.let { version ->
                 sendChat(

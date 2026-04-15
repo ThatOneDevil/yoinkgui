@@ -56,6 +56,12 @@ class ModMenuIntegration : ModMenuApi {
                         defaultValue = false,
                         description = "Enables debug logging to help diagnose issues."
                     ))
+                    .option(booleanOption(
+                        name = "Enable Update Notices",
+                        field = yoinkGuiSettings.enableUpdateNotices,
+                        defaultValue = true,
+                        description = "Toggles whether update notices are shown when joining a world."
+                    ))
                     .name(Component.nullToEmpty("Toggle formatting option"))
                     .option(enumOptionString(
                         name = "Default NBT Format",
