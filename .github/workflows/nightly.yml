@@ -1,0 +1,57 @@
+name: Nightly
+
+on:
+  push:
+    branches:
+      - 'new'
+    paths-ignore:
+      - 'README.md'
+      - 'LICENSE'
+      - '.gitignore'
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+    inputs:
+      force_nightly:
+        description: 'Force nightly build (upload artifacts and send Discord notification)'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  call-build:
+    uses: ./.github/workflows/build.yml
+
+  upload-artifacts:
+    needs: call-build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.force_nightly == 'true')
+    steps:
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: yoinkgui-${{ github.run_number }}
+          path: versions/*/build/libs/*.jar
+          retention-days: 30
+
+  notify:
+    needs: call-build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.force_nightly == 'true')
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Send Discord notification
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        run: |
+          ARTIFACT_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          COMMIT_MSG=$(git log -1 --pretty=%B | head -n 1)
+          COMMIT_SHA=$(git rev-parse --short HEAD)
+
+          curl -H "Content-Type: application/json" \
+            -d "{\"embeds\": [{\"title\": \"🌙 Nightly Build Complete\", \"description\": \"YoinkGUI nightly build has finished successfully!\", \"color\": 5814783, \"fields\": [{\"name\": \"Commit\", \"value\": \"[\`$COMMIT_SHA\`](https://github.com/${{ github.repository }}/commit/${{ github.sha }}) - $COMMIT_MSG\", \"inline\": false}, {\"name\": \"Download\", \"value\": \"[Click here to download artifacts]($ARTIFACT_URL)\", \"inline\": false}], \"timestamp\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"}]}" \
+            $DISCORD_WEBHOOK

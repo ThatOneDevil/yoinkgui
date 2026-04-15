@@ -1,0 +1,48 @@
+name: PR Check
+
+on:
+  pull_request:
+    branches:
+      - 'new'
+
+jobs:
+  call-build:
+    uses: ./.github/workflows/build.yml
+
+  label-on-failure:
+    needs: call-build
+    runs-on: ubuntu-latest
+    if: always() && needs.call-build.result == 'failure'
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Add failed-workflow label
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              labels: ['failed-workflow']
+            })
+
+  remove-label-on-success:
+    needs: call-build
+    runs-on: ubuntu-latest
+    if: always() && needs.call-build.result == 'success'
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Remove failed-workflow label
+        uses: actions/github-script@v7
+        with:
+          script: |
+            try {
+              await github.rest.issues.removeLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                name: 'failed-workflow'
+              })
+            } catch (e) {}
