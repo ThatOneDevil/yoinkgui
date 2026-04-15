@@ -16,6 +16,7 @@ open class YoinkGuiSettings() : JsonFileCodecConfig<YoinkGuiSettings>(
     val buttonX by register<Int>(default = 40, INT)
     val buttonY by register<Int>(default = 35, INT)
     val debugMode by register<Boolean>(default = false, BOOL)
+    val enableUpdateNotices by register<Boolean>(default = true, BOOL)
 
     // parser options
     val formatOption by register<String>(default = FormatOptions.LEGACY.name, STRING)
@@ -35,6 +36,7 @@ open class YoinkGuiSettings() : JsonFileCodecConfig<YoinkGuiSettings>(
         buttonX.value = settings.buttonX.value
         buttonY.value = settings.buttonY.value
         debugMode.value = settings.debugMode.value
+        enableUpdateNotices.value = settings.enableUpdateNotices.value
         formatOption.value = settings.formatOption.value
         includeRawNbt.value = settings.includeRawNbt.value
         toggleColorParser.value = settings.toggleColorParser.value
