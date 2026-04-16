@@ -19,7 +19,7 @@ jobs:
     permissions:
       pull-requests: write
     steps:
-      - name: Add failed-workflow label
+      - name: Add failed-workflow label and remove passes-workflow label
         uses: actions/github-script@v7
         with:
           script: |
@@ -29,6 +29,15 @@ jobs:
               issue_number: context.issue.number,
               labels: ['failed-workflow']
             })
+            
+            try {
+              await github.rest.issues.removeLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                name: 'passes-workflow'
+              })
+            } catch (e) {}
 
   update-labels-on-success:
     needs: call-build
@@ -37,10 +46,17 @@ jobs:
     permissions:
       pull-requests: write
     steps:
-      - name: Remove failed-workflow label and add passes-workflow label
+      - name: Add passes-workflow label and remove failed-workflow label
         uses: actions/github-script@v7
         with:
           script: |
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              labels: ['passes-workflow']
+            })
+
             try {
               await github.rest.issues.removeLabel({
                 owner: context.repo.owner,
@@ -49,10 +65,3 @@ jobs:
                 name: 'failed-workflow'
               })
             } catch (e) {}
-            
-            await github.rest.issues.addLabels({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-              labels: ['passes-workflow']
-            })
