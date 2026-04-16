@@ -3,6 +3,7 @@ package me.thatonedevil.mixin.client;
 import me.thatonedevil.YoinkGUIClient;
 import me.thatonedevil.config.YoinkGuiSettings;
 import me.thatonedevil.handlers.ParseButtonHandler;
+import me.thatonedevil.keybinds.YoinkSingleKeybind;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
@@ -80,7 +81,7 @@ public class ScreenMixin {
 
     @Inject(method = "getTooltipFromItem", at = @At("RETURN"), cancellable = true)
     private static void onGetTooltipFromItem(Minecraft minecraft, ItemStack itemStack, CallbackInfoReturnable<List<Component>> cir) {
-        if (!(minecraft.screen instanceof AbstractContainerScreen)) {
+        if (!(minecraft.screen instanceof AbstractContainerScreen || minecraft.screen instanceof CreativeModeInventoryScreen)) {
             return;
         }
 
@@ -94,8 +95,10 @@ public class ScreenMixin {
 
         List<Component> modifiedTooltip = new ArrayList<>(originalTooltip);
 
+        var key = YoinkSingleKeybind.keyMapping.getTranslatedKeyMessage();
+
         modifiedTooltip.add(literal(""));
-        modifiedTooltip.add(literal("§ePress Y to Yoink item"));
+        modifiedTooltip.add(literal("§ePress §6" + key.getString() + " §eto Yoink item"));
 
         cir.setReturnValue(modifiedTooltip);
     }
