@@ -7,36 +7,25 @@ plugins {
 }
 
 val modVersion = "2.0.1"
-val releaseType = ReleaseType.ALPHA
-
-version = "${modVersion}+${property("mod.mod_version") as String}"
-group = property("maven_group") as String
+val releaseType: ReleaseType = ReleaseType.BETA
 
 val mcVersion = property("deps.minecraft_version").toString()
 val mcDep = property("mcDep").toString()
-val yacl = property("deps.yacl").toString()
+val YACL = property("deps.yacl").toString()
 val modMenu = property("deps.modmenu").toString()
+
+version = "${modVersion}+${property("mod.mod_version")}"
+group = property("maven_group") as String
 
 base {
     archivesName.set(property("mod.archives_base_name") as String)
 }
 
 repositories {
-    maven("https://s01.oss.sonatype.org/content/repositories/snapshots/"){
-        name = "sonatype-oss-snapshots1"
-        mavenContent { snapshotsOnly() }
-    }
     mavenCentral()
-    maven("https://maven.terraformersmc.com/") {
-        name = "Terraformers"
-    }
-    maven("https://maven.isxander.dev/releases") {
-        name = "Xander Maven"
-    }
-    maven( "https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1") {
-        name = "DevAuth"
-    }
-
+    maven("https://maven.terraformersmc.com/") { name = "Terraformers" }
+    maven("https://maven.isxander.dev/releases") { name = "Xander Maven" }
+    maven("https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1") { name = "DevAuth" }
 }
 
 loom {
@@ -53,66 +42,50 @@ loom {
         ideConfigGenerated(true)
         runDir("../../run")
     }
-
 }
 
 dependencies {
-    // mappings
-    minecraft("com.mojang:minecraft:${project.property("deps.minecraft_version")}")
-    //mappings(loom.officialMojangMappings())
+    minecraft("com.mojang:minecraft:${property("deps.minecraft_version")}")
 
-    // fabric
-    implementation("net.fabricmc:fabric-loader:${project.property("loader_version")}")
+    //Fabric
+    implementation("net.fabricmc:fabric-loader:${property("loader_version")}")
     implementation("net.fabricmc.fabric-api:fabric-api:${property("deps.fabric_api")}")
     implementation("net.fabricmc:fabric-language-kotlin:${property("fabric_kotlin_version")}")
 
-    // adventure
+    //Libraries
     implementation(include("net.kyori:adventure-platform-fabric:${property("deps.adventure_api")}")!!)
 
+    //Config
+    implementation("com.terraformersmc:modmenu:$modMenu")
+    implementation("dev.isxander:yet-another-config-lib:$YACL")
 
-    // config libs
-    implementation("com.terraformersmc:modmenu:${modMenu}")
-    implementation("dev.isxander:yet-another-config-lib:${yacl}")
-
-    // kotlin
+    //Kotlin
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
 
-    //devauth
+    //Dev
     runtimeOnly("me.djtheredstoner:DevAuth-fabric:1.2.2")
-
 }
 
 tasks.processResources {
-    val mcDep: String by project
-
     val props = mapOf(
         "version" to project.version,
         "mc" to mcDep,
-        "yaclVersion" to yacl,
+        "yaclVersion" to YACL,
         "modmenuVersion" to modMenu
     )
-
     props.forEach(inputs::property)
-
-    filesMatching("fabric.mod.json") {
-        expand(props)
-    }
-
+    filesMatching("fabric.mod.json") { expand(props) }
 }
-
-val templateSource = file("../../src/templates/kotlin")
-val templateDest = layout.buildDirectory.dir("generated/sources/templates")
 
 val generateTemplates = tasks.register<Copy>("generateTemplates") {
     val props = mapOf(
         "version" to modVersion,
         "mcVersion" to mcVersion,
-        "releaseType" to releaseType.toString())
-
+        "releaseType" to releaseType.toString()
+    )
     inputs.properties(props)
-
-    from(templateSource)
-    into(templateDest)
+    from(file("../../src/templates/kotlin"))
+    into(layout.buildDirectory.dir("generated/sources/templates"))
     expand(props)
 }
 
@@ -124,9 +97,8 @@ tasks.withType<JavaCompile>().configureEach {
 
 java {
     withSourcesJar()
-    val java = JavaVersion.VERSION_25
-    targetCompatibility = java
-    sourceCompatibility = java
+    sourceCompatibility = JavaVersion.VERSION_25
+    targetCompatibility = JavaVersion.VERSION_25
 }
 
 tasks.jar {
@@ -136,14 +108,12 @@ tasks.jar {
     }
 }
 
-
 publishMods {
     displayName.set("YoinkGUI $modVersion for MC $mcVersion")
     file.set(tasks.jar.get().archiveFile)
     changelog.set(
         rootProject.file("src/main/resources/changelogs/${modVersion}.md")
-            .takeIf { it.exists() }
-            ?.readText()
+            .takeIf { it.exists() }?.readText()
             ?: "No changelog provided."
     )
 
@@ -151,20 +121,23 @@ publishMods {
     modLoaders.add("fabric")
 
     fun versionList(prop: String) = findProperty(prop)?.toString()
-        ?.split(',')
-        ?.map { it.trim() }
-        ?: emptyList()
+        ?.split(',')?.map { it.trim() } ?: emptyList()
+
+    val slugs: List<String> = listOf(
+        "fabric-api",
+        "fabric-language-kotlin",
+        "yacl",
+        "modmenu"
+    )
 
     modrinth {
         type.set(releaseType)
         projectId.set(property("modrinthId") as String)
         accessToken.set(providers.environmentVariable("MODRINTH_API_KEY"))
         minecraftVersions.addAll(versionList("pub.modrinthMC"))
-
-        requires { slug.set("fabric-api") }
-        requires { slug.set("fabric-language-kotlin") }
-        requires { slug.set("yacl") }
-        requires { slug.set("modmenu") }
+        slugs.forEach { s ->
+            requires { slug.set(s) }
+        }
     }
 
     curseforge {
@@ -172,10 +145,8 @@ publishMods {
         projectId.set(property("curseforgeId") as String)
         accessToken.set(providers.environmentVariable("CURSEFORGE_API_KEY"))
         minecraftVersions.addAll(versionList("pub.curseMC"))
-
-        requires { slug.set("fabric-api") }
-        requires { slug.set("fabric-language-kotlin") }
-        requires { slug.set("yacl") }
-        requires { slug.set("modmenu") }
+        slugs.forEach { s ->
+            requires { slug.set(s) }
+        }
     }
 }
