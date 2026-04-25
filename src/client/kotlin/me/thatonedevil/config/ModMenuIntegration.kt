@@ -67,7 +67,7 @@ class ModMenuIntegration : ModMenuApi {
                         name = "Default NBT Format",
                         field = yoinkGuiSettings.formatOption,
                         enumClass = FormatOptions::class.java,
-                        defaultValue = FormatOptions.LEGACY
+                        defaultValue = FormatOptions.MINIMESSAGE
                     ))
                     .build())
                 .group(OptionGroup.createBuilder()

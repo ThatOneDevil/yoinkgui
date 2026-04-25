@@ -49,7 +49,7 @@ object UpdateChecker {
     fun setupJoinListener() {
         ClientPlayConnectionEvents.JOIN.register { _, _, client ->
             serverName = when (Minecraft.getInstance().currentServer?.ip) {
-                "0", "localhost" -> "Singleplayer"
+                "0", "localhost", "127.0.0.1", "0.0.0.0", "::1" -> "Singleplayer"
                 else -> client.currentServer?.ip ?: "Singleplayer"
             }
 
@@ -92,6 +92,7 @@ object UpdateChecker {
             logger.error("No compatible version found for MC ${BuildConfig.MC_VERSION}")
             return null
         } catch (error: IOException) {
+            sendChat("<color:#FF6961>Failed to check for updates! &7&o(Click for details)".toClickCommand("/yoinkguiclient debug"))
             ErrorReporter.report(error, "Update Check Failure", "Checking for update failed", sendDetailedChat = false)
         }
         return null

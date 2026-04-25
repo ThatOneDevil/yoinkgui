@@ -1,9 +1,9 @@
 import me.modmuss50.mpp.ReleaseType
 
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "2.3.0"
-    id("net.fabricmc.fabric-loom") version "1.15-SNAPSHOT"
-    id("me.modmuss50.mod-publish-plugin") version "1.1.0"
+    id("org.jetbrains.kotlin.jvm") version "2.4.0-Beta2"
+    id("net.fabricmc.fabric-loom")
+    id("me.modmuss50.mod-publish-plugin") version "2.0.0-beta.1"
 }
 
 val modVersion = "2.0.1"
