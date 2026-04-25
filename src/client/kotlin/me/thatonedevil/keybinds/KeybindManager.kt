@@ -15,6 +15,7 @@ class KeybindManager {
         keys.forEach { key ->
             val binding = key.register()
             bindings[binding] = key
+            key.registerScreenEvents()
         }
 
         ClientTickEvents.END_CLIENT_TICK.register {
