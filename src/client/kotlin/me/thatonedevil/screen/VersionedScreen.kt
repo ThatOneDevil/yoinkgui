@@ -34,7 +34,7 @@ open class VersionedScreen(name: String, val parentScreen: Screen?) : Screen(Com
     override fun onClose() {
         super.onClose()
         if (parentScreen != null) {
-            minecraft.setScreen(parentScreen)
+            minecraft.gui.setScreen(parentScreen)
         }
     }
 }

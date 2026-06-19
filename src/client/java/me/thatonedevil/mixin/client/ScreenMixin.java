@@ -34,12 +34,13 @@ public class ScreenMixin {
         if (client.player == null || client.level == null) {
             return;
         }
+        Screen screen = client.gui.screen();
 
-        if (!(client.screen instanceof InventoryScreen
-                || client.screen instanceof ContainerScreen
-                || client.screen instanceof MerchantScreen
-                || client.screen instanceof CreativeModeInventoryScreen
-                || client.screen instanceof ShulkerBoxScreen)) {
+        if (!(screen instanceof InventoryScreen
+                || screen instanceof ContainerScreen
+                || screen instanceof MerchantScreen
+                || screen instanceof CreativeModeInventoryScreen
+                || screen instanceof ShulkerBoxScreen)) {
             return;
         }
 
@@ -81,7 +82,7 @@ public class ScreenMixin {
 
     @Inject(method = "getTooltipFromItem", at = @At("RETURN"), cancellable = true)
     private static void onGetTooltipFromItem(Minecraft minecraft, ItemStack itemStack, CallbackInfoReturnable<List<Component>> cir) {
-        if (!(minecraft.screen instanceof AbstractContainerScreen || minecraft.screen instanceof CreativeModeInventoryScreen)) {
+        if (!(minecraft.gui.screen() instanceof AbstractContainerScreen || minecraft.gui.screen() instanceof CreativeModeInventoryScreen)) {
             return;
         }
 

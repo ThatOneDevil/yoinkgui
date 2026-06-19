@@ -33,12 +33,12 @@ object YoinkGuiClientCommandRegistry {
                 }
                 .addCommand("menu") {
                     it.source.client.execute {
-                        it.source.client.setScreen(ButtonPositionScreen(it.source.client.screen))
+                        it.source.client.gui.setScreen(ButtonPositionScreen(it.source.client.gui.screen()))
                     }
                 }
                 .addCommand("changelog") {
                     it.source.client.execute {
-                        it.source.client.setScreen(ChangelogScreen(it.source.client.screen))
+                        it.source.client.gui.setScreen(ChangelogScreen(it.source.client.gui.screen()))
                     }
                 }
                 .addCommand("debug") {
@@ -46,7 +46,7 @@ object YoinkGuiClientCommandRegistry {
                 }
                 .addCommand("config") {
                     it.source.client.execute {
-                        it.source.client.setScreen(ModMenuIntegration().createScreen(null))
+                        it.source.client.gui.setScreen(ModMenuIntegration().createScreen(null))
                     }
                 }
                 .addCommand("discord") {

@@ -10,13 +10,13 @@ object ParseButtonHandler {
 
     fun register() {
         ClientTickEvents.END_CLIENT_TICK.register { client ->
-            if (client.screen == null) {
+            if (client.gui.screen() == null) {
                 parseButtonHovered = false
                 wasLeftClicking = false
                 return@register
             }
 
-            if (client.screen is ButtonPositionScreen) {
+            if (client.gui.screen() is ButtonPositionScreen) {
                 parseButtonHovered = false
                 return@register
             }

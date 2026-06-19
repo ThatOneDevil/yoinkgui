@@ -6,7 +6,7 @@ plugins {
     id("me.modmuss50.mod-publish-plugin") version "2.0.0-beta.1"
 }
 
-val modVersion = "2.0.1"
+val modVersion = property("mod.version").toString()
 val releaseType: ReleaseType = ReleaseType.BETA
 
 val mcVersion = property("deps.minecraft_version").toString()

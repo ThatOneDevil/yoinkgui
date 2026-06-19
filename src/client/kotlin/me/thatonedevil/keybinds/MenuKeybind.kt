@@ -17,7 +17,7 @@ class MenuKeybind : Key {
     override fun whenPressed() {
         val client = Minecraft.getInstance()
 
-        client.setScreen(ButtonPositionScreen(client.screen))
+        client.gui.setScreen(ButtonPositionScreen(client.gui.screen()))
     }
 
 }
