@@ -4,6 +4,7 @@ import me.thatonedevil.commands.YoinkGuiClientCommandRegistry
 import me.thatonedevil.config.YoinkGuiSettings
 import me.thatonedevil.handlers.ParseButtonHandler
 import me.thatonedevil.keybinds.KeybindManager
+import me.thatonedevil.utils.LatestErrorLog.record
 import me.thatonedevil.utils.api.UpdateChecker
 import net.fabricmc.api.ClientModInitializer
 import org.slf4j.Logger
@@ -21,8 +22,6 @@ object YoinkGUIClient : ClientModInitializer {
     val keybindCategory: KeyMapping.Category = KeyMapping.Category.register(Identifier.parse("keybinds"))
 
     override fun onInitializeClient() {
-
-
 
         UpdateChecker.setupJoinListener()
         YoinkGuiClientCommandRegistry.register()

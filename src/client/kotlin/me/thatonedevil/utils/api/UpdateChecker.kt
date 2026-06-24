@@ -11,6 +11,7 @@ import me.thatonedevil.BuildConfig
 import me.thatonedevil.YoinkGUIClient.logger
 import me.thatonedevil.YoinkGUIClient.yoinkGuiSettings
 import me.thatonedevil.utils.ErrorReporter
+import me.thatonedevil.utils.LatestErrorLog.record
 import me.thatonedevil.utils.Utils.debug
 import me.thatonedevil.utils.Utils.sendChat
 import me.thatonedevil.utils.Utils.toClickCommand
@@ -58,11 +59,14 @@ object UpdateChecker {
 
             debug("Server name: $serverName")
 
-            checkVersion()
+            if (yoinkGuiSettings.enableUpdateNotices.value) {
+                checkVersion()
+            }
+
+            record(null, "YoinkGUIClient initialized")
         }
     }
     fun checkVersion(){
-        if (!yoinkGuiSettings.enableUpdateNotices.value) return
         CoroutineScope(Dispatchers.IO).launch {
             getUpdateVersion()?.let { version ->
                 sendChat(

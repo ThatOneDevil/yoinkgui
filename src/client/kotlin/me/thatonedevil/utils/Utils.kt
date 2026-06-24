@@ -47,24 +47,18 @@ object Utils {
         return this.toComponent().clickEvent(ClickEvent.runCommand(command))
     }
 
-    // Ensure message sending runs on the client/render thread
     fun sendChat(message: String) {
-        try {
-            val mc = Minecraft.getInstance()
-            val action = Runnable { audience.sendMessage(message.toComponent()) }
-            mc.execute(action)
-        } catch (e: Exception) {
-            ErrorReporter.reportDebug(e, "Error sending chat message (MiniMessage)", debugMessage = "Failed to send chat message: ${e.message}")
-        }
+        sendChat(message.toComponent())
     }
 
     fun sendChat(vararg messages: Component) {
-        try {
-            val mc = Minecraft.getInstance()
-            val action = Runnable { for (component in messages) { audience.sendMessage(component) } }
-            mc.execute(action)
-        } catch (e: Exception) {
-            ErrorReporter.reportDebug(e, "Error sending chat message (MiniMessage)", debugMessage = "Failed to send chat message: ${e.message}")
+        val mc = Minecraft.getInstance()
+        if (mc.isSameThread) {
+            messages.forEach { audience.sendMessage(it) }
+        } else {
+            mc.execute {
+                messages.forEach { audience.sendMessage(it) }
+            }
         }
     }
 

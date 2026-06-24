@@ -16,7 +16,9 @@ class DebugCommand {
         val latestStacktrace = LatestErrorLog.getLatestStackTraceMessage() ?: "No stacktrace available."
         val className = LatestErrorLog.getLatestErrorName() ?: "No error name available."
 
-        val message = debugMessage(className, latestStacktrace)
+        val condensedStacktrace = latestStacktrace.lines().take(4).joinToString("\n")
+
+        val message = debugMessage(className, condensedStacktrace)
         val plainText = PlainTextComponentSerializer.plainText().serialize(debugMessage(className, latestStacktrace, false))
 
         sendChat(message.toClickCopy(plainText))
