@@ -32,15 +32,10 @@ loom {
     splitEnvironmentSourceSets()
 
     mods {
-        create("yoinkgui").project.sourceSets {
-            sourceSets["main"]
-            sourceSets["client"]
+        register("yoinkgui") {
+            sourceSet(sourceSets.main.get())
+            sourceSet(sourceSets.getByName("client"))
         }
-    }
-
-    runConfigs.all {
-        ideConfigGenerated(true)
-        runDir("../../run")
     }
 }
 
@@ -99,6 +94,10 @@ java {
     withSourcesJar()
     sourceCompatibility = JavaVersion.VERSION_25
     targetCompatibility = JavaVersion.VERSION_25
+}
+
+kotlin {
+    jvmToolchain(25)
 }
 
 tasks.jar {

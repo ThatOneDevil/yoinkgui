@@ -102,12 +102,7 @@ object ColorHandler : ComponentValueHandler {
         map[lower]?.let { return it }
 
         if (color.startsWith("#")) {
-            return if (isLegacyFormat()) {
-                // Legacy can't represent hex reliably and messyly, so skip
-                ""
-            } else {
-                "<color:${color.uppercase()}>"
-            }
+            return "<color:${color.uppercase()}>"
         }
 
         return ""

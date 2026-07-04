@@ -31,6 +31,5 @@ object YoinkGUIClient : ClientModInitializer {
 
         // Register event handlers
         ParseButtonHandler.register()
-        //SingleItemYoinkHandler.register()
     }
 }

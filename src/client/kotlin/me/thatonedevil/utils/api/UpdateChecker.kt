@@ -62,8 +62,6 @@ object UpdateChecker {
             if (yoinkGuiSettings.enableUpdateNotices.value) {
                 checkVersion()
             }
-
-            record(null, "YoinkGUIClient initialized")
         }
     }
     fun checkVersion(){
