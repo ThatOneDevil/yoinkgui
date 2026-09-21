@@ -1,13 +1,17 @@
 package me.thatonedevil.keybinds
 
+import com.mojang.blaze3d.platform.InputConstants
 import me.thatonedevil.YoinkGUIClient.yoinkGuiSettings
 import me.thatonedevil.handlers.ItemParseHandler
 import me.thatonedevil.mixin.client.AbstractContainerScreenAccessor
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents
 import net.fabricmc.fabric.api.client.screen.v1.ScreenKeyboardEvents
 import net.minecraft.client.KeyMapping
-import net.minecraft.client.gui.screens.inventory.*
-import org.lwjgl.glfw.GLFW
+import net.minecraft.client.gui.screens.inventory.ContainerScreen
+import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen
+import net.minecraft.client.gui.screens.inventory.InventoryScreen
+import net.minecraft.client.gui.screens.inventory.MerchantScreen
+import net.minecraft.client.gui.screens.inventory.ShulkerBoxScreen
 
 class YoinkSingleKeybind : Key {
 
@@ -17,8 +21,7 @@ class YoinkSingleKeybind : Key {
     }
 
     override fun keyName(): String = "key.yoinkgui.yoinksingle"
-    override fun key(): Int = GLFW.GLFW_KEY_Y
-    override fun whenPressed() {}
+    override fun key(): Int = InputConstants.KEY_Y
 
     override fun register(): KeyMapping {
         keyMapping = super.register()

@@ -2,7 +2,7 @@ package me.thatonedevil.handlers
 
 import me.thatonedevil.screen.ButtonPositionScreen
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
-import org.lwjgl.glfw.GLFW
+import net.minecraft.client.Minecraft
 
 object ParseButtonHandler {
     var parseButtonHovered = false
@@ -23,7 +23,7 @@ object ParseButtonHandler {
 
             val window = client.window.handle()
 
-            val isLeftClicking = GLFW.glfwGetMouseButton(window, GLFW.GLFW_MOUSE_BUTTON_LEFT) == GLFW.GLFW_PRESS
+            val isLeftClicking = Minecraft.getInstance().mouseHandler.isLeftPressed
 
             if (client.player != null && isLeftClicking && !wasLeftClicking) {
                 if (parseButtonHovered) {

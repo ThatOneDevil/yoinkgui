@@ -1,8 +1,8 @@
 package me.thatonedevil.keybinds
 
+import com.mojang.blaze3d.platform.InputConstants
 import me.thatonedevil.screen.ButtonPositionScreen
 import net.minecraft.client.Minecraft
-import org.lwjgl.glfw.GLFW
 
 class MenuKeybind : Key {
 
@@ -11,7 +11,7 @@ class MenuKeybind : Key {
     }
 
     override fun key(): Int {
-        return GLFW.GLFW_KEY_M
+        return InputConstants.KEY_M
     }
 
     override fun whenPressed() {

@@ -8,8 +8,8 @@ import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper
 interface Key {
     fun keyName(): String
     fun key(): Int
-    fun whenPressed()
-    fun keyType(): InputConstants.Type = InputConstants.Type.KEYSYM
+    fun whenPressed() {}
+    fun keyType(): InputConstants.Type = InputConstants.Type.KEYBOARD
 
     // Optional: override for keys that need to fire while a screen is open
     fun registerScreenEvents() {}

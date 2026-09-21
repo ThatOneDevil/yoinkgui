@@ -1,9 +1,8 @@
 {
 	"required": true,
 	"package": "me.thatonedevil.mixin",
-	"compatibilityLevel": "JAVA_21",
+	"compatibilityLevel": "JAVA_25",
 	"mixins": [
-		"ExampleMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

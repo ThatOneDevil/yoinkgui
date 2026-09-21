@@ -1,9 +1,9 @@
 import me.modmuss50.mpp.ReleaseType
 
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "2.4.0-Beta2"
+    id("org.jetbrains.kotlin.jvm") version "2.4.20"
     id("net.fabricmc.fabric-loom")
-    id("me.modmuss50.mod-publish-plugin") version "2.0.0-beta.1"
+    id("me.modmuss50.mod-publish-plugin") version "2.2.1"
 }
 
 val modVersion = property("mod.version").toString()
@@ -55,7 +55,7 @@ dependencies {
     implementation("dev.isxander:yet-another-config-lib:$YACL")
 
     //Kotlin
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0")
 
     //Dev
     runtimeOnly("me.djtheredstoner:DevAuth-fabric:1.2.2")
