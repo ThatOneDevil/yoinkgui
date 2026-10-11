@@ -8,7 +8,7 @@ import dev.isxander.yacl3.api.YetAnotherConfigLib
 import me.thatonedevil.YoinkGUIClient.yoinkGuiSettings
 import me.thatonedevil.config.YaclConfigHelper.booleanOption
 import me.thatonedevil.config.YaclConfigHelper.enumOptionString
-import me.thatonedevil.nbt.ComponentValueRegistry.refreshHandlers
+import me.thatonedevil.nbt.components.ComponentValueRegistry.refreshHandlers
 import me.thatonedevil.nbt.FormatOptions
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component

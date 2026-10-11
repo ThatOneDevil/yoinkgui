@@ -19,7 +19,7 @@ open class YoinkGuiSettings() : JsonFileCodecConfig<YoinkGuiSettings>(
     val enableUpdateNotices by register<Boolean>(default = true, BOOL)
 
     // parser options
-    val formatOption by register<String>(default = FormatOptions.LEGACY.name, STRING)
+    val formatOption by register<String>(default = FormatOptions.MINIMESSAGE.name, STRING)
     val includeRawNbt by register<Boolean>(default = false, BOOL)
     val toggleColorParser by register<Boolean>(default = true, BOOL)
     val toggleStyleParser by register<Boolean>(default = true, BOOL)

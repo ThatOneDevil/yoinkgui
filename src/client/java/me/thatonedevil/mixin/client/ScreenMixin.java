@@ -37,7 +37,7 @@ public abstract class ScreenMixin {
     @Shadow
     protected abstract <T extends GuiEventListener & Renderable & NarratableEntry> T addRenderableWidget(T widget);
 
-    @Inject(method = "init(II)V", at = @At("TAIL"))
+    @Inject(method = "init", at = @At("TAIL"))
     private void yoink$addParseButton(int width, int height, CallbackInfo ci) {
         Minecraft client = Minecraft.getInstance();
 

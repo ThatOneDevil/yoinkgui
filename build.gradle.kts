@@ -141,6 +141,7 @@ publishMods {
 
     curseforge {
         type.set(releaseType)
+        client = true
         projectId.set(property("curseforgeId") as String)
         accessToken.set(providers.environmentVariable("CURSEFORGE_API_KEY"))
         minecraftVersions.addAll(versionList("pub.curseMC"))

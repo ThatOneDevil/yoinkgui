@@ -8,6 +8,7 @@ import me.thatonedevil.YoinkGUIClient
 import me.thatonedevil.inventory.TopInventory
 import me.thatonedevil.inventory.YoinkInventory
 import me.thatonedevil.inventory.YoinkInventory.Companion.yoinkSingleItem
+import me.thatonedevil.nbt.NBTFileManager
 import me.thatonedevil.utils.ErrorReporter
 import me.thatonedevil.utils.Utils.sendChat
 import net.minecraft.client.Minecraft
@@ -33,7 +34,7 @@ object ItemParseHandler {
                     return@launch
                 }
 
-                NBTParser.saveSingleItem(nbtString, configDir.path)
+                NBTFileManager.saveSingleItem(nbtString, configDir.path)
 
             } catch (e: Exception) {
                 ErrorReporter.report(e, "Error during single item NBT parsing")
@@ -54,7 +55,7 @@ object ItemParseHandler {
                     return@launch
                 }
 
-                NBTParser.saveFormattedNBTToFile(yoinkedItems, configDir)
+                NBTFileManager.saveFormattedNBTToFile(yoinkedItems, configDir)
 
             } catch (e: Exception) {
                 ErrorReporter.report(e, "Error during NBT parsing")
