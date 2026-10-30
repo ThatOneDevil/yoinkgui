@@ -33,6 +33,7 @@ Intended strictly for convenience and development purposes.
 > - **Fabric Language Kotlin**
 > - **Yet Another Config Lib**
 > - **ModMenu**
+> - **Passes modgrade https://modgrade.com/mod/yoinkgui** (Added because of the recent modrinth/curse projects having malware)
 
 ---
 > [!NOTE]
