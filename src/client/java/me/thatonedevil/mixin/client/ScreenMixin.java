@@ -28,6 +28,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings({"UnstableApiUsage", "unused"})
 @Mixin(Screen.class)
 public abstract class ScreenMixin {
     private static final int BUTTON_WIDTH = 160;

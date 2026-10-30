@@ -7,7 +7,10 @@ import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.minimessage.MiniMessage
 import net.minecraft.client.Minecraft
 import net.kyori.adventure.platform.modcommon.MinecraftClientAudiences
+import net.minecraft.ChatFormatting
+import net.minecraft.network.chat.Style
 import java.io.File
+
 
 
 object Utils {
@@ -47,6 +50,7 @@ object Utils {
     fun String.toClickCommand(command: String): Component {
         return this.toComponent().clickEvent(ClickEvent.runCommand(command))
     }
+
 
     fun sendChat(message: String) {
         sendChat(message.toComponent())

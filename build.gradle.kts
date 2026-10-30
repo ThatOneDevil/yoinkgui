@@ -11,7 +11,7 @@ val releaseType: ReleaseType = ReleaseType.BETA
 
 val mcVersion = property("deps.minecraft_version").toString()
 val mcDep = property("mcDep").toString()
-val YACL = property("deps.yacl").toString()
+val yacl = property("deps.yacl").toString()
 val modMenu = property("deps.modmenu").toString()
 
 version = "${modVersion}+${property("mod.mod_version")}"
@@ -52,7 +52,7 @@ dependencies {
 
     //Config
     implementation("com.terraformersmc:modmenu:$modMenu")
-    implementation("dev.isxander:yet-another-config-lib:$YACL")
+    implementation("dev.isxander:yet-another-config-lib:$yacl")
 
     //Kotlin
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0")
@@ -65,7 +65,7 @@ tasks.processResources {
     val props = mapOf(
         "version" to project.version,
         "mc" to mcDep,
-        "yaclVersion" to YACL,
+        "yaclVersion" to yacl,
         "modmenuVersion" to modMenu
     )
     props.forEach(inputs::property)
@@ -73,6 +73,7 @@ tasks.processResources {
 }
 
 val generateTemplates = tasks.register<Copy>("generateTemplates") {
+    description = "Generates the template files for the mod where constant values are replaced with the actual values."
     val props = mapOf(
         "version" to modVersion,
         "mcVersion" to mcVersion,

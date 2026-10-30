@@ -8,6 +8,7 @@ import dev.isxander.yacl3.config.v3.ConfigEntry
 import dev.isxander.yacl3.config.v3.value
 import net.minecraft.network.chat.Component
 
+@Suppress("UnstableApiUsage", "unused")
 object YaclConfigHelper {
 
     fun booleanOption(

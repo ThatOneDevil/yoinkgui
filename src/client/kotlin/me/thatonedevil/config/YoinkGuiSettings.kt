@@ -6,6 +6,7 @@ import dev.isxander.yacl3.config.v3.value
 import me.thatonedevil.nbt.FormatOptions
 import net.fabricmc.loader.api.FabricLoader
 
+@Suppress("UnstableApiUsage", "unused")
 open class YoinkGuiSettings() : JsonFileCodecConfig<YoinkGuiSettings>(
     FabricLoader.getInstance().configDir.resolve("yoinkgui.json")
 ) {

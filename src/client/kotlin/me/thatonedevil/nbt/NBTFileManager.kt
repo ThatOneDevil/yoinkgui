@@ -4,10 +4,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import me.thatonedevil.config.YoinkGuiSettings
 import me.thatonedevil.utils.ErrorReporter
-import me.thatonedevil.utils.Utils
-import me.thatonedevil.utils.Utils.toClickCopy
-import me.thatonedevil.utils.Utils.toComponent
 import me.thatonedevil.utils.api.UpdateChecker
+import net.minecraft.client.Minecraft
+import net.minecraft.network.chat.ClickEvent
+import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.Style
 import java.io.File
 import java.io.IOException
 import java.time.Duration
@@ -112,21 +113,50 @@ object NBTFileManager {
         return "${UpdateChecker.serverName}-$formattedTime.txt"
     }
 
-    private fun sendSuccessMessage(
-        file: File,
-        duration: Long
-    ) {
-        Utils.sendChat(
-            "<color:#FFA6CA>Formatted NBT data saved to:"
-                .toComponent(),
+    private fun sendSuccessMessage(file: File, duration: Long) {
+        val pink = 0xFFA6CA
+        val purple = 0x8968CD
+        val openFile = ClickEvent.OpenFile(file.toPath().toAbsolutePath())
 
-            " <color:#FFA6CA>Parse time: <color:#8968CD>${duration}ms"
-                .toComponent(),
+        val relativePath = file.relativeTo(File(".").canonicalFile).path
 
-            "  <color:#8968CD>${
-                file.relativeTo(File(".").canonicalFile).path
-            } &7&o(Click to copy)"
-                .toClickCopy(file.canonicalPath)
-        )
+        val header = Component.literal("Formatted NBT data saved to:")
+            .withColor(pink)
+
+        val parseTime = Component.literal(" Parse time: ")
+            .withColor(pink)
+            .append(
+                Component.literal("${duration}ms")
+                    .withColor(purple)
+            )
+
+        val filePath = Component.literal("  ")
+            .append(
+                Component.literal(relativePath)
+                    .withStyle(
+                        Style.EMPTY
+                            .withColor(purple)
+                            .withUnderlined(true)
+                            .withClickEvent(openFile)
+                    )
+            )
+            .append(
+                Component.literal(" (Click to open file)")
+                    .withStyle(
+                        Style.EMPTY
+                            .withColor(0xAAAAAA)
+                            .withItalic(true)
+                            .withClickEvent(openFile)
+                    )
+            )
+
+        Minecraft.getInstance().execute {
+            Minecraft.getInstance().player?.let { player ->
+                player.sendSystemMessage(header)
+                player.sendSystemMessage(parseTime)
+                player.sendSystemMessage(filePath)
+            }
+        }
     }
+
 }

@@ -13,6 +13,7 @@ import me.thatonedevil.nbt.FormatOptions
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
 
+@Suppress("UnstableApiUsage", "unused")
 class ModMenuIntegration : ModMenuApi {
     override fun getModConfigScreenFactory(): ConfigScreenFactory<*> = ConfigScreenFactory { parentScreen ->
         createScreen(parentScreen)
